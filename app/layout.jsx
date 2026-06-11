@@ -17,6 +17,7 @@ export default function RootLayout({ children }) {
     <html lang="ru" className={`${inter.variable} ${manrope.variable}`}>
       <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+        <script dangerouslySetInnerHTML={{ __html: "try{if(sessionStorage.getItem('mt-splashed')==='1')document.documentElement.classList.add('splashed')}catch(e){}" }} />
       </head>
       <body>
         <div className="route-content">{children}</div>

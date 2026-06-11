@@ -1019,11 +1019,16 @@
       const scrolled = doc.scrollTop / (doc.scrollHeight - doc.clientHeight || 1);
       progressBar.style.width = (scrolled * 100) + '%';
       toTop.classList.toggle('show', doc.scrollTop > 600);
-      scrollyItems.forEach(s => { const r = s.el.getBoundingClientRect(); const denom = s.el.offsetHeight - vh;
+      scrollyItems.forEach(s => { const r = s.el.getBoundingClientRect();
+        if (r.bottom < -60 || r.top > vh + 60) return; // вне экрана — не пересчитываем тяжёлый рендер
+        const denom = s.el.offsetHeight - vh;
         s.onProgress(denom > 0 ? clamp(-r.top / denom, 0, 1) : 0); });
       if (!reduceMotion) parallaxEls.forEach(el => { const r = el.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > vh) return;
         el.style.transform = `translateY(${(r.top + r.height/2 - vh/2) * -(+el.dataset.parallax)}px)`; });
-      revealWords.forEach(p => { const trigger = vh * 0.78;
+      revealWords.forEach(p => { const pr = p.getBoundingClientRect();
+        if (pr.bottom < 0 || pr.top > vh) return; // секция вне экрана — слова не трогаем
+        const trigger = vh * 0.78;
         p.querySelectorAll('.w').forEach(w => { w.classList.toggle('lit', w.getBoundingClientRect().top < trigger); }); });
     }
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -1207,15 +1212,17 @@
     (function () {
       if (reduceMotion) return;
       const canvas = document.getElementById('candles'); const ctx = canvas.getContext('2d');
-      let W,H,ratio,candles=[];
-      function resize(){ ratio=window.devicePixelRatio||1; W=canvas.clientWidth=window.innerWidth; H=canvas.clientHeight=window.innerHeight; canvas.width=W*ratio; canvas.height=H*ratio; ctx.setTransform(ratio,0,0,ratio,0,0); }
+      let W,H,candles=[]; const RATIO = Math.min(window.devicePixelRatio||1, 1.25);
+      function resize(){ W=window.innerWidth; H=window.innerHeight; canvas.width=W*RATIO; canvas.height=H*RATIO; ctx.setTransform(RATIO,0,0,RATIO,0,0); }
       function seed(i,n){ return { x:(i/n)*W+((i*53)%40), y:H+((i*37)%H), w:6+(i%4)*2, body:14+(i%5)*8, wick:8+(i%3)*6, speed:0.25+((i%5)*0.12), up:(i*7)%3!==0, alpha:0.05+((i%4)*0.02) }; }
-      function init(){ resize(); const n=Math.max(10,Math.floor(W/90)); candles=Array.from({length:n},(_,i)=>seed(i,n)); }
-      function draw(){ ctx.clearRect(0,0,W,H); candles.forEach(c=>{ c.y-=c.speed; if(c.y+c.body+c.wick<-20) c.y=H+40;
+      function init(){ resize(); const n=Math.max(8,Math.floor(W/130)); candles=Array.from({length:n},(_,i)=>seed(i,n)); }
+      let last=0;
+      function draw(t){ requestAnimationFrame(draw); if (document.hidden) return; if (t-last < 40) return; last=t;
+        ctx.clearRect(0,0,W,H); candles.forEach(c=>{ c.y-=c.speed*1.6; if(c.y+c.body+c.wick<-20) c.y=H+40;
         const col=c.up?'45,212,191':'59,130,246'; ctx.strokeStyle=`rgba(${col},${c.alpha+0.04})`; ctx.lineWidth=1.2;
         ctx.beginPath(); ctx.moveTo(c.x,c.y-c.wick); ctx.lineTo(c.x,c.y+c.body+c.wick); ctx.stroke();
-        ctx.fillStyle=`rgba(${col},${c.alpha})`; ctx.fillRect(c.x-c.w/2,c.y,c.w,c.body); }); requestAnimationFrame(draw); }
-      init(); window.addEventListener('resize', init); draw();
+        ctx.fillStyle=`rgba(${col},${c.alpha})`; ctx.fillRect(c.x-c.w/2,c.y,c.w,c.body); }); }
+      init(); window.addEventListener('resize', init); requestAnimationFrame(draw);
     })();
 
     /* ---------- Hero chart ---------- */

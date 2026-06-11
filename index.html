@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" class="scroll-smooth">
+<html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -32,7 +32,6 @@
       background-attachment: fixed; overflow-x: hidden;
     }
 
-    /* Aurora background */
     .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
     .aurora span { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .5; mix-blend-mode: screen; }
     .aurora .b1 { width: 520px; height: 520px; background: radial-gradient(circle,#2DD4BF,transparent 70%); top:-120px; left:-80px; animation: drift1 18s ease-in-out infinite; }
@@ -44,17 +43,14 @@
     #candles { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
     .layer { position: relative; z-index: 2; }
 
-    /* Scroll progress */
     #progress { position: fixed; top:0; left:0; height:3px; width:0%; z-index:60; background: linear-gradient(90deg,#2DD4BF,#3B82F6); box-shadow:0 0 12px rgba(45,212,191,.7); }
 
-    /* Reveal */
     .reveal,.reveal-l,.reveal-r { opacity:0; transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); will-change: opacity, transform; }
     .reveal { transform: translateY(30px); }
     .reveal-l { transform: translateX(-44px); }
     .reveal-r { transform: translateX(44px); }
     .reveal.is-visible,.reveal-l.is-visible,.reveal-r.is-visible { opacity:1; transform:none; }
 
-    /* Cards: hover + spotlight */
     .card-hover { position: relative; transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
     .card-hover::before { content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; opacity:0; transition:opacity .3s ease;
       background: radial-gradient(280px circle at var(--mx,50%) var(--my,50%), rgba(45,212,191,.16), transparent 60%); }
@@ -81,40 +77,42 @@
     @keyframes floaty { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
     .floaty { animation: floaty 5s ease-in-out infinite; }
 
-    /* Marquee */
     .marquee { overflow:hidden; }
     .marquee-track { display:inline-flex; white-space:nowrap; animation: marquee 32s linear infinite; }
     .marquee:hover .marquee-track { animation-play-state: paused; }
     @keyframes marquee { from{transform:translateX(0);} to{transform:translateX(-50%);} }
 
-    /* ===== Apple-style text reveal ===== */
     .reveal-words .w { color: rgba(148,163,184,.22); transition: color .25s ease, text-shadow .25s ease; }
     .reveal-words .w.lit { color: #fff; }
     .reveal-words .w.accent.lit { color: #2DD4BF; text-shadow: 0 0 24px rgba(45,212,191,.45); }
 
-    /* ===== Pinned scrollytelling ===== */
     .pin-wrap { position: relative; }
     .pin-stage { position: sticky; top:0; height:100vh; display:flex; align-items:center; }
     .scrolly-steps { height: 420vh; }
     .step-card { transition: opacity .4s ease, transform .4s ease, border-color .4s ease, background-color .4s ease; opacity:.35; transform: translateY(8px); }
     .step-card.active { opacity:1; transform:none; border-color: rgba(45,212,191,.5); background: rgba(45,212,191,.06); }
     .step-card.active .step-num { background: linear-gradient(135deg,#2DD4BF,#3B82F6); color:#0B1121; }
-
-    /* ===== Horizontal pinned gallery ===== */
-    .pin-h { position: relative; }
-    .pin-h .pin-stage { overflow: hidden; }
-    .h-track { display:flex; gap:1.25rem; padding-inline:1.5rem; will-change: transform; }
-    .h-card { width: 340px; flex: 0 0 auto; }
     @media (max-width: 1023px) {
-      .pin-h { height: auto !important; }
-      .pin-h .pin-stage { position: static; height:auto; display:block; overflow: visible; }
-      .h-track { transform:none !important; display:grid; grid-template-columns: 1fr 1fr; padding-inline:0; }
-      .h-card { width: auto; }
       .scrolly-steps { height: auto; }
       .pin-wrap .pin-stage { position: static; height:auto; display:block; }
       .step-card { opacity:1 !important; transform:none !important; }
     }
-    @media (max-width: 639px) { .h-track { grid-template-columns: 1fr; } }
+
+    /* Auto carousel */
+    .c-mask { overflow: hidden; cursor: grab; }
+    .c-mask:active { cursor: grabbing; }
+    .c-track { display: flex; gap: 1.25rem; width: max-content; will-change: transform; }
+    .c-card { width: 320px; flex: 0 0 auto; }
+    .c-edge-l, .c-edge-r { position:absolute; top:0; bottom:0; width:90px; z-index:5; pointer-events:none; }
+    .c-edge-l { left:0; background: linear-gradient(90deg,#0B1121,transparent); }
+    .c-edge-r { right:0; background: linear-gradient(270deg,#0B1121,transparent); }
+
+    /* Cabinet app window */
+    .app-chrome { background: linear-gradient(180deg, rgba(30,41,59,.9), rgba(15,23,42,.9)); }
+    .tab-btn { transition: all .2s ease; }
+    .tab-btn.active { background: rgba(45,212,191,.12); color:#2DD4BF; border-color: rgba(45,212,191,.4); }
+    .bar { width:0; transition: width 1.1s cubic-bezier(.2,.7,.2,1); }
+    .ring-fg { transition: stroke-dashoffset 1.3s cubic-bezier(.2,.7,.2,1); }
 
     #toast-wrap { position: fixed; right:1rem; bottom:1rem; z-index:100; display:flex; flex-direction:column; gap:.6rem; max-width:360px; }
     .toast { transform: translateX(120%); opacity:0; transition: transform .4s cubic-bezier(.2,.8,.2,1), opacity .4s; }
@@ -157,22 +155,22 @@
   <header id="top" class="fixed top-0 inset-x-0 z-50 glass border-b border-white/5">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
-        <a href="#top" class="flex items-center gap-2 group">
+        <a href="#top" class="anchor flex items-center gap-2 group">
           <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-accent2 text-ink font-display font-extrabold text-lg shadow-lg shadow-accent/20 group-hover:scale-110 group-hover:rotate-6 transition-transform">M</span>
           <span class="font-display font-extrabold text-lg tracking-tight text-white">Mind<span class="text-accent">Trade</span></span>
         </a>
-        <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-          <a href="#mentor" class="nav-link hover:text-white transition-colors">О менторе</a>
-          <a href="#how" class="nav-link hover:text-white transition-colors">Как учим</a>
-          <a href="#program" class="nav-link hover:text-white transition-colors">Программа</a>
-          <a href="#pricing" class="nav-link hover:text-white transition-colors">Цены</a>
-          <a href="#contact" class="nav-link hover:text-white transition-colors">Контакты</a>
+        <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
+          <a href="#mentor" class="anchor nav-link hover:text-white transition-colors">О менторе</a>
+          <a href="#how" class="anchor nav-link hover:text-white transition-colors">Как учим</a>
+          <a href="#program" class="anchor nav-link hover:text-white transition-colors">Программа</a>
+          <a href="#cabinet" class="anchor nav-link hover:text-white transition-colors">Кабинет</a>
+          <a href="#pricing" class="anchor nav-link hover:text-white transition-colors">Цены</a>
         </nav>
         <div class="hidden md:flex items-center gap-3">
-          <button onclick="alert('Демо, кабинет в разработке')" class="btn-anim text-sm font-medium text-slate-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/5">
+          <button onclick="enterCabinet()" class="btn-anim text-sm font-medium text-slate-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/5">
             <i class="fa-regular fa-circle-user mr-1.5"></i>Войти в кабинет
           </button>
-          <a href="#contact" class="btn-anim btn-shine text-sm font-semibold px-4 py-2 rounded-lg bg-gradient-to-r from-accent to-accent2 text-ink shadow-lg shadow-accent/25 hover:shadow-accent/40">
+          <a href="#contact" class="anchor btn-anim btn-shine text-sm font-semibold px-4 py-2 rounded-lg bg-gradient-to-r from-accent to-accent2 text-ink shadow-lg shadow-accent/25 hover:shadow-accent/40">
             Старт <i class="fa-solid fa-arrow-right ml-1"></i>
           </a>
         </div>
@@ -181,14 +179,15 @@
     </div>
     <div id="mobile-menu" class="md:hidden hidden border-t border-white/5 glass">
       <nav class="px-4 py-4 flex flex-col gap-1 text-sm font-medium">
-        <a href="#mentor" class="mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">О менторе</a>
-        <a href="#how" class="mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">Как учим</a>
-        <a href="#program" class="mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">Программа</a>
-        <a href="#pricing" class="mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">Цены</a>
-        <a href="#contact" class="mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">Контакты</a>
+        <a href="#mentor" class="anchor mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">О менторе</a>
+        <a href="#how" class="anchor mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">Как учим</a>
+        <a href="#program" class="anchor mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">Программа</a>
+        <a href="#cabinet" class="anchor mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">Кабинет</a>
+        <a href="#pricing" class="anchor mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">Цены</a>
+        <a href="#contact" class="anchor mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">Контакты</a>
         <div class="grid grid-cols-2 gap-2 pt-2">
-          <button onclick="alert('Демо, кабинет в разработке')" class="px-3 py-2.5 rounded-lg border border-white/10 text-slate-200 text-sm">Кабинет</button>
-          <a href="#contact" class="mobile-link text-center px-3 py-2.5 rounded-lg bg-gradient-to-r from-accent to-accent2 text-ink font-semibold text-sm">Старт</a>
+          <button onclick="enterCabinet()" class="px-3 py-2.5 rounded-lg border border-white/10 text-slate-200 text-sm">Кабинет</button>
+          <a href="#contact" class="anchor mobile-link text-center px-3 py-2.5 rounded-lg bg-gradient-to-r from-accent to-accent2 text-ink font-semibold text-sm">Старт</a>
         </div>
       </nav>
     </div>
@@ -211,11 +210,11 @@
             Научись управлять рисками без иллюзий. Авторский курс ментора с 8-летним опытом. Без обещаний «лёгких денег» — только система, психология и статистика.
           </p>
           <div class="mt-8 flex flex-col sm:flex-row gap-3">
-            <a href="#how" class="magnetic btn-anim btn-shine inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40">
+            <a href="#how" class="anchor magnetic btn-anim btn-shine inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40">
               <i class="fa-solid fa-play"></i> Как устроено обучение
             </a>
-            <button onclick="toast('Это демо-версия. Запись на вебинар принята в тестовом режиме','info')" class="magnetic btn-anim inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-white/15 bg-white/5 text-white font-semibold hover:bg-white/10">
-              <i class="fa-solid fa-video text-accent"></i> Бесплатный вебинар
+            <button onclick="enterCabinet()" class="magnetic btn-anim inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-white/15 bg-white/5 text-white font-semibold hover:bg-white/10">
+              <i class="fa-solid fa-table-columns text-accent"></i> Посмотреть кабинет
             </button>
           </div>
           <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 text-sm text-slate-400">
@@ -256,7 +255,7 @@
     </div>
   </section>
 
-  <!-- ============ TEXT REVEAL STATEMENT ============ -->
+  <!-- ============ TEXT REVEAL ============ -->
   <section class="py-24 sm:py-36">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       <p class="reveal-words font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl leading-[1.15] tracking-tight text-center">
@@ -267,13 +266,11 @@
     </div>
   </section>
 
-  <!-- ============ HOW IT WORKS — PINNED SCROLLYTELLING ============ -->
-  <section id="how" class="pin-wrap scrolly-steps scroll-mt-0">
+  <!-- ============ HOW IT WORKS — PINNED ============ -->
+  <section id="how" class="pin-wrap scrolly-steps">
     <div class="pin-stage">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div class="grid lg:grid-cols-2 gap-10 items-center">
-
-          <!-- Sticky animated stage -->
           <div class="order-2 lg:order-1">
             <div class="relative rounded-2xl border border-white/10 bg-ink2/70 p-4 sm:p-6 shadow-2xl shadow-black/40">
               <div class="flex items-center justify-between mb-3">
@@ -289,44 +286,29 @@
               </div>
             </div>
           </div>
-
-          <!-- Steps -->
           <div class="order-1 lg:order-2">
             <span class="text-sm font-semibold text-accent uppercase tracking-wider">Как устроено обучение</span>
             <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-2 mb-7">От хаоса — к торговой системе</h2>
             <div class="space-y-4">
               <div class="step-card active rounded-2xl border border-white/10 bg-ink2/40 p-5" data-step="0">
-                <div class="flex items-start gap-4">
-                  <span class="step-num inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white font-bold">1</span>
-                  <div><h3 class="font-display font-bold text-white">Видеть структуру, а не шум</h3>
-                    <p class="text-slate-400 text-sm mt-1">Учимся читать тренды, уровни и фазы рынка вместо хаотичного угадывания.</p></div>
-                </div>
+                <div class="flex items-start gap-4"><span class="step-num inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white font-bold">1</span>
+                  <div><h3 class="font-display font-bold text-white">Видеть структуру, а не шум</h3><p class="text-slate-400 text-sm mt-1">Учимся читать тренды, уровни и фазы рынка вместо хаотичного угадывания.</p></div></div>
               </div>
               <div class="step-card rounded-2xl border border-white/10 bg-ink2/40 p-5" data-step="1">
-                <div class="flex items-start gap-4">
-                  <span class="step-num inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white font-bold">2</span>
-                  <div><h3 class="font-display font-bold text-white">Защищать счёт риском</h3>
-                    <p class="text-slate-400 text-sm mt-1">Стоп-лосс, риск 1% на сделку, контроль просадки — счёт переживает серию убытков.</p></div>
-                </div>
+                <div class="flex items-start gap-4"><span class="step-num inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white font-bold">2</span>
+                  <div><h3 class="font-display font-bold text-white">Защищать счёт риском</h3><p class="text-slate-400 text-sm mt-1">Стоп-лосс, риск 1% на сделку, контроль просадки — счёт переживает серию убытков.</p></div></div>
               </div>
               <div class="step-card rounded-2xl border border-white/10 bg-ink2/40 p-5" data-step="2">
-                <div class="flex items-start gap-4">
-                  <span class="step-num inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white font-bold">3</span>
-                  <div><h3 class="font-display font-bold text-white">Управлять психологией</h3>
-                    <p class="text-slate-400 text-sm mt-1">Дневник сделок и работа с эмоциями убирают импульсивность и переторговку.</p></div>
-                </div>
+                <div class="flex items-start gap-4"><span class="step-num inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white font-bold">3</span>
+                  <div><h3 class="font-display font-bold text-white">Управлять психологией</h3><p class="text-slate-400 text-sm mt-1">Дневник сделок и работа с эмоциями убирают импульсивность и переторговку.</p></div></div>
               </div>
               <div class="step-card rounded-2xl border border-white/10 bg-ink2/40 p-5" data-step="3">
-                <div class="flex items-start gap-4">
-                  <span class="step-num inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white font-bold">4</span>
-                  <div><h3 class="font-display font-bold text-white">Собрать свою систему</h3>
-                    <p class="text-slate-400 text-sm mt-1">Чёткие правила входа и выхода превращают торговлю в повторяемый процесс.</p></div>
-                </div>
+                <div class="flex items-start gap-4"><span class="step-num inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white font-bold">4</span>
+                  <div><h3 class="font-display font-bold text-white">Собрать свою систему</h3><p class="text-slate-400 text-sm mt-1">Чёткие правила входа и выхода превращают торговлю в повторяемый процесс.</p></div></div>
               </div>
             </div>
             <p class="text-[11px] text-slate-500 mt-5"><i class="fa-solid fa-arrow-down text-accent mr-1"></i> Прокручивай — график слева меняется вместе с этапом.</p>
           </div>
-
         </div>
       </div>
     </div>
@@ -356,16 +338,13 @@
           </p>
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-7">
             <div class="card-hover rounded-xl border border-white/10 bg-ink2/50 p-4 text-center">
-              <div class="font-display font-extrabold text-2xl gradient-text"><span class="count" data-to="8">0</span> лет</div>
-              <div class="text-xs text-slate-400 mt-1">на рынке</div>
+              <div class="font-display font-extrabold text-2xl gradient-text"><span class="count" data-to="8">0</span> лет</div><div class="text-xs text-slate-400 mt-1">на рынке</div>
             </div>
             <div class="card-hover rounded-xl border border-white/10 bg-ink2/50 p-4 text-center">
-              <div class="font-display font-extrabold text-2xl gradient-text"><span class="count" data-to="150">0</span>+</div>
-              <div class="text-xs text-slate-400 mt-1">личных консультаций</div>
+              <div class="font-display font-extrabold text-2xl gradient-text"><span class="count" data-to="150">0</span>+</div><div class="text-xs text-slate-400 mt-1">личных консультаций</div>
             </div>
             <div class="card-hover rounded-xl border border-white/10 bg-ink2/50 p-4 text-center">
-              <div class="font-display font-extrabold text-2xl gradient-text"><span class="count" data-to="80">0</span>+</div>
-              <div class="text-xs text-slate-400 mt-1">учеников с системой</div>
+              <div class="font-display font-extrabold text-2xl gradient-text"><span class="count" data-to="80">0</span>+</div><div class="text-xs text-slate-400 mt-1">учеников с системой</div>
             </div>
           </div>
           <p class="text-[11px] text-slate-500 mt-3">Цифры приведены для демонстрации.</p>
@@ -374,17 +353,159 @@
     </div>
   </section>
 
-  <!-- ============ PROGRAM — HORIZONTAL PINNED GALLERY ============ -->
-  <section id="program" class="pin-h scroll-mt-20">
-    <div class="pin-stage">
-      <div class="w-full">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 reveal">
+  <!-- ============ PROGRAM — AUTO CAROUSEL ============ -->
+  <section id="program" class="py-16 sm:py-24 scroll-mt-20 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 reveal">
+        <div>
           <span class="text-sm font-semibold text-accent uppercase tracking-wider">Программа курса</span>
-          <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-2">8 модулей — от фундамента к своей системе</h2>
-          <p class="text-slate-400 mt-3 hidden lg:block">Прокручивай вниз — карточки едут вбок. Кликни модуль для деталей.</p>
-          <p class="text-slate-400 mt-3 lg:hidden">Кликни модуль, чтобы увидеть подробности.</p>
+          <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-2">12 блоков — полная система трейдинга</h2>
+          <p class="text-slate-400 mt-3">Лента едет сама. Наведи, чтобы остановить, тяни мышью или листай стрелками. Клик — детали.</p>
         </div>
-        <div id="program-track" class="h-track"></div>
+        <div class="flex gap-2">
+          <button id="c-prev" aria-label="Назад" class="btn-anim h-11 w-11 rounded-xl border border-white/15 bg-white/5 text-white hover:bg-white/10"><i class="fa-solid fa-chevron-left"></i></button>
+          <button id="c-next" aria-label="Вперёд" class="btn-anim h-11 w-11 rounded-xl border border-white/15 bg-white/5 text-white hover:bg-white/10"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+    <div class="relative">
+      <div class="c-edge-l"></div><div class="c-edge-r"></div>
+      <div id="c-mask" class="c-mask"><div id="program-track" class="c-track"></div></div>
+    </div>
+  </section>
+
+  <!-- ============ CABINET DEMO ============ -->
+  <section id="cabinet" class="py-16 sm:py-24 scroll-mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto reveal">
+        <span class="inline-flex items-center gap-2 text-sm font-semibold text-accent uppercase tracking-wider">Личный кабинет <span class="text-[10px] normal-case bg-accent/15 text-accent px-2 py-0.5 rounded-full">демо</span></span>
+        <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-2">Учёба, прогресс и дневник — в одном месте</h2>
+        <p class="text-slate-400 mt-3">Так выглядит кабинет ученика: прогресс по модулям, кривая капитала и журнал сделок. Данные демонстрационные.</p>
+      </div>
+
+      <div class="reveal mt-12 rounded-2xl border border-white/10 bg-ink2/70 overflow-hidden shadow-2xl shadow-black/40">
+        <!-- chrome -->
+        <div class="app-chrome flex items-center justify-between px-5 py-3 border-b border-white/10">
+          <div class="flex items-center gap-2">
+            <span class="h-3 w-3 rounded-full bg-red-400/80"></span><span class="h-3 w-3 rounded-full bg-yellow-400/80"></span><span class="h-3 w-3 rounded-full bg-green-400/80"></span>
+            <span class="ml-3 text-xs text-slate-400 font-mono hidden sm:inline">app.mindtrade.demo / кабинет ученика</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs text-slate-400">
+            <i class="fa-solid fa-circle text-accent text-[8px]"></i> онлайн
+            <span class="ml-2 inline-flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-accent/40 to-accent2/40 text-white font-semibold">А</span>
+          </div>
+        </div>
+
+        <div class="grid lg:grid-cols-[230px_1fr]">
+          <!-- sidebar -->
+          <aside class="border-b lg:border-b-0 lg:border-r border-white/10 p-3">
+            <nav class="flex lg:flex-col gap-2 overflow-x-auto">
+              <button class="tab-btn active flex items-center gap-3 px-4 py-3 rounded-xl border border-transparent text-slate-300 text-sm whitespace-nowrap w-full" data-tab="overview"><i class="fa-solid fa-gauge-high w-4"></i> Обзор</button>
+              <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl border border-transparent text-slate-300 text-sm whitespace-nowrap w-full" data-tab="lessons"><i class="fa-solid fa-graduation-cap w-4"></i> Мои уроки</button>
+              <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl border border-transparent text-slate-300 text-sm whitespace-nowrap w-full" data-tab="journal"><i class="fa-solid fa-book-open w-4"></i> Дневник сделок</button>
+              <button onclick="toast('Демо: Discord-комьюнити подключается в полной версии','info')" class="tab-btn flex items-center gap-3 px-4 py-3 rounded-xl border border-transparent text-slate-300 text-sm whitespace-nowrap w-full"><i class="fa-brands fa-discord w-4"></i> Сообщество</button>
+              <div class="hidden lg:block mt-4 rounded-xl bg-accent/5 border border-accent/20 p-4">
+                <div class="text-xs text-slate-300">Тариф</div>
+                <div class="font-display font-bold text-white">Премиум</div>
+                <button onclick="scrollToId('#pricing')" class="mt-2 text-xs text-accent hover:underline">Управлять →</button>
+              </div>
+            </nav>
+          </aside>
+
+          <!-- panels -->
+          <div class="p-5 sm:p-7 min-h-[520px]">
+
+            <!-- OVERVIEW -->
+            <div data-panel="overview">
+              <div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                <div class="card-hover rounded-2xl border border-white/10 bg-white/[0.03] p-5 flex items-center gap-4">
+                  <svg viewBox="0 0 80 80" class="h-16 w-16 -rotate-90 shrink-0">
+                    <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(148,163,184,0.18)" stroke-width="8"/>
+                    <circle id="progRing" class="ring-fg" cx="40" cy="40" r="34" fill="none" stroke="#2DD4BF" stroke-width="8" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="213.6"/>
+                  </svg>
+                  <div><div class="text-2xl font-display font-extrabold text-white"><span id="progPct">0</span>%</div><div class="text-xs text-slate-400">Прогресс курса</div></div>
+                </div>
+                <div class="card-hover rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                  <div class="flex items-center justify-between"><span class="text-xs text-slate-400">Уроки пройдены</span><i class="fa-solid fa-graduation-cap text-accent"></i></div>
+                  <div class="text-2xl font-display font-extrabold text-white mt-2">5 <span class="text-slate-500 text-base">/ 12</span></div>
+                  <div class="h-2 rounded-full bg-white/10 mt-3 overflow-hidden"><div class="bar h-full rounded-full bg-gradient-to-r from-accent to-accent2" data-w="42%"></div></div>
+                </div>
+                <div class="card-hover rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                  <div class="flex items-center justify-between"><span class="text-xs text-slate-400">Дисциплина</span><i class="fa-solid fa-shield-halved text-accent"></i></div>
+                  <div class="text-2xl font-display font-extrabold text-white mt-2">92%</div>
+                  <div class="h-2 rounded-full bg-white/10 mt-3 overflow-hidden"><div class="bar h-full rounded-full bg-gradient-to-r from-accent to-accent2" data-w="92%"></div></div>
+                </div>
+                <div class="card-hover rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                  <div class="flex items-center justify-between"><span class="text-xs text-slate-400">Серия дней</span><i class="fa-solid fa-fire text-orange-400"></i></div>
+                  <div class="text-2xl font-display font-extrabold text-white mt-2">14 <span class="text-slate-500 text-base">дней</span></div>
+                  <div class="text-xs text-slate-500 mt-3">Заходишь и ведёшь дневник без пропусков</div>
+                </div>
+              </div>
+
+              <div class="grid lg:grid-cols-3 gap-4 mt-4">
+                <div class="lg:col-span-2 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                  <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-display font-bold text-white">Кривая капитала</h3>
+                    <span class="text-xs font-mono text-emerald-400">+18.4% <span class="text-slate-500">/ демо</span></span>
+                  </div>
+                  <canvas id="eqChart" class="w-full rounded-lg bg-black/20" height="200"></canvas>
+                  <p class="text-[11px] text-slate-500 mt-2">Демо-данные. Прошлые результаты не гарантируют будущей доходности.</p>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                  <h3 class="font-display font-bold text-white mb-3">Последняя активность</h3>
+                  <ul class="space-y-3 text-sm">
+                    <li class="flex gap-3"><i class="fa-solid fa-circle-check text-emerald-400 mt-0.5"></i><div><div class="text-slate-200">Завершён модуль «Свинг-трейдинг»</div><div class="text-xs text-slate-500">2 часа назад</div></div></li>
+                    <li class="flex gap-3"><i class="fa-solid fa-pen-to-square text-accent mt-0.5"></i><div><div class="text-slate-200">Добавлена сделка EUR/USD +3R</div><div class="text-xs text-slate-500">вчера</div></div></li>
+                    <li class="flex gap-3"><i class="fa-solid fa-clipboard-check text-accent2 mt-0.5"></i><div><div class="text-slate-200">Пройден тест по риск-менеджменту</div><div class="text-xs text-slate-500">2 дня назад</div></div></li>
+                    <li class="flex gap-3"><i class="fa-solid fa-trophy text-yellow-400 mt-0.5"></i><div><div class="text-slate-200">Достижение: «Дневник 20+ записей»</div><div class="text-xs text-slate-500">3 дня назад</div></div></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap gap-2 mt-4">
+                <span class="text-xs px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-300"><i class="fa-solid fa-medal text-yellow-400 mr-1"></i> Риск-план собран</span>
+                <span class="text-xs px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-300"><i class="fa-solid fa-fire text-orange-400 mr-1"></i> 7 дней подряд</span>
+                <span class="text-xs px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-300"><i class="fa-solid fa-book text-accent mr-1"></i> 20+ записей в дневнике</span>
+                <span class="text-xs px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-300"><i class="fa-solid fa-diagram-project text-accent2 mr-1"></i> Первая система</span>
+              </div>
+            </div>
+
+            <!-- LESSONS -->
+            <div data-panel="lessons" class="hidden">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-display font-bold text-white">Мои уроки</h3>
+                <span class="text-xs text-slate-400">5 из 12 завершено</span>
+              </div>
+              <div id="lessons-list" class="space-y-3"></div>
+            </div>
+
+            <!-- JOURNAL -->
+            <div data-panel="journal" class="hidden">
+              <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+                <div class="rounded-xl border border-white/10 bg-white/[0.03] p-4"><div class="text-xs text-slate-400">Winrate</div><div class="text-xl font-display font-bold text-white">58%</div></div>
+                <div class="rounded-xl border border-white/10 bg-white/[0.03] p-4"><div class="text-xs text-slate-400">Сделок</div><div class="text-xl font-display font-bold text-white">24</div></div>
+                <div class="rounded-xl border border-white/10 bg-white/[0.03] p-4"><div class="text-xs text-slate-400">Средний R</div><div class="text-xl font-display font-bold text-emerald-400">+0.7</div></div>
+                <div class="rounded-xl border border-white/10 bg-white/[0.03] p-4"><div class="text-xs text-slate-400">Профит-фактор</div><div class="text-xl font-display font-bold text-white">1.9</div></div>
+              </div>
+              <div class="overflow-x-auto rounded-xl border border-white/10">
+                <table class="w-full text-sm min-w-[640px]">
+                  <thead class="bg-white/[0.04] text-slate-400 text-xs uppercase tracking-wide">
+                    <tr><th class="text-left font-medium px-4 py-3">Дата</th><th class="text-left font-medium px-4 py-3">Инструмент</th><th class="text-left font-medium px-4 py-3">Сторона</th><th class="text-left font-medium px-4 py-3">Риск</th><th class="text-left font-medium px-4 py-3">Результат</th><th class="text-left font-medium px-4 py-3">Статус</th></tr>
+                  </thead>
+                  <tbody id="journal-rows" class="divide-y divide-white/5"></tbody>
+                </table>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-3">Демо-журнал. В полной версии дневник заполняется вашими сделками и считает статистику автоматически.</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-8 reveal">
+        <a href="#contact" class="anchor btn-anim btn-shine inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40">
+          Хочу такой кабинет <i class="fa-solid fa-arrow-right"></i>
+        </a>
       </div>
     </div>
   </section>
@@ -399,10 +520,7 @@
       </div>
       <div class="grid md:grid-cols-2 gap-6 mt-12">
         <div class="reveal card-hover rounded-2xl border border-emerald-500/20 bg-ink2/50 p-6">
-          <div class="flex items-center justify-between mb-4">
-            <span class="inline-flex items-center gap-2 text-emerald-400 font-semibold"><i class="fa-solid fa-arrow-trend-up"></i> Удачная сделка</span>
-            <span class="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded">+3R</span>
-          </div>
+          <div class="flex items-center justify-between mb-4"><span class="inline-flex items-center gap-2 text-emerald-400 font-semibold"><i class="fa-solid fa-arrow-trend-up"></i> Удачная сделка</span><span class="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded">+3R</span></div>
           <canvas class="trade-canvas w-full rounded-lg bg-black/20" data-type="win" height="170"></canvas>
           <div class="grid grid-cols-3 gap-3 mt-4 text-center text-sm">
             <div><div class="text-slate-400 text-xs">Риск</div><div class="text-white font-semibold">1%</div></div>
@@ -412,10 +530,7 @@
           <p class="text-sm text-slate-400 mt-4">Вход на ретесте уровня, стоп под структурой. Цель достигнута — позиция закрыта по правилам.</p>
         </div>
         <div class="reveal card-hover rounded-2xl border border-red-500/20 bg-ink2/50 p-6">
-          <div class="flex items-center justify-between mb-4">
-            <span class="inline-flex items-center gap-2 text-red-400 font-semibold"><i class="fa-solid fa-arrow-trend-down"></i> Убыточная сделка</span>
-            <span class="text-xs font-mono text-red-400 bg-red-500/10 px-2 py-1 rounded">−1R</span>
-          </div>
+          <div class="flex items-center justify-between mb-4"><span class="inline-flex items-center gap-2 text-red-400 font-semibold"><i class="fa-solid fa-arrow-trend-down"></i> Убыточная сделка</span><span class="text-xs font-mono text-red-400 bg-red-500/10 px-2 py-1 rounded">−1R</span></div>
           <canvas class="trade-canvas w-full rounded-lg bg-black/20" data-type="loss" height="170"></canvas>
           <div class="grid grid-cols-3 gap-3 mt-4 text-center text-sm">
             <div><div class="text-slate-400 text-xs">Риск</div><div class="text-white font-semibold">1%</div></div>
@@ -440,20 +555,17 @@
         <div class="reveal card-hover rounded-2xl border border-white/10 bg-ink2/50 p-6">
           <div class="text-accent mb-3"><i class="fa-solid fa-quote-left text-2xl"></i></div>
           <p class="text-slate-200">«Стал понимать рынок и перестал сливать депозит хаотично. Появилась структура в голове.»</p>
-          <div class="flex items-center gap-3 mt-5"><span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-accent/30 to-accent2/30 text-white font-semibold">И</span>
-            <div><div class="text-white text-sm font-semibold">Иван</div><div class="text-xs text-slate-400">ученик курса</div></div></div>
+          <div class="flex items-center gap-3 mt-5"><span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-accent/30 to-accent2/30 text-white font-semibold">И</span><div><div class="text-white text-sm font-semibold">Иван</div><div class="text-xs text-slate-400">ученик курса</div></div></div>
         </div>
         <div class="reveal card-hover rounded-2xl border border-white/10 bg-ink2/50 p-6">
           <div class="text-accent mb-3"><i class="fa-solid fa-quote-left text-2xl"></i></div>
           <p class="text-slate-200">«Дисциплина выросла, теперь торгую строго по плану. Эмоции больше не управляют сделками.»</p>
-          <div class="flex items-center gap-3 mt-5"><span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-accent/30 to-accent2/30 text-white font-semibold">М</span>
-            <div><div class="text-white text-sm font-semibold">Мария</div><div class="text-xs text-slate-400">ученица курса</div></div></div>
+          <div class="flex items-center gap-3 mt-5"><span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-accent/30 to-accent2/30 text-white font-semibold">М</span><div><div class="text-white text-sm font-semibold">Мария</div><div class="text-xs text-slate-400">ученица курса</div></div></div>
         </div>
         <div class="reveal card-hover rounded-2xl border border-white/10 bg-ink2/50 p-6">
           <div class="text-accent mb-3"><i class="fa-solid fa-quote-left text-2xl"></i></div>
           <p class="text-slate-200">«Риск-менеджмент реально спас счёт во время просадки. Понял, зачем нужны правила.»</p>
-          <div class="flex items-center gap-3 mt-5"><span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-accent/30 to-accent2/30 text-white font-semibold">Д</span>
-            <div><div class="text-white text-sm font-semibold">Дмитрий</div><div class="text-xs text-slate-400">ученик курса</div></div></div>
+          <div class="flex items-center gap-3 mt-5"><span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-accent/30 to-accent2/30 text-white font-semibold">Д</span><div><div class="text-white text-sm font-semibold">Дмитрий</div><div class="text-xs text-slate-400">ученик курса</div></div></div>
         </div>
       </div>
       <p class="text-[11px] text-slate-500 text-center mt-6">Отзывы и имена приведены для демонстрации прототипа.</p>
@@ -473,9 +585,9 @@
           <h3 class="font-display font-bold text-xl text-white">Базовый</h3>
           <div class="mt-4 flex items-end gap-2"><span class="font-display font-extrabold text-4xl text-white">$49</span><span class="text-slate-400 mb-1">/ мес · 3 500 ₽</span></div>
           <ul class="mt-6 space-y-3 text-slate-300 flex-1">
-            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Видеолекции всех 8 модулей</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Видеолекции всех 12 блоков</li>
             <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Доступ в Discord-чат</li>
-            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Домашние задания с проверкой</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Личный кабинет и дневник сделок</li>
             <li class="flex gap-3 text-slate-500"><i class="fa-solid fa-minus mt-1"></i> Личные сессии с ментором</li>
           </ul>
           <button onclick="toast('Это демо — оплата не проводится. В боевой версии будет платёжный шлюз','info')" class="btn-anim mt-8 w-full py-3 rounded-xl border border-white/15 bg-white/5 text-white font-semibold hover:bg-white/10">Выбрать</button>
@@ -488,7 +600,7 @@
             <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Всё из тарифа «Базовый»</li>
             <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> 2 личные сессии в месяц с ментором</li>
             <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Приоритетные разборы сделок</li>
-            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Помощь с торговой системой</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Помощь с торговой системой и проп-счётом</li>
           </ul>
           <button onclick="toast('Это демо — оплата не проводится. В боевой версии будет платёжный шлюз','info')" class="btn-anim btn-shine mt-8 w-full py-3 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40">Выбрать</button>
         </div>
@@ -513,7 +625,7 @@
     </div>
   </section>
 
-  <!-- ============ CONTACT FORM ============ -->
+  <!-- ============ CONTACT ============ -->
   <section id="contact" class="py-16 sm:py-24 scroll-mt-20">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="reveal rounded-2xl border border-white/10 bg-ink2/60 p-7 sm:p-10">
@@ -548,7 +660,7 @@
   <footer class="border-t border-white/5 py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-        <a href="#top" class="flex items-center gap-2">
+        <a href="#top" class="anchor flex items-center gap-2">
           <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-accent2 text-ink font-display font-extrabold text-lg">M</span>
           <span class="font-display font-extrabold text-lg text-white">Mind<span class="text-accent">Trade</span></span>
         </a>
@@ -577,11 +689,10 @@
       <button onclick="closeModal()" class="absolute top-4 right-4 h-9 w-9 inline-flex items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-white/5"><i class="fa-solid fa-xmark"></i></button>
       <div class="flex items-center gap-3 mb-4">
         <span id="modal-icon" class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/15 text-accent text-xl"><i class="fa-solid fa-book"></i></span>
-        <div><div id="modal-tag" class="text-xs font-semibold text-accent uppercase tracking-wider">Модуль</div>
-          <h3 id="modal-title" class="font-display font-bold text-xl text-white">Заголовок</h3></div>
+        <div><div id="modal-tag" class="text-xs font-semibold text-accent uppercase tracking-wider">Блок</div><h3 id="modal-title" class="font-display font-bold text-xl text-white">Заголовок</h3></div>
       </div>
       <p id="modal-desc" class="text-slate-300 leading-relaxed"></p>
-      <div class="mt-5 rounded-xl border border-dashed border-white/15 bg-white/[0.03] p-4 text-sm text-slate-400"><i class="fa-solid fa-circle-info text-accent mr-2"></i> Детальный план модуля будет в полной версии курса.</div>
+      <div class="mt-5 rounded-xl border border-dashed border-white/15 bg-white/[0.03] p-4 text-sm text-slate-400"><i class="fa-solid fa-circle-info text-accent mr-2"></i> Детальный план блока будет в полной версии курса.</div>
       <button onclick="closeModal()" class="btn-anim mt-6 w-full py-3 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold">Понятно</button>
     </div>
   </div>
@@ -597,13 +708,26 @@
     /* ---------- Burger ---------- */
     const burger = document.getElementById('burger');
     const mobileMenu = document.getElementById('mobile-menu');
+    function closeMenu(){ mobileMenu.classList.add('hidden'); burger.innerHTML = '<i class="fa-solid fa-bars text-lg"></i>'; }
     burger.addEventListener('click', () => {
       mobileMenu.classList.toggle('hidden');
       burger.innerHTML = mobileMenu.classList.contains('hidden') ? '<i class="fa-solid fa-bars text-lg"></i>' : '<i class="fa-solid fa-xmark text-lg"></i>';
     });
-    document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => {
-      mobileMenu.classList.add('hidden'); burger.innerHTML = '<i class="fa-solid fa-bars text-lg"></i>';
-    }));
+
+    /* ---------- Smooth anchor scroll (offset for sticky header) ---------- */
+    function scrollToId(id){ const t = document.querySelector(id); if(!t) return;
+      const y = t.getBoundingClientRect().top + window.scrollY - 72;
+      window.scrollTo({ top: y, behavior: 'smooth' }); }
+    document.querySelectorAll('a.anchor').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const id = a.getAttribute('href');
+        if (!id || id === '#') return;
+        if (id === '#top') { e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); closeMenu(); return; }
+        const t = document.querySelector(id); if (!t) return;
+        e.preventDefault(); scrollToId(id); closeMenu();
+      });
+    });
+    function enterCabinet(){ scrollToId('#cabinet'); toast('Это демо личного кабинета. В боевой версии — вход по логину','info'); }
 
     /* ---------- Toast ---------- */
     function toast(message, type='success') {
@@ -633,37 +757,27 @@
       document.getElementById('ticker').innerHTML = row + row;
     })();
 
-    /* ---------- Modules + modal ---------- */
+    /* ---------- Course curriculum (12 blocks) ---------- */
     const modules = [
-      { icon:'fa-cubes', title:'Фундамент рынков и терминология', desc:'Как устроены рынки, какие бывают инструменты, базовая терминология. Разбираем механику цены, ликвидность и участников рынка — фундамент, без которого дальше двигаться рискованно.' },
-      { icon:'fa-chart-line', title:'Технический анализ', desc:'Уровни поддержки и сопротивления, тренды и контртренды, ключевые графические паттерны. Учимся читать структуру рынка, а не угадывать развороты.' },
-      { icon:'fa-wave-square', title:'Индикаторы и объёмы', desc:'Какие индикаторы реально помогают, а какие лишь шум. Работа с объёмами как с подтверждением, а не как с «святым Граалем».' },
-      { icon:'fa-shield-halved', title:'Управление капиталом', desc:'Risk Management — сердце системы. Размер позиции, риск на сделку, допустимая просадка. Как защитить счёт даже в серии убытков.' },
-      { icon:'fa-brain', title:'Психология и дневник сделок', desc:'Страх, жадность, переторговка. Ведём дневник сделок, анализируем эмоции и решения, формируем устойчивые торговые привычки.' },
-      { icon:'fa-globe', title:'Макроэкономика и новости', desc:'Как новости и макроданные влияют на рынок. Учимся не торговать «на эмоциях от заголовков» и понимать контекст движения цены.' },
-      { icon:'fa-building-columns', title:'Легальная работа с проп-фирмами', desc:'Как устроены FTMO, Topstep и другие проп-фирмы, их правила и ограничения. Работаем честно и строго в рамках их условий.' },
-      { icon:'fa-diagram-project', title:'Построение личной торговой системы', desc:'Собираем всё в единую систему: правила входа/выхода, риск, чек-листы. На выходе — твой персональный торговый план.' },
+      { icon:'fa-chart-line',       title:'Фундамент работы с графиком', desc:'Как читать график: структура рынка, уровни, тренды, свечи и паттерны. База, на которой строится всё остальное.' },
+      { icon:'fa-diagram-project',  title:'Торговая система и 3+ сэтапа', desc:'Готовая торговая система и более трёх торговых моделей/сэтапов внутри неё — с чёткими правилами входа, стопа и выхода.' },
+      { icon:'fa-shield-halved',    title:'Управление капиталом и риск', desc:'Risk Management — сердце системы. Размер позиции, риск на сделку, контроль просадки. Как защитить счёт в серии убытков.' },
+      { icon:'fa-brain',            title:'Психология трейдинга', desc:'Страх, жадность, переторговка. Дневник сделок, работа с эмоциями и формирование устойчивых торговых привычек.' },
+      { icon:'fa-bolt',             title:'Основы интрадей-трейдинга', desc:'Внутридневная торговля: тайминги сессий, ликвидность, быстрые сэтапы и управление сделкой в течение дня.' },
+      { icon:'fa-wave-square',      title:'Основы свинг-трейдинга', desc:'Удержание позиций от нескольких дней до недель: работа со среднесроком, переносы и сопровождение позиции.' },
+      { icon:'fa-mountain',         title:'Основы позиционной торговли', desc:'Долгосрочные удержания и крупные движения: как ловить большие тренды и спокойно высиживать позицию.' },
+      { icon:'fa-seedling',         title:'Основы долгосрочного инвестирования', desc:'Портфель, горизонты, диверсификация и сложный процент. Чем инвестирование отличается от спекуляций.' },
+      { icon:'fa-calendar-days',    title:'Сезонность в экономике', desc:'Сезонные закономерности рынков и экономических циклов и как аккуратно учитывать их в торговых решениях.' },
+      { icon:'fa-newspaper',        title:'Макроэкономический нарратив (новости)', desc:'Как читать новости и макро-нарратив, понимать контекст движения цены и не торговать на эмоциях от заголовков.' },
+      { icon:'fa-building-columns', title:'Математика работы с проп-счетами', desc:'Системная работа с проп-фирмами (FTMO, Topstep): математика риска, прохождение челленджа и удержание счёта строго в рамках правил. Без обещаний гарантированной прибыли.' },
+      { icon:'fa-handshake',        title:'Капитал в управление', desc:'Как и где легально привлекать капитал в управление: модели работы с проп-фирмами и инвесторами, ограничения и ответственность.' },
     ];
-    const track = document.getElementById('program-track');
-    modules.forEach((m,i) => {
-      const card = document.createElement('button');
-      card.className = 'h-card card-hover text-left rounded-2xl border border-white/10 bg-ink2/60 p-6 group';
-      card.innerHTML = `
-        <div class="flex items-center justify-between mb-4">
-          <span class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent text-xl group-hover:bg-accent group-hover:text-ink group-hover:scale-110 transition-all"><i class="fa-solid ${m.icon}"></i></span>
-          <span class="text-xs font-mono text-slate-500">0${i+1}</span>
-        </div>
-        <h3 class="font-display font-bold text-white leading-snug">${m.title}</h3>
-        <p class="text-sm text-slate-400 mt-2 line-clamp-3">${m.desc}</p>
-        <span class="mt-4 inline-flex items-center gap-1.5 text-sm text-accent">Подробнее <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i></span>`;
-      card.addEventListener('click', () => openModal(m,i));
-      track.appendChild(card);
-    });
 
+    /* ---------- Modal ---------- */
     const modal = document.getElementById('modal'), modalPanel = document.getElementById('modal-panel'), modalBackdrop = document.getElementById('modal-backdrop');
     function openModal(m,i) {
       document.getElementById('modal-icon').innerHTML = `<i class="fa-solid ${m.icon}"></i>`;
-      document.getElementById('modal-tag').textContent = 'Модуль ' + (i+1);
+      document.getElementById('modal-tag').textContent = 'Блок ' + (i+1);
       document.getElementById('modal-title').textContent = m.title;
       document.getElementById('modal-desc').textContent = m.desc;
       modal.classList.remove('hidden'); modal.classList.add('flex');
@@ -687,40 +801,30 @@
     /* ---------- Magnetic buttons ---------- */
     if (!reduceMotion && window.matchMedia('(pointer:fine)').matches) {
       document.querySelectorAll('.magnetic').forEach((el) => {
-        el.addEventListener('pointermove', (e) => {
-          const r = el.getBoundingClientRect();
-          el.style.transform = `translate(${(e.clientX-r.left-r.width/2)*0.2}px, ${(e.clientY-r.top-r.height/2)*0.3 - 2}px)`;
-        });
+        el.addEventListener('pointermove', (e) => { const r = el.getBoundingClientRect();
+          el.style.transform = `translate(${(e.clientX-r.left-r.width/2)*0.2}px, ${(e.clientY-r.top-r.height/2)*0.3 - 2}px)`; });
         el.addEventListener('pointerleave', () => { el.style.transform = ''; });
       });
     }
 
     /* ---------- Count-up ---------- */
-    function countUp(el) {
-      const target = +el.dataset.to; const dur = 1400; let start = null;
-      function step(ts) { if (!start) start = ts; const p = Math.min((ts-start)/dur, 1);
-        el.textContent = Math.round((1-Math.pow(1-p,3))*target); if (p<1) requestAnimationFrame(step); }
-      requestAnimationFrame(step);
-    }
+    function countUp(el) { const target = +el.dataset.to; const dur = 1400; let start = null;
+      function step(ts){ if(!start) start=ts; const p=Math.min((ts-start)/dur,1); el.textContent=Math.round((1-Math.pow(1-p,3))*target); if(p<1) requestAnimationFrame(step); }
+      requestAnimationFrame(step); }
 
     /* ---------- Reveal observer ---------- */
     const io = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          if (entry.target.classList.contains('count')) countUp(entry.target);
-          io.unobserve(entry.target);
-        }
-      });
+      entries.forEach((entry) => { if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        if (entry.target.classList.contains('count')) countUp(entry.target);
+        io.unobserve(entry.target);
+      } });
     }, { threshold: 0.14 });
     document.querySelectorAll('.reveal, .reveal-l, .reveal-r, .count').forEach((el) => io.observe(el));
 
-    /* =========================================================
-       SCROLL ENGINE — single rAF loop drives all scroll effects
-       ========================================================= */
+    /* ===================== SCROLL ENGINE ===================== */
     const scrollyItems = [];
     function registerScrolly(el, onProgress) { scrollyItems.push({ el, onProgress }); }
-
     const progressBar = document.getElementById('progress');
     const toTop = document.getElementById('toTop');
     const parallaxEls = [...document.querySelectorAll('[data-parallax]')];
@@ -730,43 +834,21 @@
     function onScroll() { if (!ticking) { requestAnimationFrame(tick); ticking = true; } }
     function tick() {
       ticking = false;
-      const vh = window.innerHeight;
-      const doc = document.documentElement;
-
-      // progress bar + back-to-top
+      const vh = window.innerHeight, doc = document.documentElement;
       const scrolled = doc.scrollTop / (doc.scrollHeight - doc.clientHeight || 1);
       progressBar.style.width = (scrolled * 100) + '%';
       toTop.classList.toggle('show', doc.scrollTop > 600);
-
-      // scrolly sections
-      scrollyItems.forEach(s => {
-        const r = s.el.getBoundingClientRect();
-        const denom = s.el.offsetHeight - vh;
-        const p = denom > 0 ? clamp(-r.top / denom, 0, 1) : 0;
-        s.onProgress(p, r);
-      });
-
-      // parallax
-      if (!reduceMotion) parallaxEls.forEach(el => {
-        const r = el.getBoundingClientRect();
-        const center = r.top + r.height/2 - vh/2;
-        el.style.transform = `translateY(${center * -(+el.dataset.parallax)}px)`;
-      });
-
-      // word reveal
-      revealWords.forEach(p => {
-        const words = p.querySelectorAll('.w');
-        words.forEach(w => {
-          const r = w.getBoundingClientRect();
-          const trigger = vh * 0.78;
-          w.classList.toggle('lit', r.top < trigger);
-        });
-      });
+      scrollyItems.forEach(s => { const r = s.el.getBoundingClientRect(); const denom = s.el.offsetHeight - vh;
+        s.onProgress(denom > 0 ? clamp(-r.top / denom, 0, 1) : 0); });
+      if (!reduceMotion) parallaxEls.forEach(el => { const r = el.getBoundingClientRect();
+        el.style.transform = `translateY(${(r.top + r.height/2 - vh/2) * -(+el.dataset.parallax)}px)`; });
+      revealWords.forEach(p => { const trigger = vh * 0.78;
+        p.querySelectorAll('.w').forEach(w => { w.classList.toggle('lit', w.getBoundingClientRect().top < trigger); }); });
     }
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', () => { setupHorizontal(); onScroll(); });
+    window.addEventListener('resize', () => { measureCarousel(); onScroll(); });
 
-    /* ---------- Pinned steps: drive the morphing stage chart ---------- */
+    /* ---------- Pinned morphing stage chart ---------- */
     (function () {
       const section = document.getElementById('how');
       const canvas = document.getElementById('stageChart');
@@ -775,159 +857,206 @@
       const pills = [...section.querySelectorAll('.stage-pill')];
       const phases = ['Хаос → Структура','Защита риском','Психология','Готовая система'];
       const ctx = canvas.getContext('2d');
-
-      // two reference paths: chaotic vs clean trend
-      const N = 120, chaos = [], clean = [];
-      let cv = 50;
-      for (let i=0;i<N;i++) {
-        chaos.push(50 + Math.sin(i*0.9)*22 + Math.sin(i*0.27)*16 + ((i*53)%17-8));
-        cv += 0.5 + Math.sin(i*0.08)*0.5;
-        clean.push(28 + cv*0.55 + Math.sin(i*0.3)*4);
-      }
+      const N = 120, chaos = [], clean = []; let cv = 50;
+      for (let i=0;i<N;i++){ chaos.push(50 + Math.sin(i*0.9)*22 + Math.sin(i*0.27)*16 + ((i*53)%17-8));
+        cv += 0.5 + Math.sin(i*0.08)*0.5; clean.push(28 + cv*0.55 + Math.sin(i*0.3)*4); }
       const cmin = Math.min(...chaos,...clean), cmax = Math.max(...chaos,...clean);
-
-      function resize() {
-        const ratio = window.devicePixelRatio || 1;
-        canvas.width = canvas.clientWidth * ratio; canvas.height = 340 * ratio;
-        ctx.setTransform(ratio,0,0,ratio,0,0);
-      }
+      function resize(){ const r=window.devicePixelRatio||1; canvas.width=canvas.clientWidth*r; canvas.height=340*r; ctx.setTransform(r,0,0,r,0,0); }
       resize(); window.addEventListener('resize', resize);
-
       let curP = 0;
       function render(p) {
-        const w = canvas.clientWidth, h = 340, pad = 14;
-        ctx.clearRect(0,0,w,h);
-
-        // grid
-        ctx.strokeStyle = 'rgba(148,163,184,0.07)'; ctx.lineWidth = 1;
-        for (let g=0; g<=4; g++){ const y=(h/4)*g; ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
-
-        const t = smooth(p);
-        const xAt = (i) => pad + (i/(N-1))*(w-pad*2);
-        const yAt = (val) => pad + (1-(val-cmin)/(cmax-cmin))*(h-pad*2);
-        const blend = (i) => lerp(chaos[i], clean[i], t);
-
-        // risk band (fade in 0.2-0.45)
-        const aRisk = clamp((p-0.18)/0.22, 0, 1);
-        if (aRisk > 0) {
-          const yStop = yAt(blend(N-1) - 16), yTgt = yAt(blend(N-1) + 22);
-          ctx.setLineDash([5,5]);
-          ctx.strokeStyle = `rgba(248,113,113,${0.5*aRisk})`; ctx.beginPath(); ctx.moveTo(0,yStop); ctx.lineTo(w,yStop); ctx.stroke();
-          ctx.strokeStyle = `rgba(52,211,153,${0.5*aRisk})`; ctx.beginPath(); ctx.moveTo(0,yTgt); ctx.lineTo(w,yTgt); ctx.stroke();
-          ctx.setLineDash([]);
-          ctx.fillStyle = `rgba(248,113,113,${0.7*aRisk})`; ctx.font = '11px Inter'; ctx.fillText('stop', 6, yStop-6);
-          ctx.fillStyle = `rgba(52,211,153,${0.7*aRisk})`; ctx.fillText('target', 6, yTgt-6);
-        }
-
-        // area + line
-        const col = `rgb(${Math.round(lerp(248,45,t))},${Math.round(lerp(113,212,t))},${Math.round(lerp(113,191,t))})`;
-        const grad = ctx.createLinearGradient(0,0,0,h);
-        grad.addColorStop(0, `rgba(45,212,191,${0.05+0.2*t})`); grad.addColorStop(1,'rgba(45,212,191,0)');
-        ctx.beginPath(); ctx.moveTo(xAt(0), h);
-        for (let i=0;i<N;i++) ctx.lineTo(xAt(i), yAt(blend(i)));
-        ctx.lineTo(xAt(N-1), h); ctx.closePath(); ctx.fillStyle = grad; ctx.fill();
-
-        ctx.beginPath();
-        for (let i=0;i<N;i++){ const x=xAt(i),y=yAt(blend(i)); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
-        ctx.strokeStyle = col; ctx.lineWidth = 2.6; ctx.lineJoin='round';
-        ctx.shadowColor = `rgba(45,212,191,${0.5*t})`; ctx.shadowBlur = 14*t; ctx.stroke(); ctx.shadowBlur = 0;
-
-        // journal markers (psychology, fade 0.45-0.7)
-        const aPsy = clamp((p-0.45)/0.22, 0, 1);
-        if (aPsy > 0) {
-          ctx.fillStyle = `rgba(139,92,246,${aPsy})`;
-          [22,48,74,98].forEach(i => { ctx.beginPath(); ctx.arc(xAt(i), yAt(blend(i)), 3.4, 0, Math.PI*2); ctx.fill(); });
-        }
-
-        // system entries (fade 0.7-1)
-        const aSys = clamp((p-0.7)/0.25, 0, 1);
-        if (aSys > 0) {
-          const eIdx = 18, xIdx = N-10;
-          ctx.fillStyle = `rgba(96,165,250,${aSys})`;
-          ctx.beginPath(); ctx.arc(xAt(eIdx), yAt(blend(eIdx)), 5, 0, Math.PI*2); ctx.fill();
-          ctx.fillStyle = `rgba(45,212,191,${aSys})`;
-          ctx.beginPath(); ctx.arc(xAt(xIdx), yAt(blend(xIdx)), 5, 0, Math.PI*2); ctx.fill();
-          ctx.fillStyle = `rgba(203,213,225,${aSys})`; ctx.font='11px Inter';
-          ctx.fillText('вход', xAt(eIdx)-8, yAt(blend(eIdx))+18);
-          ctx.fillText('выход +3R', xAt(xIdx)-54, yAt(blend(xIdx))-10);
-        }
+        const w=canvas.clientWidth, h=340, pad=14; ctx.clearRect(0,0,w,h);
+        ctx.strokeStyle='rgba(148,163,184,0.07)'; ctx.lineWidth=1;
+        for (let g=0;g<=4;g++){ const y=(h/4)*g; ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+        const t=smooth(p); const xAt=i=>pad+(i/(N-1))*(w-pad*2); const yAt=v=>pad+(1-(v-cmin)/(cmax-cmin))*(h-pad*2); const blend=i=>lerp(chaos[i],clean[i],t);
+        const aRisk=clamp((p-0.18)/0.22,0,1);
+        if (aRisk>0){ const yStop=yAt(blend(N-1)-16), yTgt=yAt(blend(N-1)+22); ctx.setLineDash([5,5]);
+          ctx.strokeStyle=`rgba(248,113,113,${0.5*aRisk})`; ctx.beginPath(); ctx.moveTo(0,yStop); ctx.lineTo(w,yStop); ctx.stroke();
+          ctx.strokeStyle=`rgba(52,211,153,${0.5*aRisk})`; ctx.beginPath(); ctx.moveTo(0,yTgt); ctx.lineTo(w,yTgt); ctx.stroke(); ctx.setLineDash([]);
+          ctx.fillStyle=`rgba(248,113,113,${0.7*aRisk})`; ctx.font='11px Inter'; ctx.fillText('stop',6,yStop-6);
+          ctx.fillStyle=`rgba(52,211,153,${0.7*aRisk})`; ctx.fillText('target',6,yTgt-6); }
+        const col=`rgb(${Math.round(lerp(248,45,t))},${Math.round(lerp(113,212,t))},${Math.round(lerp(113,191,t))})`;
+        const grad=ctx.createLinearGradient(0,0,0,h); grad.addColorStop(0,`rgba(45,212,191,${0.05+0.2*t})`); grad.addColorStop(1,'rgba(45,212,191,0)');
+        ctx.beginPath(); ctx.moveTo(xAt(0),h); for(let i=0;i<N;i++) ctx.lineTo(xAt(i),yAt(blend(i))); ctx.lineTo(xAt(N-1),h); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+        ctx.beginPath(); for(let i=0;i<N;i++){ const x=xAt(i),y=yAt(blend(i)); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+        ctx.strokeStyle=col; ctx.lineWidth=2.6; ctx.lineJoin='round'; ctx.shadowColor=`rgba(45,212,191,${0.5*t})`; ctx.shadowBlur=14*t; ctx.stroke(); ctx.shadowBlur=0;
+        const aPsy=clamp((p-0.45)/0.22,0,1);
+        if (aPsy>0){ ctx.fillStyle=`rgba(139,92,246,${aPsy})`; [22,48,74,98].forEach(i=>{ ctx.beginPath(); ctx.arc(xAt(i),yAt(blend(i)),3.4,0,Math.PI*2); ctx.fill(); }); }
+        const aSys=clamp((p-0.7)/0.25,0,1);
+        if (aSys>0){ const eIdx=18,xIdx=N-10; ctx.fillStyle=`rgba(96,165,250,${aSys})`; ctx.beginPath(); ctx.arc(xAt(eIdx),yAt(blend(eIdx)),5,0,Math.PI*2); ctx.fill();
+          ctx.fillStyle=`rgba(45,212,191,${aSys})`; ctx.beginPath(); ctx.arc(xAt(xIdx),yAt(blend(xIdx)),5,0,Math.PI*2); ctx.fill();
+          ctx.fillStyle=`rgba(203,213,225,${aSys})`; ctx.font='11px Inter'; ctx.fillText('вход',xAt(eIdx)-8,yAt(blend(eIdx))+18); ctx.fillText('выход +3R',xAt(xIdx)-54,yAt(blend(xIdx))-10); }
       }
-
-      registerScrolly(section, (p) => {
-        curP = p;
-        render(p);
-        const active = clamp(Math.round(p*3), 0, 3);
-        stepCards.forEach((c,i) => c.classList.toggle('active', i===active));
-        pills.forEach((c,i) => c.classList.toggle('text-accent', i<=active));
-        phaseEl.textContent = phases[active];
-      });
-
-      // initial paint
-      const mio = new IntersectionObserver((es) => { es.forEach(e => { if (e.isIntersecting){ resize(); render(curP); } }); });
-      mio.observe(canvas);
+      registerScrolly(section, (p) => { curP=p; render(p);
+        const active=clamp(Math.round(p*3),0,3);
+        stepCards.forEach((c,i)=>c.classList.toggle('active',i===active));
+        pills.forEach((c,i)=>c.classList.toggle('text-accent',i<=active));
+        phaseEl.textContent=phases[active]; });
+      const mio = new IntersectionObserver((es)=>{ es.forEach(e=>{ if(e.isIntersecting){ resize(); render(curP); } }); }); mio.observe(canvas);
       render(0);
     })();
 
-    /* ---------- Horizontal pinned gallery ---------- */
-    function setupHorizontal() {
-      const section = document.querySelector('.pin-h');
-      const stage = section.querySelector('.pin-stage');
-      const trackEl = document.getElementById('program-track');
-      const isMobile = window.innerWidth < 1024;
-      // clear previous registration for this element
-      for (let i = scrollyItems.length-1; i>=0; i--) if (scrollyItems[i].el === section) scrollyItems.splice(i,1);
-
-      if (isMobile) { section.style.height = ''; trackEl.style.transform = ''; return; }
-
-      const maxX = trackEl.scrollWidth - window.innerWidth + 24;
-      section.style.height = (window.innerHeight + Math.max(maxX, 0)) + 'px';
-      stage.style.height = '100vh';
-      registerScrolly(section, (p) => { trackEl.style.transform = `translateX(${-p*Math.max(maxX,0)}px)`; });
+    /* ======================= AUTO CAROUSEL ======================= */
+    const cTrack = document.getElementById('program-track');
+    const cMask = document.getElementById('c-mask');
+    let cx=0, cEV=0, cPaused=false, cDragging=false, cLastX=0, cMoved=0, cDragged=false, cHalf=0;
+    const C_SPEED = 0.5;
+    (function build(){
+      const frag = document.createDocumentFragment();
+      for (let pass=0; pass<2; pass++) modules.forEach((m,i) => {
+        const card = document.createElement('button');
+        card.className = 'c-card card-hover text-left rounded-2xl border border-white/10 bg-ink2/60 p-6 group';
+        card.innerHTML = `
+          <div class="flex items-center justify-between mb-4">
+            <span class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent text-xl group-hover:bg-accent group-hover:text-ink group-hover:scale-110 transition-all"><i class="fa-solid ${m.icon}"></i></span>
+            <span class="text-xs font-mono text-slate-500">${String(i+1).padStart(2,'0')}</span>
+          </div>
+          <h3 class="font-display font-bold text-white leading-snug min-h-[3rem]">${m.title}</h3>
+          <p class="text-sm text-slate-400 mt-2 line-clamp-3">${m.desc}</p>
+          <span class="mt-4 inline-flex items-center gap-1.5 text-sm text-accent">Подробнее <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i></span>`;
+        card.addEventListener('click', () => { if (cDragged) return; openModal(m, i); });
+        frag.appendChild(card);
+      });
+      cTrack.appendChild(frag);
+    })();
+    function measureCarousel(){ cHalf = cTrack.scrollWidth / 2; }
+    measureCarousel(); window.addEventListener('load', measureCarousel);
+    cMask.addEventListener('mouseenter', () => cPaused = true);
+    cMask.addEventListener('mouseleave', () => cPaused = false);
+    cMask.addEventListener('pointerdown', (e) => { cDragging=true; cPaused=true; cLastX=e.clientX; cMoved=0; cDragged=false; cMask.setPointerCapture(e.pointerId); });
+    window.addEventListener('pointermove', (e) => { if(!cDragging) return; const dx=e.clientX-cLastX; cx+=dx; cLastX=e.clientX; cMoved+=Math.abs(dx); if(cMoved>6) cDragged=true; });
+    window.addEventListener('pointerup', () => { if(!cDragging) return; cDragging=false; cPaused=false; setTimeout(()=>cDragged=false, 50); });
+    document.getElementById('c-next').addEventListener('click', () => { cEV -= 55; });
+    document.getElementById('c-prev').addEventListener('click', () => { cEV += 55; });
+    function carouselLoop(){
+      if (!cPaused && !cDragging) cx -= C_SPEED;
+      cx += cEV; cEV *= 0.86; if (Math.abs(cEV) < 0.05) cEV = 0;
+      if (cHalf > 0){ while (cx <= -cHalf) cx += cHalf; while (cx > 0) cx -= cHalf; }
+      cTrack.style.transform = `translate3d(${cx}px,0,0)`;
+      requestAnimationFrame(carouselLoop);
     }
-    setupHorizontal();
+    requestAnimationFrame(carouselLoop);
 
-    /* ---------- Background floating candles ---------- */
+    /* ======================= CABINET DEMO ======================= */
+    // tabs
+    document.querySelectorAll('#cabinet .tab-btn[data-tab]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.dataset.tab;
+        document.querySelectorAll('#cabinet .tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('#cabinet [data-panel]').forEach(p => p.classList.toggle('hidden', p.dataset.panel !== tab));
+      });
+    });
+    // lessons list
+    (function(){
+      const prog = [100,100,100,100,100,40,0,0,0,0,0,0];
+      const list = document.getElementById('lessons-list');
+      modules.forEach((m,i) => {
+        const p = prog[i];
+        const status = p===100 ? '<span class="text-emerald-400">Завершён</span>' : p>0 ? '<span class="text-accent">В процессе</span>' : '<span class="text-slate-500">Закрыто</span>';
+        const icon = p===100 ? 'fa-circle-check text-emerald-400' : p>0 ? 'fa-circle-play text-accent' : 'fa-lock text-slate-600';
+        const row = document.createElement('div');
+        row.className = 'rounded-xl border ' + (p>0&&p<100 ? 'border-accent/40 bg-accent/[0.05]' : 'border-white/10 bg-white/[0.03]') + ' p-4 flex items-center gap-4';
+        row.innerHTML = `
+          <i class="fa-solid ${icon} text-lg w-5 text-center"></i>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between gap-3">
+              <div class="font-medium text-white truncate">${i+1}. ${m.title}</div>
+              <div class="text-xs shrink-0">${status}</div>
+            </div>
+            <div class="h-1.5 rounded-full bg-white/10 mt-2 overflow-hidden"><div class="h-full rounded-full bg-gradient-to-r from-accent to-accent2" style="width:${p}%"></div></div>
+          </div>
+          <button onclick="${p>0?`toast('Демо: урок откроется в полной версии','info')`:`toast('Сначала пройдите предыдущие блоки','warn')`}" class="shrink-0 text-xs px-3 py-2 rounded-lg ${p>0?'bg-accent/15 text-accent':'bg-white/5 text-slate-500'} hover:opacity-80">${p===100?'Повторить':p>0?'Продолжить':'Открыть'}</button>`;
+        list.appendChild(row);
+      });
+    })();
+    // journal rows
+    (function(){
+      const rows = [
+        ['11 июн','EUR/USD','Long','+3.0R','Цель','up'],
+        ['10 июн','BTC/USDT','Short','−1.0R','Стоп','down'],
+        ['09 июн','US100','Long','+1.5R','Частичная фиксация','up'],
+        ['06 июн','GOLD','Long','+2.2R','Цель','up'],
+        ['05 июн','ETH/USDT','Short','−1.0R','Стоп','down'],
+        ['04 июн','SOL/USDT','Long','+0.8R','Ручное закрытие','up'],
+      ];
+      const tb = document.getElementById('journal-rows');
+      rows.forEach(r => {
+        const tr = document.createElement('tr'); tr.className='hover:bg-white/[0.03]';
+        const side = r[2]==='Long' ? '<span class="text-emerald-400">Long</span>' : '<span class="text-red-400">Short</span>';
+        const res = r[5]==='up' ? `<span class="text-emerald-400 font-semibold">${r[3]}</span>` : `<span class="text-red-400 font-semibold">${r[3]}</span>`;
+        tr.innerHTML = `<td class="px-4 py-3 text-slate-300">${r[0]}</td><td class="px-4 py-3 text-white font-medium">${r[1]}</td><td class="px-4 py-3">${side}</td><td class="px-4 py-3 text-slate-300">1%</td><td class="px-4 py-3">${res}</td><td class="px-4 py-3 text-slate-400">${r[4]}</td>`;
+        tb.appendChild(tr);
+      });
+    })();
+    // equity canvas + animate stats on view
+    function drawEquity(){
+      const canvas = document.getElementById('eqChart'); if(!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const r=window.devicePixelRatio||1; canvas.width=canvas.clientWidth*r; canvas.height=200*r; ctx.setTransform(r,0,0,r,0,0);
+      const N=80, data=[]; let v=100;
+      for(let i=0;i<N;i++){ v += Math.sin(i*0.25)*0.7 + 0.45 + ((i*37)%11-5)*0.18; if(i%17===0) v-=2.2; data.push(v); }
+      const min=Math.min(...data), max=Math.max(...data);
+      let prog=0;
+      (function frame(){ const w=canvas.clientWidth,h=200,pad=8; ctx.clearRect(0,0,w,h);
+        ctx.strokeStyle='rgba(148,163,184,0.07)'; ctx.lineWidth=1; for(let g=0;g<=3;g++){ const y=(h/3)*g; ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+        const count=Math.floor(prog), xAt=i=>(i/(N-1))*w, yAt=val=>pad+(1-(val-min)/(max-min))*(h-pad*2);
+        const grad=ctx.createLinearGradient(0,0,0,h); grad.addColorStop(0,'rgba(45,212,191,0.25)'); grad.addColorStop(1,'rgba(45,212,191,0)');
+        ctx.beginPath(); ctx.moveTo(0,h); for(let i=0;i<=count&&i<N;i++) ctx.lineTo(xAt(i),yAt(data[i])); ctx.lineTo(xAt(Math.min(count,N-1)),h); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+        ctx.beginPath(); for(let i=0;i<=count&&i<N;i++){ const x=xAt(i),y=yAt(data[i]); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+        ctx.strokeStyle='#2DD4BF'; ctx.lineWidth=2.4; ctx.lineJoin='round'; ctx.shadowColor='rgba(45,212,191,0.5)'; ctx.shadowBlur=10; ctx.stroke(); ctx.shadowBlur=0;
+        if(prog<N-1){ prog+=1.1; requestAnimationFrame(frame); } })();
+    }
+    (function(){
+      const cab = document.getElementById('cabinet'); let done=false;
+      const obs = new IntersectionObserver((es)=>{ es.forEach(e=>{ if(e.isIntersecting && !done){ done=true;
+        document.querySelectorAll('#cabinet .bar').forEach(b=> b.style.width=b.dataset.w);
+        const ring=document.getElementById('progRing'), circ=213.6, pct=45;
+        ring.style.strokeDashoffset = circ*(1-pct/100);
+        const pctEl=document.getElementById('progPct'); let s=null;
+        (function up(ts){ if(!s)s=ts; const t=Math.min((ts-s)/1300,1); pctEl.textContent=Math.round((1-Math.pow(1-t,3))*pct); if(t<1) requestAnimationFrame(up); })(performance.now());
+        drawEquity();
+      } }); }, { threshold:0.2 });
+      obs.observe(cab);
+    })();
+    window.addEventListener('resize', () => { if (document.getElementById('eqChart').clientWidth) drawEquity(); });
+
+    /* ---------- Background candles ---------- */
     (function () {
       if (reduceMotion) return;
       const canvas = document.getElementById('candles'); const ctx = canvas.getContext('2d');
       let W,H,ratio,candles=[];
-      function resize(){ ratio=window.devicePixelRatio||1; W=canvas.clientWidth=window.innerWidth; H=canvas.clientHeight=window.innerHeight;
-        canvas.width=W*ratio; canvas.height=H*ratio; ctx.setTransform(ratio,0,0,ratio,0,0); }
-      function seed(i,n){ return { x:(i/n)*W+((i*53)%40), y:H+((i*37)%H), w:6+(i%4)*2, body:14+(i%5)*8, wick:8+(i%3)*6,
-        speed:0.25+((i%5)*0.12), up:(i*7)%3!==0, alpha:0.05+((i%4)*0.02) }; }
+      function resize(){ ratio=window.devicePixelRatio||1; W=canvas.clientWidth=window.innerWidth; H=canvas.clientHeight=window.innerHeight; canvas.width=W*ratio; canvas.height=H*ratio; ctx.setTransform(ratio,0,0,ratio,0,0); }
+      function seed(i,n){ return { x:(i/n)*W+((i*53)%40), y:H+((i*37)%H), w:6+(i%4)*2, body:14+(i%5)*8, wick:8+(i%3)*6, speed:0.25+((i%5)*0.12), up:(i*7)%3!==0, alpha:0.05+((i%4)*0.02) }; }
       function init(){ resize(); const n=Math.max(10,Math.floor(W/90)); candles=Array.from({length:n},(_,i)=>seed(i,n)); }
-      function draw(){ ctx.clearRect(0,0,W,H); candles.forEach(c=>{ c.y-=c.speed; if (c.y+c.body+c.wick<-20) c.y=H+40;
+      function draw(){ ctx.clearRect(0,0,W,H); candles.forEach(c=>{ c.y-=c.speed; if(c.y+c.body+c.wick<-20) c.y=H+40;
         const col=c.up?'45,212,191':'59,130,246'; ctx.strokeStyle=`rgba(${col},${c.alpha+0.04})`; ctx.lineWidth=1.2;
         ctx.beginPath(); ctx.moveTo(c.x,c.y-c.wick); ctx.lineTo(c.x,c.y+c.body+c.wick); ctx.stroke();
         ctx.fillStyle=`rgba(${col},${c.alpha})`; ctx.fillRect(c.x-c.w/2,c.y,c.w,c.body); }); requestAnimationFrame(draw); }
       init(); window.addEventListener('resize', init); draw();
     })();
 
-    /* ---------- Hero animated price chart (timed draw) ---------- */
+    /* ---------- Hero chart ---------- */
     (function () {
       const canvas = document.getElementById('priceChart'); if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      const pctEl = canvas.parentElement.querySelector('.font-mono.text-accent');
+      const ctx = canvas.getContext('2d'); const pctEl = canvas.parentElement.querySelector('.font-mono.text-accent');
       function resize(){ const r=window.devicePixelRatio||1; canvas.width=canvas.clientWidth*r; canvas.height=280*r; ctx.setTransform(r,0,0,r,0,0); }
       resize(); window.addEventListener('resize', resize);
       const N=140, data=[]; let v=50;
-      for (let i=0;i<N;i++){ const noise=Math.sin(i*0.35)*6+Math.sin(i*0.11)*10; v+=(Math.sin(i*0.07)*0.9)+(i%13===0?-4:0.35); data.push(60+noise+v*0.4); }
-      const min=Math.min(...data), max=Math.max(...data);
-      let progress=0;
+      for(let i=0;i<N;i++){ const noise=Math.sin(i*0.35)*6+Math.sin(i*0.11)*10; v+=(Math.sin(i*0.07)*0.9)+(i%13===0?-4:0.35); data.push(60+noise+v*0.4); }
+      const min=Math.min(...data), max=Math.max(...data); let progress=0;
       function draw(){ const w=canvas.clientWidth,h=280; ctx.clearRect(0,0,w,h);
-        ctx.strokeStyle='rgba(148,163,184,0.08)'; ctx.lineWidth=1;
-        for (let g=0;g<=4;g++){ const y=(h/4)*g; ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
-        const count=Math.floor(progress), pad=8;
-        const xAt=(i)=>(i/(N-1))*w, yAt=(val)=>pad+(1-(val-min)/(max-min))*(h-pad*2);
+        ctx.strokeStyle='rgba(148,163,184,0.08)'; ctx.lineWidth=1; for(let g=0;g<=4;g++){ const y=(h/4)*g; ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+        const count=Math.floor(progress), pad=8, xAt=i=>(i/(N-1))*w, yAt=val=>pad+(1-(val-min)/(max-min))*(h-pad*2);
         const grad=ctx.createLinearGradient(0,0,0,h); grad.addColorStop(0,'rgba(45,212,191,0.28)'); grad.addColorStop(1,'rgba(45,212,191,0)');
-        ctx.beginPath(); ctx.moveTo(0,h); for (let i=0;i<=count&&i<N;i++) ctx.lineTo(xAt(i),yAt(data[i])); ctx.lineTo(xAt(Math.min(count,N-1)),h); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
-        ctx.beginPath(); for (let i=0;i<=count&&i<N;i++){ const x=xAt(i),y=yAt(data[i]); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+        ctx.beginPath(); ctx.moveTo(0,h); for(let i=0;i<=count&&i<N;i++) ctx.lineTo(xAt(i),yAt(data[i])); ctx.lineTo(xAt(Math.min(count,N-1)),h); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+        ctx.beginPath(); for(let i=0;i<=count&&i<N;i++){ const x=xAt(i),y=yAt(data[i]); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
         ctx.strokeStyle='#2DD4BF'; ctx.lineWidth=2.5; ctx.lineJoin='round'; ctx.shadowColor='rgba(45,212,191,0.6)'; ctx.shadowBlur=12; ctx.stroke(); ctx.shadowBlur=0;
         const idx=Math.min(count,N-1), hx=xAt(idx), hy=yAt(data[idx]);
         ctx.beginPath(); ctx.arc(hx,hy,4,0,Math.PI*2); ctx.fillStyle='#2DD4BF'; ctx.fill();
         ctx.beginPath(); ctx.arc(hx,hy,9,0,Math.PI*2); ctx.strokeStyle='rgba(45,212,191,0.35)'; ctx.lineWidth=2; ctx.stroke();
-        if (pctEl){ const ch=((data[idx]-data[0])/data[0]*100); pctEl.textContent=(ch>=0?'+':'')+ch.toFixed(2)+'%'; pctEl.style.color=ch>=0?'#2DD4BF':'#f87171'; }
-        if (progress<N-1){ progress+=0.9; requestAnimationFrame(draw); } }
+        if(pctEl){ const ch=((data[idx]-data[0])/data[0]*100); pctEl.textContent=(ch>=0?'+':'')+ch.toFixed(2)+'%'; pctEl.style.color=ch>=0?'#2DD4BF':'#f87171'; }
+        if(progress<N-1){ progress+=0.9; requestAnimationFrame(draw); } }
       requestAnimationFrame(()=>{ progress=0; draw(); });
     })();
 
@@ -936,25 +1065,18 @@
       const ctx = canvas.getContext('2d'); const type = canvas.dataset.type;
       function setup(){ const r=window.devicePixelRatio||1; canvas.width=canvas.clientWidth*r; canvas.height=170*r; ctx.setTransform(r,0,0,r,0,0); render(); }
       function render(){ const w=canvas.clientWidth,h=170,pad=10; ctx.clearRect(0,0,w,h);
-        const pts=[], n=40;
-        for (let i=0;i<n;i++){ pts.push(type==='win'?40+i*0.9+Math.sin(i*0.5)*6:90-i*0.6+Math.sin(i*0.5)*6); }
-        const min=Math.min(...pts)-8, max=Math.max(...pts)+8;
-        const xAt=(i)=>pad+(i/(n-1))*(w-pad*2), yAt=(val)=>pad+(1-(val-min)/(max-min))*(h-pad*2);
-        const color=type==='win'?'#34d399':'#f87171'; const eIdx=4, xIdx=n-5;
-        ctx.setLineDash([4,4]); ctx.strokeStyle='rgba(248,113,113,0.5)'; ctx.beginPath();
-        const stopY=type==='win'?yAt(pts[eIdx]-12):yAt(pts[xIdx]); ctx.moveTo(0,stopY); ctx.lineTo(w,stopY); ctx.stroke();
+        const pts=[],n=40; for(let i=0;i<n;i++){ pts.push(type==='win'?40+i*0.9+Math.sin(i*0.5)*6:90-i*0.6+Math.sin(i*0.5)*6); }
+        const min=Math.min(...pts)-8, max=Math.max(...pts)+8, xAt=i=>pad+(i/(n-1))*(w-pad*2), yAt=val=>pad+(1-(val-min)/(max-min))*(h-pad*2);
+        const color=type==='win'?'#34d399':'#f87171'; const eIdx=4,xIdx=n-5;
+        ctx.setLineDash([4,4]); ctx.strokeStyle='rgba(248,113,113,0.5)'; ctx.beginPath(); const stopY=type==='win'?yAt(pts[eIdx]-12):yAt(pts[xIdx]); ctx.moveTo(0,stopY); ctx.lineTo(w,stopY); ctx.stroke();
         ctx.strokeStyle='rgba(52,211,153,0.5)'; ctx.beginPath(); const tgtY=type==='win'?yAt(pts[xIdx]):yAt(pts[eIdx]+12); ctx.moveTo(0,tgtY); ctx.lineTo(w,tgtY); ctx.stroke(); ctx.setLineDash([]);
         ctx.beginPath(); pts.forEach((p,i)=>{ const x=xAt(i),y=yAt(p); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }); ctx.strokeStyle=color; ctx.lineWidth=2; ctx.lineJoin='round'; ctx.stroke();
-        ctx.fillStyle='#60a5fa'; ctx.beginPath(); ctx.arc(xAt(eIdx),yAt(pts[eIdx]),4,0,Math.PI*2); ctx.fill();
-        ctx.fillStyle='#cbd5e1'; ctx.font='10px Inter'; ctx.fillText('вход', xAt(eIdx)-8, yAt(pts[eIdx])-8);
-        ctx.fillStyle=color; ctx.beginPath(); ctx.arc(xAt(xIdx),yAt(pts[xIdx]),4,0,Math.PI*2); ctx.fill();
-        ctx.fillStyle='#cbd5e1'; ctx.fillText(type==='win'?'выход +3R':'стоп −1R', xAt(xIdx)-40, yAt(pts[xIdx])+(type==='win'?-8:14)); }
-      const mio = new IntersectionObserver((es)=>{ es.forEach(e=>{ if (e.isIntersecting){ setup(); mio.unobserve(canvas); } }); }, { threshold: 0.3 });
-      mio.observe(canvas);
-      window.addEventListener('resize', () => { if (canvas.clientWidth) render(); });
+        ctx.fillStyle='#60a5fa'; ctx.beginPath(); ctx.arc(xAt(eIdx),yAt(pts[eIdx]),4,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#cbd5e1'; ctx.font='10px Inter'; ctx.fillText('вход',xAt(eIdx)-8,yAt(pts[eIdx])-8);
+        ctx.fillStyle=color; ctx.beginPath(); ctx.arc(xAt(xIdx),yAt(pts[xIdx]),4,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#cbd5e1'; ctx.fillText(type==='win'?'выход +3R':'стоп −1R',xAt(xIdx)-40,yAt(pts[xIdx])+(type==='win'?-8:14)); }
+      const mio = new IntersectionObserver((es)=>{ es.forEach(e=>{ if(e.isIntersecting){ setup(); mio.unobserve(canvas); } }); }, { threshold: 0.3 });
+      mio.observe(canvas); window.addEventListener('resize', () => { if (canvas.clientWidth) render(); });
     });
 
-    // first paint
     onScroll();
   </script>
 </body>

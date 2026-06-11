@@ -99,7 +99,7 @@
     }
 
     /* Auto carousel */
-    .c-mask { overflow: hidden; cursor: grab; }
+    .c-mask { overflow: hidden; cursor: grab; padding: 2.5rem 0; }
     .c-mask:active { cursor: grabbing; }
     .c-track { display: flex; gap: 1.25rem; width: max-content; will-change: transform; }
     .c-card { width: 320px; flex: 0 0 auto; }
@@ -167,9 +167,9 @@
           <a href="#pricing" class="anchor nav-link hover:text-white transition-colors">Цены</a>
         </nav>
         <div class="hidden md:flex items-center gap-3">
-          <button onclick="enterCabinet()" class="btn-anim text-sm font-medium text-slate-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/5">
+          <a href="login.html" class="btn-anim inline-flex items-center text-sm font-medium text-slate-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/5">
             <i class="fa-regular fa-circle-user mr-1.5"></i>Войти в кабинет
-          </button>
+          </a>
           <a href="#contact" class="anchor btn-anim btn-shine text-sm font-semibold px-4 py-2 rounded-lg bg-gradient-to-r from-accent to-accent2 text-ink shadow-lg shadow-accent/25 hover:shadow-accent/40">
             Старт <i class="fa-solid fa-arrow-right ml-1"></i>
           </a>
@@ -186,7 +186,7 @@
         <a href="#pricing" class="anchor mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">Цены</a>
         <a href="#contact" class="anchor mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">Контакты</a>
         <div class="grid grid-cols-2 gap-2 pt-2">
-          <button onclick="enterCabinet()" class="px-3 py-2.5 rounded-lg border border-white/10 text-slate-200 text-sm">Кабинет</button>
+          <a href="login.html" class="text-center px-3 py-2.5 rounded-lg border border-white/10 text-slate-200 text-sm">Кабинет</a>
           <a href="#contact" class="anchor mobile-link text-center px-3 py-2.5 rounded-lg bg-gradient-to-r from-accent to-accent2 text-ink font-semibold text-sm">Старт</a>
         </div>
       </nav>
@@ -502,8 +502,11 @@
         </div>
       </div>
 
-      <div class="text-center mt-8 reveal">
-        <a href="#contact" class="anchor btn-anim btn-shine inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40">
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8 reveal">
+        <a href="app.html" class="btn-anim btn-shine inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40">
+          <i class="fa-solid fa-table-columns"></i> Открыть демо-кабинет
+        </a>
+        <a href="#contact" class="anchor btn-anim inline-flex items-center gap-2 px-6 py-3.5 rounded-xl border border-white/15 bg-white/5 text-white font-semibold hover:bg-white/10">
           Хочу такой кабинет <i class="fa-solid fa-arrow-right"></i>
         </a>
       </div>
@@ -665,8 +668,8 @@
           <span class="font-display font-extrabold text-lg text-white">Mind<span class="text-accent">Trade</span></span>
         </a>
         <nav class="flex items-center gap-6 text-sm text-slate-400">
-          <a href="#" class="hover:text-accent transition-colors">Политика конфиденциальности</a>
-          <a href="#" class="hover:text-accent transition-colors">Оферта</a>
+          <a href="privacy.html" class="hover:text-accent transition-colors">Политика конфиденциальности</a>
+          <a href="offer.html" class="hover:text-accent transition-colors">Оферта</a>
         </nav>
         <div class="flex items-center gap-3">
           <a href="#" onclick="toast('Демо-ссылка на соцсеть','info'); return false;" class="btn-anim inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 hover:text-accent hover:border-accent/40" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>

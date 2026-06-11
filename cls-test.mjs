@@ -45,11 +45,21 @@ log('CLS при перезагрузке < 0.1 (нет видимых сдвиг
 log('Лоадер скрыт сразу (html.splashed)', await page.evaluate(() => document.documentElement.classList.contains('splashed') && getComputedStyle(document.getElementById('site-loader')).display === 'none'));
 log('Fade-in отключён на повторной загрузке', await page.evaluate(() => getComputedStyle(document.querySelector('.route-content')).animationName === 'none'));
 
-// FA: lite-сабсет подключён и шрифт загружен
-const faLocal = await page.evaluate(() => [...document.styleSheets].some(s => s.href && s.href.includes('/fa/css/fa-lite.css')));
-log('Font Awesome: lite-сабсет подключён', faLocal);
-const faLoaded = await page.evaluate(() => document.fonts.check('900 16px "Font Awesome 6 Free"'));
+// FA: lite-сабсет заинлайнен и шрифт загружен
+const faLocal = await page.evaluate(() => [...document.querySelectorAll('style')].some(s => s.textContent.includes('Font Awesome 6 Free')));
+log('Font Awesome: lite-сабсет заинлайнен', faLocal);
+const faLoaded = await page.evaluate(async () => {
+  await document.fonts.load('900 16px "Font Awesome 6 Free"').catch(() => {});
+  await document.fonts.ready;
+  return document.fonts.check('900 16px "Font Awesome 6 Free"');
+});
 log('Шрифт иконок загружен', faLoaded);
+// глиф реально отрисован: ширина ::before у видимой иконки ненулевая
+const glyphW = await page.evaluate(() => {
+  const i = [...document.querySelectorAll('i.fa-solid')].find(el => el.getBoundingClientRect().width > 0);
+  return i ? i.getBoundingClientRect().width : 0;
+});
+log('Иконка реально отрисована (ширина > 4px)', glyphW > 4, 'w=' + glyphW.toFixed(1));
 // все видимые иконки страницы реально отрисованы (ни одна не потерялась при сабсете)
 const iconCheck = await page.evaluate(() => {
   const bad = [];

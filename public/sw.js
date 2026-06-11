@@ -1,12 +1,11 @@
 /* MindTrade service worker: статика — cache-first, HTML — network-first с офлайн-фолбэком */
-var V = 'mt-v2';
+var V = 'mt-v3';
 var BASE = '/trading-course-landing';
 var CORE = [
   BASE + '/',
   BASE + '/login/',
   BASE + '/app/',
   BASE + '/admin/',
-  BASE + '/fa/css/fa-lite.css',
   BASE + '/fa/webfonts/fa-solid-900-subset.woff2',
   BASE + '/fa/webfonts/fa-brands-400-subset.woff2',
   BASE + '/fa/webfonts/fa-regular-400-subset.woff2',

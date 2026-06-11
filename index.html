@@ -165,6 +165,7 @@
           <a href="#program" class="anchor nav-link hover:text-white transition-colors">Программа</a>
           <a href="#cabinet" class="anchor nav-link hover:text-white transition-colors">Кабинет</a>
           <a href="#pricing" class="anchor nav-link hover:text-white transition-colors">Цены</a>
+          <a href="#server" class="anchor nav-link hover:text-white transition-colors">Сервер</a>
         </nav>
         <div class="hidden md:flex items-center gap-3">
           <a href="login.html" class="btn-anim inline-flex items-center text-sm font-medium text-slate-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/5">
@@ -184,6 +185,7 @@
         <a href="#program" class="anchor mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">Программа</a>
         <a href="#cabinet" class="anchor mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">Кабинет</a>
         <a href="#pricing" class="anchor mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">Цены</a>
+        <a href="#server" class="anchor mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">Сервер</a>
         <a href="#contact" class="anchor mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">Контакты</a>
         <div class="grid grid-cols-2 gap-2 pt-2">
           <a href="login.html" class="text-center px-3 py-2.5 rounded-lg border border-white/10 text-slate-200 text-sm">Кабинет</a>
@@ -581,31 +583,120 @@
       <div class="text-center max-w-2xl mx-auto reveal">
         <span class="text-sm font-semibold text-accent uppercase tracking-wider">Тарифы</span>
         <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-2">Выбери формат обучения</h2>
-        <p class="text-slate-400 mt-3">Прозрачные условия. Без скрытых платежей.</p>
+        <p class="text-slate-400 mt-3">Три формата — от группы до личного менторства. Прозрачные условия, без скрытых платежей.</p>
       </div>
-      <div class="grid md:grid-cols-2 gap-6 mt-12 max-w-4xl mx-auto">
+      <div class="grid md:grid-cols-3 gap-6 mt-12">
         <div class="reveal card-hover rounded-2xl border border-white/10 bg-ink2/50 p-8 flex flex-col">
-          <h3 class="font-display font-bold text-xl text-white">Базовый</h3>
-          <div class="mt-4 flex items-end gap-2"><span class="font-display font-extrabold text-4xl text-white">$49</span><span class="text-slate-400 mb-1">/ мес · 3 500 ₽</span></div>
+          <div class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-accent/10 text-accent text-lg"><i class="fa-solid fa-users"></i></div>
+          <h3 class="font-display font-bold text-xl text-white mt-4">Групповой</h3>
+          <p class="text-sm text-slate-400 mt-1">Обучение в группе с разборами</p>
+          <div class="mt-4 flex items-end gap-2"><span class="font-display font-extrabold text-4xl text-white">$1000</span><span class="text-slate-400 mb-1">/ за курс</span></div>
+          <div class="mt-3 self-start inline-flex items-center gap-2 text-xs text-accent bg-accent/10 border border-accent/20 rounded-full px-3 py-1"><i class="fa-solid fa-server"></i> Secret Trading — на время обучения</div>
           <ul class="mt-6 space-y-3 text-slate-300 flex-1">
-            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Видеолекции всех 12 блоков</li>
-            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Доступ в Discord-чат</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Все 12 блоков и видеолекции</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Групповые разборы сделок</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Discord-комьюнити и домашки</li>
             <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Личный кабинет и дневник сделок</li>
             <li class="flex gap-3 text-slate-500"><i class="fa-solid fa-minus mt-1"></i> Личные сессии с ментором</li>
           </ul>
           <button onclick="toast('Это демо — оплата не проводится. В боевой версии будет платёжный шлюз','info')" class="btn-anim mt-8 w-full py-3 rounded-xl border border-white/15 bg-white/5 text-white font-semibold hover:bg-white/10">Выбрать</button>
         </div>
-        <div class="reveal card-hover relative rounded-2xl border border-accent/40 bg-gradient-to-br from-accent/[0.08] to-accent2/[0.06] p-8 flex flex-col">
+
+        <div class="reveal card-hover relative rounded-2xl border border-accent/40 bg-gradient-to-br from-accent/[0.08] to-accent2/[0.06] p-8 flex flex-col md:-mt-4 md:mb-[-1rem]">
           <span class="absolute -top-3 right-6 text-xs font-semibold bg-gradient-to-r from-accent to-accent2 text-ink px-3 py-1 rounded-full shadow-lg shadow-accent/30">Популярный</span>
-          <h3 class="font-display font-bold text-xl text-white">Премиум</h3>
-          <div class="mt-4 flex items-end gap-2"><span class="font-display font-extrabold text-4xl text-white">$99</span><span class="text-slate-400 mb-1">/ мес · 7 000 ₽</span></div>
+          <div class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-accent/15 text-accent text-lg"><i class="fa-solid fa-user-graduate"></i></div>
+          <h3 class="font-display font-bold text-xl text-white mt-4">Личный</h3>
+          <p class="text-sm text-slate-400 mt-1">Индивидуальное обучение с ментором</p>
+          <div class="mt-4 flex items-end gap-2"><span class="font-display font-extrabold text-4xl text-white">$2000</span><span class="text-slate-400 mb-1">/ за курс</span></div>
+          <div class="mt-3 self-start inline-flex items-center gap-2 text-xs text-accent bg-accent/10 border border-accent/20 rounded-full px-3 py-1"><i class="fa-solid fa-server"></i> Secret Trading — на 1 год</div>
           <ul class="mt-6 space-y-3 text-slate-200 flex-1">
-            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Всё из тарифа «Базовый»</li>
-            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> 2 личные сессии в месяц с ментором</li>
-            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Приоритетные разборы сделок</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Всё из формата «Групповой»</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Личные сессии с ментором</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Персональная проверка домашних заданий</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Приоритетная поддержка</li>
             <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Помощь с торговой системой и проп-счётом</li>
           </ul>
           <button onclick="toast('Это демо — оплата не проводится. В боевой версии будет платёжный шлюз','info')" class="btn-anim btn-shine mt-8 w-full py-3 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40">Выбрать</button>
+        </div>
+
+        <div class="reveal card-hover rounded-2xl border border-white/10 bg-ink2/50 p-8 flex flex-col">
+          <div class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-accent/10 text-accent text-lg"><i class="fa-solid fa-crown"></i></div>
+          <h3 class="font-display font-bold text-xl text-white mt-4">Менторство</h3>
+          <p class="text-sm text-slate-400 mt-1">Личное ведение до результата</p>
+          <div class="mt-4 flex items-end gap-2"><span class="font-display font-extrabold text-4xl text-white">$5000</span><span class="text-slate-400 mb-1">/ за курс</span></div>
+          <div class="mt-3 self-start inline-flex items-center gap-2 text-xs text-accent bg-accent/10 border border-accent/20 rounded-full px-3 py-1"><i class="fa-solid fa-server"></i> Secret Trading — навсегда</div>
+          <ul class="mt-6 space-y-3 text-slate-300 flex-1">
+            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Всё из формата «Личный»</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Еженедельные 1:1 сессии с ментором</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Сопровождение до построения своей системы</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Разбор работы с проп-счетами (в рамках правил)</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Постоянная связь с ментором</li>
+          </ul>
+          <button onclick="toast('Это демо — оплата не проводится. В боевой версии будет платёжный шлюз','info')" class="btn-anim mt-8 w-full py-3 rounded-xl border border-white/15 bg-white/5 text-white font-semibold hover:bg-white/10">Выбрать</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECRET TRADING SERVER ============ -->
+  <section id="server" class="py-16 sm:py-24 scroll-mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-10 items-center">
+        <!-- Left: about -->
+        <div class="reveal-l">
+          <span class="inline-flex items-center gap-2 text-sm font-semibold text-accent uppercase tracking-wider"><i class="fa-solid fa-lock"></i> Закрытый сервер</span>
+          <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-2">Сервер <span class="gradient-text">Secret Trading</span></h2>
+          <p class="text-slate-300 mt-4 leading-relaxed">
+            Закрытое комьюнити учеников: разборы сделок, обсуждение рынка, учебные материалы и нетворкинг с теми, кто торгует системно. Доступ открыт <span class="text-white font-medium">только тем, кто проходит обучение</span>.
+          </p>
+          <ul class="mt-5 space-y-3 text-slate-300">
+            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Разборы сделок — прибыльных и убыточных</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Обсуждение рынка и идей в режиме реального времени</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Учебные материалы, чек-листы и шаблоны</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Комьюнити и поддержка ментора</li>
+          </ul>
+
+          <div class="mt-6 rounded-xl border border-white/10 bg-ink2/50 p-5">
+            <div class="text-sm font-semibold text-white mb-3">Доступ входит в формат обучения:</div>
+            <div class="grid sm:grid-cols-3 gap-3 text-sm">
+              <div class="rounded-lg bg-white/5 p-3"><div class="text-slate-400 text-xs">Групповой</div><div class="text-white font-medium mt-1">на время обучения</div></div>
+              <div class="rounded-lg bg-white/5 p-3"><div class="text-slate-400 text-xs">Личный</div><div class="text-white font-medium mt-1">на 1 год</div></div>
+              <div class="rounded-lg bg-white/5 p-3"><div class="text-slate-400 text-xs">Менторство</div><div class="text-accent font-medium mt-1">навсегда</div></div>
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-500 mt-3">Сервер носит образовательный характер. Это не сигналы с гарантией прибыли — окончательные решения вы принимаете самостоятельно.</p>
+        </div>
+
+        <!-- Right: subscription -->
+        <div class="reveal-r">
+          <div class="rounded-2xl border border-white/10 bg-ink2/60 p-6 sm:p-8">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-accent2 text-ink text-lg"><i class="fa-solid fa-server"></i></span>
+              <div>
+                <div class="font-display font-bold text-white">Продление доступа</div>
+                <div class="text-xs text-slate-400">по подписке · только для учеников курса</div>
+              </div>
+            </div>
+            <p class="text-sm text-slate-400 mt-2 mb-5">Когда включённый в обучение период закончится, доступ к серверу можно продлить:</p>
+
+            <div class="space-y-3">
+              <button onclick="toast('Это демо — оплата подписки не проводится. В боевой версии будет платёжный шлюз','info')" class="card-hover w-full text-left rounded-xl border border-white/10 bg-white/[0.03] p-4 flex items-center justify-between">
+                <div><div class="font-semibold text-white">1 месяц</div><div class="text-xs text-slate-400">доступ к серверу Secret Trading</div></div>
+                <div class="text-right"><div class="font-display font-extrabold text-2xl text-white">$100</div></div>
+              </button>
+              <button onclick="toast('Это демо — оплата подписки не проводится. В боевой версии будет платёжный шлюз','info')" class="card-hover relative w-full text-left rounded-xl border border-accent/40 bg-accent/[0.06] p-4 flex items-center justify-between">
+                <span class="absolute -top-2.5 left-4 text-[10px] font-semibold bg-gradient-to-r from-accent to-accent2 text-ink px-2 py-0.5 rounded-full">выгодно</span>
+                <div><div class="font-semibold text-white">3 месяца</div><div class="text-xs text-slate-400">≈ $67 / мес · экономия 33%</div></div>
+                <div class="text-right"><div class="font-display font-extrabold text-2xl text-white">$200</div></div>
+              </button>
+              <button onclick="toast('Это демо — оплата подписки не проводится. В боевой версии будет платёжный шлюз','info')" class="card-hover relative w-full text-left rounded-xl border border-white/10 bg-white/[0.03] p-4 flex items-center justify-between">
+                <span class="absolute -top-2.5 left-4 text-[10px] font-semibold bg-white/10 text-accent px-2 py-0.5 rounded-full">макс. выгода</span>
+                <div><div class="font-semibold text-white">1 год</div><div class="text-xs text-slate-400">≈ $42 / мес · экономия 58%</div></div>
+                <div class="text-right"><div class="font-display font-extrabold text-2xl text-white">$500</div></div>
+              </button>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-4 text-center">Подписка доступна только тем, кто приобрёл обучение.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -902,7 +993,7 @@
     /* ======================= AUTO CAROUSEL ======================= */
     const cTrack = document.getElementById('program-track');
     const cMask = document.getElementById('c-mask');
-    let cx=0, cEV=0, cPaused=false, cDragging=false, cLastX=0, cMoved=0, cDragged=false, cHalf=0;
+    let cx=0, cEV=0, cHover=false, cDragging=false, cLastX=0, cMoved=0, cDragged=false, cHalf=0;
     const C_SPEED = 0.5;
     (function build(){
       const frag = document.createDocumentFragment();
@@ -924,15 +1015,15 @@
     })();
     function measureCarousel(){ cHalf = cTrack.scrollWidth / 2; }
     measureCarousel(); window.addEventListener('load', measureCarousel);
-    cMask.addEventListener('mouseenter', () => cPaused = true);
-    cMask.addEventListener('mouseleave', () => cPaused = false);
-    cMask.addEventListener('pointerdown', (e) => { cDragging=true; cPaused=true; cLastX=e.clientX; cMoved=0; cDragged=false; cMask.setPointerCapture(e.pointerId); });
+    cMask.addEventListener('mouseenter', () => cHover = true);
+    cMask.addEventListener('mouseleave', () => cHover = false);
+    cMask.addEventListener('pointerdown', (e) => { cDragging=true; cLastX=e.clientX; cMoved=0; cDragged=false; });
     window.addEventListener('pointermove', (e) => { if(!cDragging) return; const dx=e.clientX-cLastX; cx+=dx; cLastX=e.clientX; cMoved+=Math.abs(dx); if(cMoved>6) cDragged=true; });
-    window.addEventListener('pointerup', () => { if(!cDragging) return; cDragging=false; cPaused=false; setTimeout(()=>cDragged=false, 50); });
+    window.addEventListener('pointerup', () => { if(!cDragging) return; cDragging=false; setTimeout(()=>cDragged=false, 50); });
     document.getElementById('c-next').addEventListener('click', () => { cEV -= 55; });
     document.getElementById('c-prev').addEventListener('click', () => { cEV += 55; });
     function carouselLoop(){
-      if (!cPaused && !cDragging) cx -= C_SPEED;
+      if (!cHover && !cDragging) cx -= C_SPEED;
       cx += cEV; cEV *= 0.86; if (Math.abs(cEV) < 0.05) cEV = 0;
       if (cHalf > 0){ while (cx <= -cHalf) cx += cHalf; while (cx > 0) cx -= cHalf; }
       cTrack.style.transform = `translate3d(${cx}px,0,0)`;

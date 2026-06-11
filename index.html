@@ -6,179 +6,148 @@
   <title>Курс трейдинга | Без иллюзий</title>
   <meta name="description" content="Авторский курс по трейдингу от ментора с 8-летним опытом. Система, риск-менеджмент и психология. Без обещаний лёгких денег и гарантий прибыли." />
 
-  <!-- TailwindCSS v3 Play CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-
-  <!-- Google Fonts: Inter + Manrope -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
 
   <script>
     tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-            display: ['Manrope', 'Inter', 'sans-serif'],
-          },
-          colors: {
-            ink: '#0B1121',
-            ink2: '#0F172A',
-            accent: '#2DD4BF',
-            accent2: '#3B82F6',
-          },
-        },
-      },
+      theme: { extend: {
+        fontFamily: { sans: ['Inter','system-ui','sans-serif'], display: ['Manrope','Inter','sans-serif'] },
+        colors: { ink:'#0B1121', ink2:'#0F172A', accent:'#2DD4BF', accent2:'#3B82F6' },
+      } },
     };
   </script>
 
   <style>
-    :root { --accent: #2DD4BF; --accent2: #3B82F6; }
+    :root { --accent:#2DD4BF; --accent2:#3B82F6; }
 
     body {
       background:
         radial-gradient(1200px 600px at 80% -10%, rgba(45,212,191,0.10), transparent 60%),
         radial-gradient(1000px 500px at 0% 10%, rgba(59,130,246,0.12), transparent 55%),
         linear-gradient(160deg, #0B1121 0%, #0F172A 100%);
-      background-attachment: fixed;
-      overflow-x: hidden;
+      background-attachment: fixed; overflow-x: hidden;
     }
 
-    /* ---- Aurora moving blobs (page background) ---- */
+    /* Aurora background */
     .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-    .aurora span {
-      position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5;
-      mix-blend-mode: screen;
-    }
-    .aurora .b1 { width: 520px; height: 520px; background: radial-gradient(circle, #2DD4BF, transparent 70%); top: -120px; left: -80px; animation: drift1 18s ease-in-out infinite; }
-    .aurora .b2 { width: 460px; height: 460px; background: radial-gradient(circle, #3B82F6, transparent 70%); top: 30%; right: -120px; animation: drift2 22s ease-in-out infinite; }
-    .aurora .b3 { width: 380px; height: 380px; background: radial-gradient(circle, #6366f1, transparent 70%); bottom: -120px; left: 30%; animation: drift3 26s ease-in-out infinite; }
-    @keyframes drift1 { 0%,100%{ transform: translate(0,0) scale(1);} 50%{ transform: translate(120px,80px) scale(1.15);} }
-    @keyframes drift2 { 0%,100%{ transform: translate(0,0) scale(1);} 50%{ transform: translate(-100px,60px) scale(1.1);} }
-    @keyframes drift3 { 0%,100%{ transform: translate(0,0) scale(1);} 50%{ transform: translate(80px,-90px) scale(1.2);} }
-
-    /* keep content above aurora + candles */
-    .layer { position: relative; z-index: 2; }
+    .aurora span { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .5; mix-blend-mode: screen; }
+    .aurora .b1 { width: 520px; height: 520px; background: radial-gradient(circle,#2DD4BF,transparent 70%); top:-120px; left:-80px; animation: drift1 18s ease-in-out infinite; }
+    .aurora .b2 { width: 460px; height: 460px; background: radial-gradient(circle,#3B82F6,transparent 70%); top:30%; right:-120px; animation: drift2 22s ease-in-out infinite; }
+    .aurora .b3 { width: 380px; height: 380px; background: radial-gradient(circle,#6366f1,transparent 70%); bottom:-120px; left:30%; animation: drift3 26s ease-in-out infinite; }
+    @keyframes drift1 { 0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(120px,80px) scale(1.15);} }
+    @keyframes drift2 { 0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(-100px,60px) scale(1.1);} }
+    @keyframes drift3 { 0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(80px,-90px) scale(1.2);} }
     #candles { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+    .layer { position: relative; z-index: 2; }
 
-    /* ---- Scroll progress bar ---- */
-    #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0%; z-index: 60;
-      background: linear-gradient(90deg, #2DD4BF, #3B82F6); box-shadow: 0 0 12px rgba(45,212,191,0.7); transition: width .1s linear; }
+    /* Scroll progress */
+    #progress { position: fixed; top:0; left:0; height:3px; width:0%; z-index:60; background: linear-gradient(90deg,#2DD4BF,#3B82F6); box-shadow:0 0 12px rgba(45,212,191,.7); }
 
-    /* Scroll-reveal */
-    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); will-change: opacity, transform; }
-    .reveal.is-visible { opacity: 1; transform: none; }
-    .reveal-l { opacity: 0; transform: translateX(-40px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
-    .reveal-l.is-visible { opacity: 1; transform: none; }
-    .reveal-r { opacity: 0; transform: translateX(40px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
-    .reveal-r.is-visible { opacity: 1; transform: none; }
+    /* Reveal */
+    .reveal,.reveal-l,.reveal-r { opacity:0; transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); will-change: opacity, transform; }
+    .reveal { transform: translateY(30px); }
+    .reveal-l { transform: translateX(-44px); }
+    .reveal-r { transform: translateX(44px); }
+    .reveal.is-visible,.reveal-l.is-visible,.reveal-r.is-visible { opacity:1; transform:none; }
 
-    /* Card hover micro-anim + spotlight */
-    .card-hover {
-      position: relative;
-      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease, background-color .25s ease;
-    }
-    .card-hover::before {
-      content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .3s ease;
-      background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), rgba(45,212,191,0.16), transparent 60%);
-    }
-    .card-hover:hover::before { opacity: 1; }
-    .card-hover:hover {
-      transform: translateY(-4px) scale(1.02);
-      border-color: rgba(45,212,191,0.5);
-      box-shadow: 0 22px 50px -20px rgba(45,212,191,0.4);
-    }
+    /* Cards: hover + spotlight */
+    .card-hover { position: relative; transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+    .card-hover::before { content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; opacity:0; transition:opacity .3s ease;
+      background: radial-gradient(280px circle at var(--mx,50%) var(--my,50%), rgba(45,212,191,.16), transparent 60%); }
+    .card-hover:hover::before { opacity:1; }
+    .card-hover:hover { transform: translateY(-4px) scale(1.02); border-color: rgba(45,212,191,.5); box-shadow: 0 22px 50px -20px rgba(45,212,191,.4); }
 
-    /* 3D tilt */
-    .tilt { transform-style: preserve-3d; transition: transform .15s ease; }
-    .tilt-inner { transform: translateZ(30px); }
-
-    .btn-anim { position: relative; transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease, color .2s ease; }
+    .btn-anim { position: relative; transition: transform .2s ease, box-shadow .2s ease; }
     .btn-anim:hover { transform: translateY(-2px); }
-    /* shine sweep on primary buttons */
     .btn-shine { overflow: hidden; }
-    .btn-shine::after {
-      content: ""; position: absolute; top: 0; left: -120%; width: 60%; height: 100%;
-      background: linear-gradient(110deg, transparent, rgba(255,255,255,0.45), transparent);
-      transform: skewX(-20deg); transition: left .6s ease;
-    }
-    .btn-shine:hover::after { left: 140%; }
+    .btn-shine::after { content:""; position:absolute; top:0; left:-120%; width:60%; height:100%;
+      background: linear-gradient(110deg, transparent, rgba(255,255,255,.45), transparent); transform: skewX(-20deg); transition: left .6s ease; }
+    .btn-shine:hover::after { left:140%; }
 
-    .glass { background: rgba(15,23,42,0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    .glass { background: rgba(15,23,42,.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
 
-    /* Animated shimmer gradient text */
-    .gradient-text {
-      background: linear-gradient(90deg, #2DD4BF, #3B82F6, #8b5cf6, #2DD4BF);
-      background-size: 300% 100%;
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-      animation: shimmer 6s linear infinite;
-    }
+    .gradient-text { background: linear-gradient(90deg,#2DD4BF,#3B82F6,#8b5cf6,#2DD4BF); background-size:300% 100%;
+      -webkit-background-clip:text; background-clip:text; color:transparent; animation: shimmer 6s linear infinite; }
     @keyframes shimmer { to { background-position: 300% center; } }
 
-    .grid-bg {
-      background-image:
-        linear-gradient(rgba(148,163,184,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(148,163,184,0.06) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
+    .grid-bg { background-image:
+      linear-gradient(rgba(148,163,184,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(148,163,184,.06) 1px, transparent 1px); background-size: 40px 40px; }
 
-    /* Floating animation */
-    @keyframes floaty { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-10px);} }
+    @keyframes floaty { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
     .floaty { animation: floaty 5s ease-in-out infinite; }
 
-    /* Marquee ticker */
-    .marquee { overflow: hidden; }
-    .marquee-track { display: inline-flex; white-space: nowrap; animation: marquee 30s linear infinite; }
+    /* Marquee */
+    .marquee { overflow:hidden; }
+    .marquee-track { display:inline-flex; white-space:nowrap; animation: marquee 32s linear infinite; }
     .marquee:hover .marquee-track { animation-play-state: paused; }
-    @keyframes marquee { from { transform: translateX(0);} to { transform: translateX(-50%);} }
+    @keyframes marquee { from{transform:translateX(0);} to{transform:translateX(-50%);} }
 
-    /* Toast */
-    #toast-wrap { position: fixed; right: 1rem; bottom: 1rem; z-index: 100; display: flex; flex-direction: column; gap: .6rem; max-width: 360px; }
-    .toast { transform: translateX(120%); opacity: 0; transition: transform .4s cubic-bezier(.2,.8,.2,1), opacity .4s; }
-    .toast.show { transform: translateX(0); opacity: 1; }
+    /* ===== Apple-style text reveal ===== */
+    .reveal-words .w { color: rgba(148,163,184,.22); transition: color .25s ease, text-shadow .25s ease; }
+    .reveal-words .w.lit { color: #fff; }
+    .reveal-words .w.accent.lit { color: #2DD4BF; text-shadow: 0 0 24px rgba(45,212,191,.45); }
 
-    /* Modal */
+    /* ===== Pinned scrollytelling ===== */
+    .pin-wrap { position: relative; }
+    .pin-stage { position: sticky; top:0; height:100vh; display:flex; align-items:center; }
+    .scrolly-steps { height: 420vh; }
+    .step-card { transition: opacity .4s ease, transform .4s ease, border-color .4s ease, background-color .4s ease; opacity:.35; transform: translateY(8px); }
+    .step-card.active { opacity:1; transform:none; border-color: rgba(45,212,191,.5); background: rgba(45,212,191,.06); }
+    .step-card.active .step-num { background: linear-gradient(135deg,#2DD4BF,#3B82F6); color:#0B1121; }
+
+    /* ===== Horizontal pinned gallery ===== */
+    .pin-h { position: relative; }
+    .pin-h .pin-stage { overflow: hidden; }
+    .h-track { display:flex; gap:1.25rem; padding-inline:1.5rem; will-change: transform; }
+    .h-card { width: 340px; flex: 0 0 auto; }
+    @media (max-width: 1023px) {
+      .pin-h { height: auto !important; }
+      .pin-h .pin-stage { position: static; height:auto; display:block; overflow: visible; }
+      .h-track { transform:none !important; display:grid; grid-template-columns: 1fr 1fr; padding-inline:0; }
+      .h-card { width: auto; }
+      .scrolly-steps { height: auto; }
+      .pin-wrap .pin-stage { position: static; height:auto; display:block; }
+      .step-card { opacity:1 !important; transform:none !important; }
+    }
+    @media (max-width: 639px) { .h-track { grid-template-columns: 1fr; } }
+
+    #toast-wrap { position: fixed; right:1rem; bottom:1rem; z-index:100; display:flex; flex-direction:column; gap:.6rem; max-width:360px; }
+    .toast { transform: translateX(120%); opacity:0; transition: transform .4s cubic-bezier(.2,.8,.2,1), opacity .4s; }
+    .toast.show { transform: translateX(0); opacity:1; }
+
     .modal-backdrop { transition: opacity .25s ease; }
     .modal-panel { transition: transform .25s ease, opacity .25s ease; }
 
-    /* Pulse badge dot */
-    @keyframes pulseDot { 0%,100% { opacity: 1; transform: scale(1);} 50% { opacity:.4; transform: scale(.7);} }
+    @keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.4;transform:scale(.7);} }
     .pulse-dot { animation: pulseDot 1.6s infinite; }
-
-    /* Glow ring */
-    @keyframes glowPulse { 0%,100%{ box-shadow: 0 0 0 0 rgba(45,212,191,0.35);} 50%{ box-shadow: 0 0 0 10px rgba(45,212,191,0);} }
+    @keyframes glowPulse { 0%,100%{box-shadow:0 0 0 0 rgba(45,212,191,.35);} 50%{box-shadow:0 0 0 10px rgba(45,212,191,0);} }
     .glow-pulse { animation: glowPulse 2.4s ease-out infinite; }
 
-    /* Back to top */
-    #toTop { opacity: 0; transform: translateY(12px) scale(.9); pointer-events: none; transition: all .3s ease; }
-    #toTop.show { opacity: 1; transform: none; pointer-events: auto; }
+    #toTop { opacity:0; transform: translateY(12px) scale(.9); pointer-events:none; transition: all .3s ease; }
+    #toTop.show { opacity:1; transform:none; pointer-events:auto; }
 
-    /* underline link animation */
     .nav-link { position: relative; }
     .nav-link::after { content:""; position:absolute; left:0; bottom:-4px; height:2px; width:0; background: linear-gradient(90deg,#2DD4BF,#3B82F6); transition: width .25s ease; }
-    .nav-link:hover::after { width: 100%; }
+    .nav-link:hover::after { width:100%; }
 
-    ::-webkit-scrollbar { width: 10px; }
-    ::-webkit-scrollbar-track { background: #0B1121; }
-    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 6px; }
-    ::-webkit-scrollbar-thumb:hover { background: #334155; }
+    @keyframes scrollHint { 0%{transform:translateY(0);opacity:1;} 50%{transform:translateY(8px);opacity:.4;} 100%{transform:translateY(0);opacity:1;} }
+    .scroll-hint i { animation: scrollHint 1.8s ease-in-out infinite; }
 
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-    }
+    ::-webkit-scrollbar { width:10px; } ::-webkit-scrollbar-track { background:#0B1121; }
+    ::-webkit-scrollbar-thumb { background:#1e293b; border-radius:6px; } ::-webkit-scrollbar-thumb:hover { background:#334155; }
+
+    @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; } }
   </style>
 </head>
 
 <body class="font-sans text-slate-200 antialiased selection:bg-accent/30">
 
-  <!-- Scroll progress -->
   <div id="progress"></div>
-
-  <!-- Background layers -->
   <div class="aurora"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
   <canvas id="candles"></canvas>
 
@@ -188,21 +157,17 @@
   <header id="top" class="fixed top-0 inset-x-0 z-50 glass border-b border-white/5">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
-        <!-- Logo -->
         <a href="#top" class="flex items-center gap-2 group">
           <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-accent2 text-ink font-display font-extrabold text-lg shadow-lg shadow-accent/20 group-hover:scale-110 group-hover:rotate-6 transition-transform">M</span>
           <span class="font-display font-extrabold text-lg tracking-tight text-white">Mind<span class="text-accent">Trade</span></span>
         </a>
-
-        <!-- Desktop nav -->
         <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
           <a href="#mentor" class="nav-link hover:text-white transition-colors">О менторе</a>
+          <a href="#how" class="nav-link hover:text-white transition-colors">Как учим</a>
           <a href="#program" class="nav-link hover:text-white transition-colors">Программа</a>
           <a href="#pricing" class="nav-link hover:text-white transition-colors">Цены</a>
           <a href="#contact" class="nav-link hover:text-white transition-colors">Контакты</a>
         </nav>
-
-        <!-- Actions -->
         <div class="hidden md:flex items-center gap-3">
           <button onclick="alert('Демо, кабинет в разработке')" class="btn-anim text-sm font-medium text-slate-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/5">
             <i class="fa-regular fa-circle-user mr-1.5"></i>Войти в кабинет
@@ -211,18 +176,13 @@
             Старт <i class="fa-solid fa-arrow-right ml-1"></i>
           </a>
         </div>
-
-        <!-- Burger -->
-        <button id="burger" aria-label="Меню" class="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-lg text-slate-200 hover:bg-white/5">
-          <i class="fa-solid fa-bars text-lg"></i>
-        </button>
+        <button id="burger" aria-label="Меню" class="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-lg text-slate-200 hover:bg-white/5"><i class="fa-solid fa-bars text-lg"></i></button>
       </div>
     </div>
-
-    <!-- Mobile menu -->
     <div id="mobile-menu" class="md:hidden hidden border-t border-white/5 glass">
       <nav class="px-4 py-4 flex flex-col gap-1 text-sm font-medium">
         <a href="#mentor" class="mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">О менторе</a>
+        <a href="#how" class="mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">Как учим</a>
         <a href="#program" class="mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">Программа</a>
         <a href="#pricing" class="mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">Цены</a>
         <a href="#contact" class="mobile-link px-3 py-3 rounded-lg hover:bg-white/5 hover:text-accent">Контакты</a>
@@ -235,33 +195,29 @@
   </header>
 
   <!-- ============ HERO ============ -->
-  <section class="relative pt-28 pb-12 sm:pt-36 overflow-hidden">
+  <section class="relative pt-28 pb-10 sm:pt-36 overflow-hidden">
     <div class="absolute inset-0 grid-bg opacity-40 pointer-events-none"></div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
       <div class="grid lg:grid-cols-2 gap-12 items-center">
-        <!-- Copy -->
-        <div class="reveal-l">
+        <div class="reveal-l is-visible">
           <span class="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/5 px-3 py-1 text-xs font-medium text-accent mb-6 glow-pulse">
             <span class="h-1.5 w-1.5 rounded-full bg-accent pulse-dot"></span>
             Честное обучение. Без гарантий прибыли
           </span>
-
           <h1 class="font-display font-extrabold text-4xl sm:text-5xl lg:text-[3.4rem] leading-[1.08] text-white tracking-tight">
             Трейдинг — это <span class="gradient-text">дисциплина</span>, а не лотерея
           </h1>
           <p class="mt-5 text-lg text-slate-300/90 max-w-xl">
             Научись управлять рисками без иллюзий. Авторский курс ментора с 8-летним опытом. Без обещаний «лёгких денег» — только система, психология и статистика.
           </p>
-
           <div class="mt-8 flex flex-col sm:flex-row gap-3">
-            <a href="#program" class="magnetic btn-anim btn-shine inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40">
-              <i class="fa-solid fa-list-check"></i> Посмотреть программу
+            <a href="#how" class="magnetic btn-anim btn-shine inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40">
+              <i class="fa-solid fa-play"></i> Как устроено обучение
             </a>
-            <button onclick="toast('Это демо-версия. Запись на вебинар принята в тестовом режиме', 'info')" class="magnetic btn-anim inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-white/15 bg-white/5 text-white font-semibold hover:bg-white/10">
+            <button onclick="toast('Это демо-версия. Запись на вебинар принята в тестовом режиме','info')" class="magnetic btn-anim inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-white/15 bg-white/5 text-white font-semibold hover:bg-white/10">
               <i class="fa-solid fa-video text-accent"></i> Бесплатный вебинар
             </button>
           </div>
-
           <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 text-sm text-slate-400">
             <div class="flex items-center gap-2"><i class="fa-solid fa-shield-halved text-accent"></i> Риск-менеджмент в основе</div>
             <div class="flex items-center gap-2"><i class="fa-solid fa-brain text-accent"></i> Психология торговли</div>
@@ -269,9 +225,8 @@
           </div>
         </div>
 
-        <!-- Animated chart card -->
-        <div class="reveal-r">
-          <div class="floaty relative rounded-2xl border border-white/10 bg-ink2/70 p-4 sm:p-6 shadow-2xl shadow-black/40">
+        <div class="reveal-r is-visible">
+          <div class="floaty relative rounded-2xl border border-white/10 bg-ink2/70 p-4 sm:p-6 shadow-2xl shadow-black/40" data-parallax="0.05">
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center gap-2">
                 <span class="h-2.5 w-2.5 rounded-full bg-red-400/80"></span>
@@ -283,63 +238,95 @@
             </div>
             <canvas id="priceChart" class="w-full rounded-lg" height="280"></canvas>
             <div class="mt-3 grid grid-cols-3 gap-3 text-center">
-              <div class="rounded-lg bg-white/5 py-2">
-                <div class="text-[11px] text-slate-400">Риск на сделку</div>
-                <div class="text-sm font-semibold text-white">1%</div>
-              </div>
-              <div class="rounded-lg bg-white/5 py-2">
-                <div class="text-[11px] text-slate-400">R:R цель</div>
-                <div class="text-sm font-semibold text-white">1:3</div>
-              </div>
-              <div class="rounded-lg bg-white/5 py-2">
-                <div class="text-[11px] text-slate-400">Подход</div>
-                <div class="text-sm font-semibold text-accent">Система</div>
-              </div>
+              <div class="rounded-lg bg-white/5 py-2"><div class="text-[11px] text-slate-400">Риск на сделку</div><div class="text-sm font-semibold text-white">1%</div></div>
+              <div class="rounded-lg bg-white/5 py-2"><div class="text-[11px] text-slate-400">R:R цель</div><div class="text-sm font-semibold text-white">1:3</div></div>
+              <div class="rounded-lg bg-white/5 py-2"><div class="text-[11px] text-slate-400">Подход</div><div class="text-sm font-semibold text-accent">Система</div></div>
             </div>
             <p class="mt-3 text-[11px] text-slate-500 text-center">График — иллюстрация. Не является торговой рекомендацией.</p>
           </div>
         </div>
       </div>
+      <div class="scroll-hint hidden lg:flex flex-col items-center gap-2 text-slate-500 text-xs mt-12">
+        <span>Листай вниз</span><i class="fa-solid fa-chevron-down"></i>
+      </div>
     </div>
 
-    <!-- Ticker marquee -->
-    <div class="mt-12 marquee border-y border-white/5 bg-white/[0.02] py-3">
+    <div class="mt-10 marquee border-y border-white/5 bg-white/[0.02] py-3">
       <div class="marquee-track text-sm font-mono" id="ticker"></div>
     </div>
   </section>
 
-  <!-- ============ PROBLEM / SOLUTION ============ -->
-  <section class="py-16 sm:py-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid md:grid-cols-2 gap-6">
-        <!-- Problems -->
-        <div class="reveal card-hover rounded-2xl border border-white/10 bg-ink2/50 p-7">
-          <div class="flex items-center gap-3 mb-5">
-            <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-red-500/10 text-red-400 text-lg"><i class="fa-solid fa-triangle-exclamation"></i></span>
-            <h3 class="font-display font-bold text-xl text-white">С чем сталкиваются новички?</h3>
-          </div>
-          <ul class="space-y-3 text-slate-300">
-            <li class="flex gap-3"><i class="fa-solid fa-xmark text-red-400 mt-1"></i> Теряют депозит из-за хаотичных сделок</li>
-            <li class="flex gap-3"><i class="fa-solid fa-xmark text-red-400 mt-1"></i> Торгуют без системы и плана</li>
-            <li class="flex gap-3"><i class="fa-solid fa-xmark text-red-400 mt-1"></i> Страх фиксировать убыток вовремя</li>
-            <li class="flex gap-3"><i class="fa-solid fa-xmark text-red-400 mt-1"></i> Жадность и переторговка</li>
-            <li class="flex gap-3"><i class="fa-solid fa-xmark text-red-400 mt-1"></i> Эмоции вместо статистики</li>
-          </ul>
-        </div>
+  <!-- ============ TEXT REVEAL STATEMENT ============ -->
+  <section class="py-24 sm:py-36">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <p class="reveal-words font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl leading-[1.15] tracking-tight text-center">
+        <span class="w">Рынок</span> <span class="w">не</span> <span class="w">прощает</span> <span class="w">хаос.</span>
+        <span class="w accent">Дисциплина,</span> <span class="w accent">риск-менеджмент</span> <span class="w">и</span> <span class="w accent">система</span>
+        <span class="w">превращают</span> <span class="w">случайные</span> <span class="w">сделки</span> <span class="w">в</span> <span class="w">управляемый</span> <span class="w">процесс.</span>
+      </p>
+    </div>
+  </section>
 
-        <!-- Solutions -->
-        <div class="reveal card-hover rounded-2xl border border-accent/20 bg-gradient-to-br from-accent/[0.07] to-accent2/[0.05] p-7">
-          <div class="flex items-center gap-3 mb-5">
-            <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-accent/15 text-accent text-lg"><i class="fa-solid fa-check-double"></i></span>
-            <h3 class="font-display font-bold text-xl text-white">Что даёт курс?</h3>
+  <!-- ============ HOW IT WORKS — PINNED SCROLLYTELLING ============ -->
+  <section id="how" class="pin-wrap scrolly-steps scroll-mt-0">
+    <div class="pin-stage">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div class="grid lg:grid-cols-2 gap-10 items-center">
+
+          <!-- Sticky animated stage -->
+          <div class="order-2 lg:order-1">
+            <div class="relative rounded-2xl border border-white/10 bg-ink2/70 p-4 sm:p-6 shadow-2xl shadow-black/40">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-mono text-slate-400">Демо-терминал · обучение по шагам</span>
+                <span id="stagePhase" class="text-xs font-semibold text-accent">Хаос</span>
+              </div>
+              <canvas id="stageChart" class="w-full rounded-lg bg-black/20" height="340"></canvas>
+              <div class="mt-4 grid grid-cols-4 gap-2 text-center text-[11px]">
+                <div class="stage-pill rounded-lg bg-white/5 py-2" data-i="0">Структура</div>
+                <div class="stage-pill rounded-lg bg-white/5 py-2" data-i="1">Риск</div>
+                <div class="stage-pill rounded-lg bg-white/5 py-2" data-i="2">Психология</div>
+                <div class="stage-pill rounded-lg bg-white/5 py-2" data-i="3">Система</div>
+              </div>
+            </div>
           </div>
-          <ul class="space-y-3 text-slate-200">
-            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Понятную торговую систему и правила входа/выхода</li>
-            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Риск-менеджмент, который защищает счёт</li>
-            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Психологию и работу с дневником сделок</li>
-            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Поддержку в Discord-комьюнити</li>
-            <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Разборы реальных сделок — прибыльных и убыточных</li>
-          </ul>
+
+          <!-- Steps -->
+          <div class="order-1 lg:order-2">
+            <span class="text-sm font-semibold text-accent uppercase tracking-wider">Как устроено обучение</span>
+            <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-2 mb-7">От хаоса — к торговой системе</h2>
+            <div class="space-y-4">
+              <div class="step-card active rounded-2xl border border-white/10 bg-ink2/40 p-5" data-step="0">
+                <div class="flex items-start gap-4">
+                  <span class="step-num inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white font-bold">1</span>
+                  <div><h3 class="font-display font-bold text-white">Видеть структуру, а не шум</h3>
+                    <p class="text-slate-400 text-sm mt-1">Учимся читать тренды, уровни и фазы рынка вместо хаотичного угадывания.</p></div>
+                </div>
+              </div>
+              <div class="step-card rounded-2xl border border-white/10 bg-ink2/40 p-5" data-step="1">
+                <div class="flex items-start gap-4">
+                  <span class="step-num inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white font-bold">2</span>
+                  <div><h3 class="font-display font-bold text-white">Защищать счёт риском</h3>
+                    <p class="text-slate-400 text-sm mt-1">Стоп-лосс, риск 1% на сделку, контроль просадки — счёт переживает серию убытков.</p></div>
+                </div>
+              </div>
+              <div class="step-card rounded-2xl border border-white/10 bg-ink2/40 p-5" data-step="2">
+                <div class="flex items-start gap-4">
+                  <span class="step-num inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white font-bold">3</span>
+                  <div><h3 class="font-display font-bold text-white">Управлять психологией</h3>
+                    <p class="text-slate-400 text-sm mt-1">Дневник сделок и работа с эмоциями убирают импульсивность и переторговку.</p></div>
+                </div>
+              </div>
+              <div class="step-card rounded-2xl border border-white/10 bg-ink2/40 p-5" data-step="3">
+                <div class="flex items-start gap-4">
+                  <span class="step-num inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white font-bold">4</span>
+                  <div><h3 class="font-display font-bold text-white">Собрать свою систему</h3>
+                    <p class="text-slate-400 text-sm mt-1">Чёткие правила входа и выхода превращают торговлю в повторяемый процесс.</p></div>
+                </div>
+              </div>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-5"><i class="fa-solid fa-arrow-down text-accent mr-1"></i> Прокручивай — график слева меняется вместе с этапом.</p>
+          </div>
+
         </div>
       </div>
     </div>
@@ -349,9 +336,8 @@
   <section id="mentor" class="py-16 sm:py-24 scroll-mt-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid lg:grid-cols-5 gap-10 items-center">
-        <!-- Avatar -->
         <div class="reveal-l lg:col-span-2">
-          <div class="relative mx-auto max-w-sm floaty">
+          <div class="relative mx-auto max-w-sm floaty" data-parallax="0.04">
             <div class="aspect-square rounded-3xl border border-white/10 bg-gradient-to-br from-ink2 to-ink flex items-center justify-center overflow-hidden">
               <i class="fa-solid fa-user-tie text-[7rem] text-slate-600"></i>
               <div class="absolute inset-0 grid-bg opacity-30"></div>
@@ -359,8 +345,6 @@
             <span class="absolute bottom-3 left-1/2 -translate-x-1/2 text-[11px] bg-black/60 text-slate-300 px-3 py-1 rounded-full border border-white/10">Фото для демо</span>
           </div>
         </div>
-
-        <!-- Bio -->
         <div class="reveal-r lg:col-span-3">
           <span class="text-sm font-semibold text-accent uppercase tracking-wider">О менторе</span>
           <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-2">Александр</h2>
@@ -370,7 +354,6 @@
           <p class="text-slate-300 mt-3 leading-relaxed">
             Ведёт Discord-комьюнити и разборы сделок — и прибыльных, и убыточных. Считает, что убыток по правилам — это часть системы, а не провал.
           </p>
-
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-7">
             <div class="card-hover rounded-xl border border-white/10 bg-ink2/50 p-4 text-center">
               <div class="font-display font-extrabold text-2xl gradient-text"><span class="count" data-to="8">0</span> лет</div>
@@ -391,17 +374,17 @@
     </div>
   </section>
 
-  <!-- ============ PROGRAM ============ -->
-  <section id="program" class="py-16 sm:py-24 scroll-mt-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-2xl mx-auto reveal">
-        <span class="text-sm font-semibold text-accent uppercase tracking-wider">Программа курса</span>
-        <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-2">8 модулей — от фундамента к своей системе</h2>
-        <p class="text-slate-400 mt-3">Нажми на модуль, чтобы увидеть подробности.</p>
-      </div>
-
-      <div id="program-grid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-12">
-        <!-- cards injected by JS -->
+  <!-- ============ PROGRAM — HORIZONTAL PINNED GALLERY ============ -->
+  <section id="program" class="pin-h scroll-mt-20">
+    <div class="pin-stage">
+      <div class="w-full">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 reveal">
+          <span class="text-sm font-semibold text-accent uppercase tracking-wider">Программа курса</span>
+          <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-2">8 модулей — от фундамента к своей системе</h2>
+          <p class="text-slate-400 mt-3 hidden lg:block">Прокручивай вниз — карточки едут вбок. Кликни модуль для деталей.</p>
+          <p class="text-slate-400 mt-3 lg:hidden">Кликни модуль, чтобы увидеть подробности.</p>
+        </div>
+        <div id="program-track" class="h-track"></div>
       </div>
     </div>
   </section>
@@ -414,9 +397,7 @@
         <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-2">Примеры из реальной торговли</h2>
         <p class="text-slate-400 mt-3">Убытки — нормальная часть процесса. Главное — следовать правилам.</p>
       </div>
-
       <div class="grid md:grid-cols-2 gap-6 mt-12">
-        <!-- Win -->
         <div class="reveal card-hover rounded-2xl border border-emerald-500/20 bg-ink2/50 p-6">
           <div class="flex items-center justify-between mb-4">
             <span class="inline-flex items-center gap-2 text-emerald-400 font-semibold"><i class="fa-solid fa-arrow-trend-up"></i> Удачная сделка</span>
@@ -430,8 +411,6 @@
           </div>
           <p class="text-sm text-slate-400 mt-4">Вход на ретесте уровня, стоп под структурой. Цель достигнута — позиция закрыта по правилам.</p>
         </div>
-
-        <!-- Loss -->
         <div class="reveal card-hover rounded-2xl border border-red-500/20 bg-ink2/50 p-6">
           <div class="flex items-center justify-between mb-4">
             <span class="inline-flex items-center gap-2 text-red-400 font-semibold"><i class="fa-solid fa-arrow-trend-down"></i> Убыточная сделка</span>
@@ -457,34 +436,24 @@
         <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-2">Что меняется у учеников</h2>
         <p class="text-slate-400 mt-3">Без сумм заработка — только про подход и дисциплину.</p>
       </div>
-
       <div class="grid md:grid-cols-3 gap-6 mt-12">
-        <!-- t1 -->
         <div class="reveal card-hover rounded-2xl border border-white/10 bg-ink2/50 p-6">
           <div class="text-accent mb-3"><i class="fa-solid fa-quote-left text-2xl"></i></div>
           <p class="text-slate-200">«Стал понимать рынок и перестал сливать депозит хаотично. Появилась структура в голове.»</p>
-          <div class="flex items-center gap-3 mt-5">
-            <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-accent/30 to-accent2/30 text-white font-semibold">И</span>
-            <div><div class="text-white text-sm font-semibold">Иван</div><div class="text-xs text-slate-400">ученик курса</div></div>
-          </div>
+          <div class="flex items-center gap-3 mt-5"><span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-accent/30 to-accent2/30 text-white font-semibold">И</span>
+            <div><div class="text-white text-sm font-semibold">Иван</div><div class="text-xs text-slate-400">ученик курса</div></div></div>
         </div>
-        <!-- t2 -->
         <div class="reveal card-hover rounded-2xl border border-white/10 bg-ink2/50 p-6">
           <div class="text-accent mb-3"><i class="fa-solid fa-quote-left text-2xl"></i></div>
           <p class="text-slate-200">«Дисциплина выросла, теперь торгую строго по плану. Эмоции больше не управляют сделками.»</p>
-          <div class="flex items-center gap-3 mt-5">
-            <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-accent/30 to-accent2/30 text-white font-semibold">М</span>
-            <div><div class="text-white text-sm font-semibold">Мария</div><div class="text-xs text-slate-400">ученица курса</div></div>
-          </div>
+          <div class="flex items-center gap-3 mt-5"><span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-accent/30 to-accent2/30 text-white font-semibold">М</span>
+            <div><div class="text-white text-sm font-semibold">Мария</div><div class="text-xs text-slate-400">ученица курса</div></div></div>
         </div>
-        <!-- t3 -->
         <div class="reveal card-hover rounded-2xl border border-white/10 bg-ink2/50 p-6">
           <div class="text-accent mb-3"><i class="fa-solid fa-quote-left text-2xl"></i></div>
           <p class="text-slate-200">«Риск-менеджмент реально спас счёт во время просадки. Понял, зачем нужны правила.»</p>
-          <div class="flex items-center gap-3 mt-5">
-            <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-accent/30 to-accent2/30 text-white font-semibold">Д</span>
-            <div><div class="text-white text-sm font-semibold">Дмитрий</div><div class="text-xs text-slate-400">ученик курса</div></div>
-          </div>
+          <div class="flex items-center gap-3 mt-5"><span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-accent/30 to-accent2/30 text-white font-semibold">Д</span>
+            <div><div class="text-white text-sm font-semibold">Дмитрий</div><div class="text-xs text-slate-400">ученик курса</div></div></div>
         </div>
       </div>
       <p class="text-[11px] text-slate-500 text-center mt-6">Отзывы и имена приведены для демонстрации прототипа.</p>
@@ -499,39 +468,29 @@
         <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-2">Выбери формат обучения</h2>
         <p class="text-slate-400 mt-3">Прозрачные условия. Без скрытых платежей.</p>
       </div>
-
       <div class="grid md:grid-cols-2 gap-6 mt-12 max-w-4xl mx-auto">
-        <!-- Basic -->
         <div class="reveal card-hover rounded-2xl border border-white/10 bg-ink2/50 p-8 flex flex-col">
           <h3 class="font-display font-bold text-xl text-white">Базовый</h3>
-          <div class="mt-4 flex items-end gap-2">
-            <span class="font-display font-extrabold text-4xl text-white">$49</span>
-            <span class="text-slate-400 mb-1">/ мес · 3 500 ₽</span>
-          </div>
+          <div class="mt-4 flex items-end gap-2"><span class="font-display font-extrabold text-4xl text-white">$49</span><span class="text-slate-400 mb-1">/ мес · 3 500 ₽</span></div>
           <ul class="mt-6 space-y-3 text-slate-300 flex-1">
             <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Видеолекции всех 8 модулей</li>
             <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Доступ в Discord-чат</li>
             <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Домашние задания с проверкой</li>
             <li class="flex gap-3 text-slate-500"><i class="fa-solid fa-minus mt-1"></i> Личные сессии с ментором</li>
           </ul>
-          <button onclick="toast('Это демо — оплата не проводится. В боевой версии будет платёжный шлюз', 'info')" class="btn-anim mt-8 w-full py-3 rounded-xl border border-white/15 bg-white/5 text-white font-semibold hover:bg-white/10">Выбрать</button>
+          <button onclick="toast('Это демо — оплата не проводится. В боевой версии будет платёжный шлюз','info')" class="btn-anim mt-8 w-full py-3 rounded-xl border border-white/15 bg-white/5 text-white font-semibold hover:bg-white/10">Выбрать</button>
         </div>
-
-        <!-- Premium -->
         <div class="reveal card-hover relative rounded-2xl border border-accent/40 bg-gradient-to-br from-accent/[0.08] to-accent2/[0.06] p-8 flex flex-col">
           <span class="absolute -top-3 right-6 text-xs font-semibold bg-gradient-to-r from-accent to-accent2 text-ink px-3 py-1 rounded-full shadow-lg shadow-accent/30">Популярный</span>
           <h3 class="font-display font-bold text-xl text-white">Премиум</h3>
-          <div class="mt-4 flex items-end gap-2">
-            <span class="font-display font-extrabold text-4xl text-white">$99</span>
-            <span class="text-slate-400 mb-1">/ мес · 7 000 ₽</span>
-          </div>
+          <div class="mt-4 flex items-end gap-2"><span class="font-display font-extrabold text-4xl text-white">$99</span><span class="text-slate-400 mb-1">/ мес · 7 000 ₽</span></div>
           <ul class="mt-6 space-y-3 text-slate-200 flex-1">
             <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Всё из тарифа «Базовый»</li>
             <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> 2 личные сессии в месяц с ментором</li>
             <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Приоритетные разборы сделок</li>
             <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Помощь с торговой системой</li>
           </ul>
-          <button onclick="toast('Это демо — оплата не проводится. В боевой версии будет платёжный шлюз', 'info')" class="btn-anim btn-shine mt-8 w-full py-3 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40">Выбрать</button>
+          <button onclick="toast('Это демо — оплата не проводится. В боевой версии будет платёжный шлюз','info')" class="btn-anim btn-shine mt-8 w-full py-3 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40">Выбрать</button>
         </div>
       </div>
     </div>
@@ -563,22 +522,15 @@
           <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-2">Записаться на разговор с ментором</h2>
           <p class="text-slate-400 mt-3">Оставь контакты — обсудим твою ситуацию и подберём формат обучения.</p>
         </div>
-
         <form id="lead-form" class="mt-8 space-y-4" novalidate>
           <div class="grid sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm text-slate-300 mb-1.5">Имя</label>
-              <input name="name" type="text" required placeholder="Как к вам обращаться" class="w-full rounded-xl bg-ink/60 border border-white/10 px-4 py-3 text-white placeholder-slate-500 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none transition" />
-            </div>
-            <div>
-              <label class="block text-sm text-slate-300 mb-1.5">Email</label>
-              <input name="email" type="email" required placeholder="you@email.com" class="w-full rounded-xl bg-ink/60 border border-white/10 px-4 py-3 text-white placeholder-slate-500 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none transition" />
-            </div>
+            <div><label class="block text-sm text-slate-300 mb-1.5">Имя</label>
+              <input name="name" type="text" required placeholder="Как к вам обращаться" class="w-full rounded-xl bg-ink/60 border border-white/10 px-4 py-3 text-white placeholder-slate-500 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none transition" /></div>
+            <div><label class="block text-sm text-slate-300 mb-1.5">Email</label>
+              <input name="email" type="email" required placeholder="you@email.com" class="w-full rounded-xl bg-ink/60 border border-white/10 px-4 py-3 text-white placeholder-slate-500 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none transition" /></div>
           </div>
-          <div>
-            <label class="block text-sm text-slate-300 mb-1.5">Telegram <span class="text-slate-500">(опционально)</span></label>
-            <input name="telegram" type="text" placeholder="@username" class="w-full rounded-xl bg-ink/60 border border-white/10 px-4 py-3 text-white placeholder-slate-500 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none transition" />
-          </div>
+          <div><label class="block text-sm text-slate-300 mb-1.5">Telegram <span class="text-slate-500">(опционально)</span></label>
+            <input name="telegram" type="text" placeholder="@username" class="w-full rounded-xl bg-ink/60 border border-white/10 px-4 py-3 text-white placeholder-slate-500 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none transition" /></div>
           <label class="flex items-start gap-3 text-sm text-slate-300 cursor-pointer select-none">
             <input type="checkbox" class="mt-1 h-4 w-4 rounded border-white/20 bg-ink text-accent focus:ring-accent/40" />
             <span>Я ознакомлен с дисклеймером и принимаю условия обучения.</span>
@@ -600,16 +552,14 @@
           <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-accent2 text-ink font-display font-extrabold text-lg">M</span>
           <span class="font-display font-extrabold text-lg text-white">Mind<span class="text-accent">Trade</span></span>
         </a>
-
         <nav class="flex items-center gap-6 text-sm text-slate-400">
           <a href="#" class="hover:text-accent transition-colors">Политика конфиденциальности</a>
           <a href="#" class="hover:text-accent transition-colors">Оферта</a>
         </nav>
-
         <div class="flex items-center gap-3">
-          <a href="#" onclick="toast('Демо-ссылка на соцсеть', 'info'); return false;" class="btn-anim inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 hover:text-accent hover:border-accent/40" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
-          <a href="#" onclick="toast('Демо-ссылка на соцсеть', 'info'); return false;" class="btn-anim inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 hover:text-accent hover:border-accent/40" aria-label="Discord"><i class="fa-brands fa-discord"></i></a>
-          <a href="#" onclick="toast('Демо-ссылка на соцсеть', 'info'); return false;" class="btn-anim inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 hover:text-accent hover:border-accent/40" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          <a href="#" onclick="toast('Демо-ссылка на соцсеть','info'); return false;" class="btn-anim inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 hover:text-accent hover:border-accent/40" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
+          <a href="#" onclick="toast('Демо-ссылка на соцсеть','info'); return false;" class="btn-anim inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 hover:text-accent hover:border-accent/40" aria-label="Discord"><i class="fa-brands fa-discord"></i></a>
+          <a href="#" onclick="toast('Демо-ссылка на соцсеть','info'); return false;" class="btn-anim inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 hover:text-accent hover:border-accent/40" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
         </div>
       </div>
       <p class="text-center text-xs text-slate-500 mt-8">© 2026 MindTrade. Образовательный проект. Прототип для демонстрации.</p>
@@ -618,64 +568,51 @@
 
   </div><!-- /.layer -->
 
-  <!-- Back to top -->
-  <button id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Наверх" class="fixed bottom-5 left-5 z-[90] h-12 w-12 rounded-full bg-gradient-to-br from-accent to-accent2 text-ink shadow-lg shadow-accent/30 flex items-center justify-center hover:scale-110 transition-transform">
-    <i class="fa-solid fa-arrow-up"></i>
-  </button>
+  <button id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Наверх" class="fixed bottom-5 left-5 z-[90] h-12 w-12 rounded-full bg-gradient-to-br from-accent to-accent2 text-ink shadow-lg shadow-accent/30 flex items-center justify-center hover:scale-110 transition-transform"><i class="fa-solid fa-arrow-up"></i></button>
 
-  <!-- ============ MODAL ============ -->
+  <!-- MODAL -->
   <div id="modal" class="fixed inset-0 z-[80] hidden items-center justify-center p-4">
     <div id="modal-backdrop" class="modal-backdrop absolute inset-0 bg-black/70 backdrop-blur-sm opacity-0"></div>
     <div id="modal-panel" class="modal-panel relative w-full max-w-lg rounded-2xl border border-white/10 bg-ink2 p-7 shadow-2xl opacity-0 scale-95">
       <button onclick="closeModal()" class="absolute top-4 right-4 h-9 w-9 inline-flex items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-white/5"><i class="fa-solid fa-xmark"></i></button>
       <div class="flex items-center gap-3 mb-4">
         <span id="modal-icon" class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/15 text-accent text-xl"><i class="fa-solid fa-book"></i></span>
-        <div>
-          <div id="modal-tag" class="text-xs font-semibold text-accent uppercase tracking-wider">Модуль</div>
-          <h3 id="modal-title" class="font-display font-bold text-xl text-white">Заголовок</h3>
-        </div>
+        <div><div id="modal-tag" class="text-xs font-semibold text-accent uppercase tracking-wider">Модуль</div>
+          <h3 id="modal-title" class="font-display font-bold text-xl text-white">Заголовок</h3></div>
       </div>
       <p id="modal-desc" class="text-slate-300 leading-relaxed"></p>
-      <div class="mt-5 rounded-xl border border-dashed border-white/15 bg-white/[0.03] p-4 text-sm text-slate-400">
-        <i class="fa-solid fa-circle-info text-accent mr-2"></i> Детальный план модуля будет в полной версии курса.
-      </div>
+      <div class="mt-5 rounded-xl border border-dashed border-white/15 bg-white/[0.03] p-4 text-sm text-slate-400"><i class="fa-solid fa-circle-info text-accent mr-2"></i> Детальный план модуля будет в полной версии курса.</div>
       <button onclick="closeModal()" class="btn-anim mt-6 w-full py-3 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold">Понятно</button>
     </div>
   </div>
 
-  <!-- ============ TOASTS ============ -->
   <div id="toast-wrap" aria-live="polite"></div>
 
-  <!-- ============ SCRIPTS ============ -->
   <script>
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+    const smooth = (t) => t*t*(3-2*t);
+    const lerp = (a,b,t) => a + (b-a)*t;
 
-    /* ---------- Burger menu ---------- */
+    /* ---------- Burger ---------- */
     const burger = document.getElementById('burger');
     const mobileMenu = document.getElementById('mobile-menu');
     burger.addEventListener('click', () => {
       mobileMenu.classList.toggle('hidden');
-      burger.innerHTML = mobileMenu.classList.contains('hidden')
-        ? '<i class="fa-solid fa-bars text-lg"></i>'
-        : '<i class="fa-solid fa-xmark text-lg"></i>';
+      burger.innerHTML = mobileMenu.classList.contains('hidden') ? '<i class="fa-solid fa-bars text-lg"></i>' : '<i class="fa-solid fa-xmark text-lg"></i>';
     });
     document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => {
-      mobileMenu.classList.add('hidden');
-      burger.innerHTML = '<i class="fa-solid fa-bars text-lg"></i>';
+      mobileMenu.classList.add('hidden'); burger.innerHTML = '<i class="fa-solid fa-bars text-lg"></i>';
     }));
 
-    /* ---------- Toast notifications ---------- */
-    function toast(message, type = 'success') {
+    /* ---------- Toast ---------- */
+    function toast(message, type='success') {
       const wrap = document.getElementById('toast-wrap');
       const el = document.createElement('div');
-      const colors = {
-        success: 'border-accent/40 text-accent',
-        info: 'border-accent2/40 text-accent2',
-        warn: 'border-yellow-400/40 text-yellow-300',
-      };
-      const icons = { success: 'fa-circle-check', info: 'fa-circle-info', warn: 'fa-triangle-exclamation' };
-      el.className = `toast glass border ${colors[type] || colors.success} rounded-xl px-4 py-3 shadow-2xl flex items-start gap-3`;
-      el.innerHTML = `<i class="fa-solid ${icons[type] || icons.success} mt-0.5"></i><span class="text-sm text-slate-100">${message}</span>`;
+      const colors = { success:'border-accent/40 text-accent', info:'border-accent2/40 text-accent2', warn:'border-yellow-400/40 text-yellow-300' };
+      const icons = { success:'fa-circle-check', info:'fa-circle-info', warn:'fa-triangle-exclamation' };
+      el.className = `toast glass border ${colors[type]||colors.success} rounded-xl px-4 py-3 shadow-2xl flex items-start gap-3`;
+      el.innerHTML = `<i class="fa-solid ${icons[type]||icons.success} mt-0.5"></i><span class="text-sm text-slate-100">${message}</span>`;
       wrap.appendChild(el);
       requestAnimationFrame(() => el.classList.add('show'));
       setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 400); }, 4200);
@@ -684,350 +621,341 @@
     /* ---------- Lead form ---------- */
     document.getElementById('lead-form').addEventListener('submit', (e) => {
       e.preventDefault();
-      toast('Спасибо! Это демо-версия. В реальном проекте мы свяжемся с вами в течение часа', 'success');
+      toast('Спасибо! Это демо-версия. В реальном проекте мы свяжемся с вами в течение часа','success');
       e.target.reset();
     });
 
-    /* ---------- Ticker marquee ---------- */
+    /* ---------- Ticker ---------- */
     (function () {
-      const items = [
-        ['BTC', '+2.4%', true], ['ETH', '+1.1%', true], ['SOL', '-0.8%', false], ['EUR/USD', '+0.3%', true],
-        ['GOLD', '+0.6%', true], ['SP500', '-0.2%', false], ['NASDAQ', '+0.9%', true], ['OIL', '-1.3%', false],
-        ['BNB', '+0.5%', true], ['XRP', '-0.4%', false], ['DXY', '+0.1%', true], ['GBP/USD', '-0.2%', false],
-      ];
-      const make = (sym, chg, up) =>
-        `<span class="inline-flex items-center gap-2 px-6 text-slate-400"><span class="text-slate-200 font-semibold">${sym}</span><span class="${up ? 'text-emerald-400' : 'text-red-400'}"><i class="fa-solid fa-caret-${up ? 'up' : 'down'}"></i> ${chg}</span></span>`;
+      const items = [['BTC','+2.4%',1],['ETH','+1.1%',1],['SOL','-0.8%',0],['EUR/USD','+0.3%',1],['GOLD','+0.6%',1],['SP500','-0.2%',0],['NASDAQ','+0.9%',1],['OIL','-1.3%',0],['BNB','+0.5%',1],['XRP','-0.4%',0],['DXY','+0.1%',1],['GBP/USD','-0.2%',0]];
+      const make = (s,c,u) => `<span class="inline-flex items-center gap-2 px-6 text-slate-400"><span class="text-slate-200 font-semibold">${s}</span><span class="${u?'text-emerald-400':'text-red-400'}"><i class="fa-solid fa-caret-${u?'up':'down'}"></i> ${c}</span></span>`;
       const row = items.map(i => make(...i)).join('');
-      document.getElementById('ticker').innerHTML = row + row; // duplicate for seamless loop
+      document.getElementById('ticker').innerHTML = row + row;
     })();
 
-    /* ---------- Program modules + modal ---------- */
+    /* ---------- Modules + modal ---------- */
     const modules = [
-      { icon: 'fa-cubes', title: 'Фундамент рынков и терминология', desc: 'Как устроены рынки, какие бывают инструменты, базовая терминология. Разбираем механику цены, ликвидность и участников рынка — фундамент, без которого дальше двигаться рискованно.' },
-      { icon: 'fa-chart-line', title: 'Технический анализ', desc: 'Уровни поддержки и сопротивления, тренды и контртренды, ключевые графические паттерны. Учимся читать структуру рынка, а не угадывать развороты.' },
-      { icon: 'fa-wave-square', title: 'Индикаторы и объёмы', desc: 'Какие индикаторы реально помогают, а какие лишь шум. Работа с объёмами как с подтверждением, а не как с «святым Граалем».' },
-      { icon: 'fa-shield-halved', title: 'Управление капиталом', desc: 'Risk Management — сердце системы. Размер позиции, риск на сделку, допустимая просадка. Как защитить счёт даже в серии убытков.' },
-      { icon: 'fa-brain', title: 'Психология и дневник сделок', desc: 'Страх, жадность, переторговка. Ведём дневник сделок, анализируем эмоции и решения, формируем устойчивые торговые привычки.' },
-      { icon: 'fa-globe', title: 'Макроэкономика и новости', desc: 'Как новости и макроданные влияют на рынок. Учимся не торговать «на эмоциях от заголовков» и понимать контекст движения цены.' },
-      { icon: 'fa-building-columns', title: 'Легальная работа с проп-фирмами', desc: 'Как устроены FTMO, Topstep и другие проп-фирмы, их правила и ограничения. Работаем честно и строго в рамках их условий.' },
-      { icon: 'fa-diagram-project', title: 'Построение личной торговой системы', desc: 'Собираем всё в единую систему: правила входа/выхода, риск, чек-листы. На выходе — твой персональный торговый план.' },
+      { icon:'fa-cubes', title:'Фундамент рынков и терминология', desc:'Как устроены рынки, какие бывают инструменты, базовая терминология. Разбираем механику цены, ликвидность и участников рынка — фундамент, без которого дальше двигаться рискованно.' },
+      { icon:'fa-chart-line', title:'Технический анализ', desc:'Уровни поддержки и сопротивления, тренды и контртренды, ключевые графические паттерны. Учимся читать структуру рынка, а не угадывать развороты.' },
+      { icon:'fa-wave-square', title:'Индикаторы и объёмы', desc:'Какие индикаторы реально помогают, а какие лишь шум. Работа с объёмами как с подтверждением, а не как с «святым Граалем».' },
+      { icon:'fa-shield-halved', title:'Управление капиталом', desc:'Risk Management — сердце системы. Размер позиции, риск на сделку, допустимая просадка. Как защитить счёт даже в серии убытков.' },
+      { icon:'fa-brain', title:'Психология и дневник сделок', desc:'Страх, жадность, переторговка. Ведём дневник сделок, анализируем эмоции и решения, формируем устойчивые торговые привычки.' },
+      { icon:'fa-globe', title:'Макроэкономика и новости', desc:'Как новости и макроданные влияют на рынок. Учимся не торговать «на эмоциях от заголовков» и понимать контекст движения цены.' },
+      { icon:'fa-building-columns', title:'Легальная работа с проп-фирмами', desc:'Как устроены FTMO, Topstep и другие проп-фирмы, их правила и ограничения. Работаем честно и строго в рамках их условий.' },
+      { icon:'fa-diagram-project', title:'Построение личной торговой системы', desc:'Собираем всё в единую систему: правила входа/выхода, риск, чек-листы. На выходе — твой персональный торговый план.' },
     ];
-
-    const grid = document.getElementById('program-grid');
-    modules.forEach((m, i) => {
+    const track = document.getElementById('program-track');
+    modules.forEach((m,i) => {
       const card = document.createElement('button');
-      card.className = 'reveal card-hover tilt text-left rounded-2xl border border-white/10 bg-ink2/50 p-6 group';
-      card.style.transitionDelay = (i % 4 * 60) + 'ms';
+      card.className = 'h-card card-hover text-left rounded-2xl border border-white/10 bg-ink2/60 p-6 group';
       card.innerHTML = `
-        <div class="tilt-inner">
-          <div class="flex items-center justify-between mb-4">
-            <span class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent text-xl group-hover:bg-accent group-hover:text-ink group-hover:scale-110 transition-all"><i class="fa-solid ${m.icon}"></i></span>
-            <span class="text-xs font-mono text-slate-500">0${i + 1}</span>
-          </div>
-          <h3 class="font-display font-bold text-white leading-snug">${m.title}</h3>
-          <span class="mt-3 inline-flex items-center gap-1.5 text-sm text-accent">Подробнее <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i></span>
+        <div class="flex items-center justify-between mb-4">
+          <span class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent text-xl group-hover:bg-accent group-hover:text-ink group-hover:scale-110 transition-all"><i class="fa-solid ${m.icon}"></i></span>
+          <span class="text-xs font-mono text-slate-500">0${i+1}</span>
         </div>
-      `;
-      card.addEventListener('click', () => openModal(m, i));
-      grid.appendChild(card);
+        <h3 class="font-display font-bold text-white leading-snug">${m.title}</h3>
+        <p class="text-sm text-slate-400 mt-2 line-clamp-3">${m.desc}</p>
+        <span class="mt-4 inline-flex items-center gap-1.5 text-sm text-accent">Подробнее <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i></span>`;
+      card.addEventListener('click', () => openModal(m,i));
+      track.appendChild(card);
     });
 
-    const modal = document.getElementById('modal');
-    const modalPanel = document.getElementById('modal-panel');
-    const modalBackdrop = document.getElementById('modal-backdrop');
-    function openModal(m, i) {
+    const modal = document.getElementById('modal'), modalPanel = document.getElementById('modal-panel'), modalBackdrop = document.getElementById('modal-backdrop');
+    function openModal(m,i) {
       document.getElementById('modal-icon').innerHTML = `<i class="fa-solid ${m.icon}"></i>`;
-      document.getElementById('modal-tag').textContent = 'Модуль ' + (i + 1);
+      document.getElementById('modal-tag').textContent = 'Модуль ' + (i+1);
       document.getElementById('modal-title').textContent = m.title;
       document.getElementById('modal-desc').textContent = m.desc;
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-      requestAnimationFrame(() => {
-        modalBackdrop.classList.remove('opacity-0');
-        modalPanel.classList.remove('opacity-0', 'scale-95');
-      });
+      modal.classList.remove('hidden'); modal.classList.add('flex');
+      requestAnimationFrame(() => { modalBackdrop.classList.remove('opacity-0'); modalPanel.classList.remove('opacity-0','scale-95'); });
     }
     function closeModal() {
-      modalBackdrop.classList.add('opacity-0');
-      modalPanel.classList.add('opacity-0', 'scale-95');
+      modalBackdrop.classList.add('opacity-0'); modalPanel.classList.add('opacity-0','scale-95');
       setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 250);
     }
     modalBackdrop.addEventListener('click', closeModal);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
-    /* ---------- Spotlight on cards (follow cursor) ---------- */
+    /* ---------- Spotlight ---------- */
     document.addEventListener('pointermove', (e) => {
-      const card = e.target.closest('.card-hover');
-      if (!card) return;
+      const card = e.target.closest('.card-hover'); if (!card) return;
       const r = card.getBoundingClientRect();
       card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
       card.style.setProperty('--my', (e.clientY - r.top) + 'px');
     });
 
-    /* ---------- 3D tilt on program cards ---------- */
+    /* ---------- Magnetic buttons ---------- */
     if (!reduceMotion && window.matchMedia('(pointer:fine)').matches) {
-      document.querySelectorAll('.tilt').forEach((el) => {
-        el.addEventListener('pointermove', (e) => {
-          const r = el.getBoundingClientRect();
-          const px = (e.clientX - r.left) / r.width - 0.5;
-          const py = (e.clientY - r.top) / r.height - 0.5;
-          el.style.transform = `perspective(700px) rotateY(${px * 10}deg) rotateX(${-py * 10}deg)`;
-        });
-        el.addEventListener('pointerleave', () => { el.style.transform = ''; });
-      });
-
-      /* ---------- Magnetic buttons ---------- */
       document.querySelectorAll('.magnetic').forEach((el) => {
         el.addEventListener('pointermove', (e) => {
           const r = el.getBoundingClientRect();
-          const x = e.clientX - r.left - r.width / 2;
-          const y = e.clientY - r.top - r.height / 2;
-          el.style.transform = `translate(${x * 0.2}px, ${y * 0.3 - 2}px)`;
+          el.style.transform = `translate(${(e.clientX-r.left-r.width/2)*0.2}px, ${(e.clientY-r.top-r.height/2)*0.3 - 2}px)`;
         });
         el.addEventListener('pointerleave', () => { el.style.transform = ''; });
       });
     }
 
-    /* ---------- Count-up numbers ---------- */
+    /* ---------- Count-up ---------- */
     function countUp(el) {
-      const target = +el.dataset.to;
-      const dur = 1400; let start = null;
-      function step(ts) {
-        if (!start) start = ts;
-        const p = Math.min((ts - start) / dur, 1);
-        const eased = 1 - Math.pow(1 - p, 3);
-        el.textContent = Math.round(eased * target);
-        if (p < 1) requestAnimationFrame(step);
-      }
+      const target = +el.dataset.to; const dur = 1400; let start = null;
+      function step(ts) { if (!start) start = ts; const p = Math.min((ts-start)/dur, 1);
+        el.textContent = Math.round((1-Math.pow(1-p,3))*target); if (p<1) requestAnimationFrame(step); }
       requestAnimationFrame(step);
     }
 
-    /* ---------- Scroll reveal (Intersection Observer) ---------- */
+    /* ---------- Reveal observer ---------- */
     const io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('is-visible');
-          entry.target.querySelectorAll && entry.target.querySelectorAll('.count').forEach(countUp);
           if (entry.target.classList.contains('count')) countUp(entry.target);
           io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12 });
-    document.querySelectorAll('.reveal, .reveal-l, .reveal-r').forEach((el) => io.observe(el));
-    document.querySelectorAll('.count').forEach((el) => io.observe(el));
+    }, { threshold: 0.14 });
+    document.querySelectorAll('.reveal, .reveal-l, .reveal-r, .count').forEach((el) => io.observe(el));
 
-    /* ---------- Scroll progress bar + back-to-top ---------- */
-    const progress = document.getElementById('progress');
+    /* =========================================================
+       SCROLL ENGINE — single rAF loop drives all scroll effects
+       ========================================================= */
+    const scrollyItems = [];
+    function registerScrolly(el, onProgress) { scrollyItems.push({ el, onProgress }); }
+
+    const progressBar = document.getElementById('progress');
     const toTop = document.getElementById('toTop');
-    function onScroll() {
-      const h = document.documentElement;
-      const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight);
-      progress.style.width = (scrolled * 100) + '%';
-      toTop.classList.toggle('show', h.scrollTop > 600);
+    const parallaxEls = [...document.querySelectorAll('[data-parallax]')];
+    const revealWords = [...document.querySelectorAll('.reveal-words')];
+
+    let ticking = false;
+    function onScroll() { if (!ticking) { requestAnimationFrame(tick); ticking = true; } }
+    function tick() {
+      ticking = false;
+      const vh = window.innerHeight;
+      const doc = document.documentElement;
+
+      // progress bar + back-to-top
+      const scrolled = doc.scrollTop / (doc.scrollHeight - doc.clientHeight || 1);
+      progressBar.style.width = (scrolled * 100) + '%';
+      toTop.classList.toggle('show', doc.scrollTop > 600);
+
+      // scrolly sections
+      scrollyItems.forEach(s => {
+        const r = s.el.getBoundingClientRect();
+        const denom = s.el.offsetHeight - vh;
+        const p = denom > 0 ? clamp(-r.top / denom, 0, 1) : 0;
+        s.onProgress(p, r);
+      });
+
+      // parallax
+      if (!reduceMotion) parallaxEls.forEach(el => {
+        const r = el.getBoundingClientRect();
+        const center = r.top + r.height/2 - vh/2;
+        el.style.transform = `translateY(${center * -(+el.dataset.parallax)}px)`;
+      });
+
+      // word reveal
+      revealWords.forEach(p => {
+        const words = p.querySelectorAll('.w');
+        words.forEach(w => {
+          const r = w.getBoundingClientRect();
+          const trigger = vh * 0.78;
+          w.classList.toggle('lit', r.top < trigger);
+        });
+      });
     }
     window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
+    window.addEventListener('resize', () => { setupHorizontal(); onScroll(); });
+
+    /* ---------- Pinned steps: drive the morphing stage chart ---------- */
+    (function () {
+      const section = document.getElementById('how');
+      const canvas = document.getElementById('stageChart');
+      const phaseEl = document.getElementById('stagePhase');
+      const stepCards = [...section.querySelectorAll('.step-card')];
+      const pills = [...section.querySelectorAll('.stage-pill')];
+      const phases = ['Хаос → Структура','Защита риском','Психология','Готовая система'];
+      const ctx = canvas.getContext('2d');
+
+      // two reference paths: chaotic vs clean trend
+      const N = 120, chaos = [], clean = [];
+      let cv = 50;
+      for (let i=0;i<N;i++) {
+        chaos.push(50 + Math.sin(i*0.9)*22 + Math.sin(i*0.27)*16 + ((i*53)%17-8));
+        cv += 0.5 + Math.sin(i*0.08)*0.5;
+        clean.push(28 + cv*0.55 + Math.sin(i*0.3)*4);
+      }
+      const cmin = Math.min(...chaos,...clean), cmax = Math.max(...chaos,...clean);
+
+      function resize() {
+        const ratio = window.devicePixelRatio || 1;
+        canvas.width = canvas.clientWidth * ratio; canvas.height = 340 * ratio;
+        ctx.setTransform(ratio,0,0,ratio,0,0);
+      }
+      resize(); window.addEventListener('resize', resize);
+
+      let curP = 0;
+      function render(p) {
+        const w = canvas.clientWidth, h = 340, pad = 14;
+        ctx.clearRect(0,0,w,h);
+
+        // grid
+        ctx.strokeStyle = 'rgba(148,163,184,0.07)'; ctx.lineWidth = 1;
+        for (let g=0; g<=4; g++){ const y=(h/4)*g; ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+
+        const t = smooth(p);
+        const xAt = (i) => pad + (i/(N-1))*(w-pad*2);
+        const yAt = (val) => pad + (1-(val-cmin)/(cmax-cmin))*(h-pad*2);
+        const blend = (i) => lerp(chaos[i], clean[i], t);
+
+        // risk band (fade in 0.2-0.45)
+        const aRisk = clamp((p-0.18)/0.22, 0, 1);
+        if (aRisk > 0) {
+          const yStop = yAt(blend(N-1) - 16), yTgt = yAt(blend(N-1) + 22);
+          ctx.setLineDash([5,5]);
+          ctx.strokeStyle = `rgba(248,113,113,${0.5*aRisk})`; ctx.beginPath(); ctx.moveTo(0,yStop); ctx.lineTo(w,yStop); ctx.stroke();
+          ctx.strokeStyle = `rgba(52,211,153,${0.5*aRisk})`; ctx.beginPath(); ctx.moveTo(0,yTgt); ctx.lineTo(w,yTgt); ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.fillStyle = `rgba(248,113,113,${0.7*aRisk})`; ctx.font = '11px Inter'; ctx.fillText('stop', 6, yStop-6);
+          ctx.fillStyle = `rgba(52,211,153,${0.7*aRisk})`; ctx.fillText('target', 6, yTgt-6);
+        }
+
+        // area + line
+        const col = `rgb(${Math.round(lerp(248,45,t))},${Math.round(lerp(113,212,t))},${Math.round(lerp(113,191,t))})`;
+        const grad = ctx.createLinearGradient(0,0,0,h);
+        grad.addColorStop(0, `rgba(45,212,191,${0.05+0.2*t})`); grad.addColorStop(1,'rgba(45,212,191,0)');
+        ctx.beginPath(); ctx.moveTo(xAt(0), h);
+        for (let i=0;i<N;i++) ctx.lineTo(xAt(i), yAt(blend(i)));
+        ctx.lineTo(xAt(N-1), h); ctx.closePath(); ctx.fillStyle = grad; ctx.fill();
+
+        ctx.beginPath();
+        for (let i=0;i<N;i++){ const x=xAt(i),y=yAt(blend(i)); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+        ctx.strokeStyle = col; ctx.lineWidth = 2.6; ctx.lineJoin='round';
+        ctx.shadowColor = `rgba(45,212,191,${0.5*t})`; ctx.shadowBlur = 14*t; ctx.stroke(); ctx.shadowBlur = 0;
+
+        // journal markers (psychology, fade 0.45-0.7)
+        const aPsy = clamp((p-0.45)/0.22, 0, 1);
+        if (aPsy > 0) {
+          ctx.fillStyle = `rgba(139,92,246,${aPsy})`;
+          [22,48,74,98].forEach(i => { ctx.beginPath(); ctx.arc(xAt(i), yAt(blend(i)), 3.4, 0, Math.PI*2); ctx.fill(); });
+        }
+
+        // system entries (fade 0.7-1)
+        const aSys = clamp((p-0.7)/0.25, 0, 1);
+        if (aSys > 0) {
+          const eIdx = 18, xIdx = N-10;
+          ctx.fillStyle = `rgba(96,165,250,${aSys})`;
+          ctx.beginPath(); ctx.arc(xAt(eIdx), yAt(blend(eIdx)), 5, 0, Math.PI*2); ctx.fill();
+          ctx.fillStyle = `rgba(45,212,191,${aSys})`;
+          ctx.beginPath(); ctx.arc(xAt(xIdx), yAt(blend(xIdx)), 5, 0, Math.PI*2); ctx.fill();
+          ctx.fillStyle = `rgba(203,213,225,${aSys})`; ctx.font='11px Inter';
+          ctx.fillText('вход', xAt(eIdx)-8, yAt(blend(eIdx))+18);
+          ctx.fillText('выход +3R', xAt(xIdx)-54, yAt(blend(xIdx))-10);
+        }
+      }
+
+      registerScrolly(section, (p) => {
+        curP = p;
+        render(p);
+        const active = clamp(Math.round(p*3), 0, 3);
+        stepCards.forEach((c,i) => c.classList.toggle('active', i===active));
+        pills.forEach((c,i) => c.classList.toggle('text-accent', i<=active));
+        phaseEl.textContent = phases[active];
+      });
+
+      // initial paint
+      const mio = new IntersectionObserver((es) => { es.forEach(e => { if (e.isIntersecting){ resize(); render(curP); } }); });
+      mio.observe(canvas);
+      render(0);
+    })();
+
+    /* ---------- Horizontal pinned gallery ---------- */
+    function setupHorizontal() {
+      const section = document.querySelector('.pin-h');
+      const stage = section.querySelector('.pin-stage');
+      const trackEl = document.getElementById('program-track');
+      const isMobile = window.innerWidth < 1024;
+      // clear previous registration for this element
+      for (let i = scrollyItems.length-1; i>=0; i--) if (scrollyItems[i].el === section) scrollyItems.splice(i,1);
+
+      if (isMobile) { section.style.height = ''; trackEl.style.transform = ''; return; }
+
+      const maxX = trackEl.scrollWidth - window.innerWidth + 24;
+      section.style.height = (window.innerHeight + Math.max(maxX, 0)) + 'px';
+      stage.style.height = '100vh';
+      registerScrolly(section, (p) => { trackEl.style.transform = `translateX(${-p*Math.max(maxX,0)}px)`; });
+    }
+    setupHorizontal();
 
     /* ---------- Background floating candles ---------- */
     (function () {
       if (reduceMotion) return;
-      const canvas = document.getElementById('candles');
-      const ctx = canvas.getContext('2d');
-      let W, H, ratio, candles = [];
-      function resize() {
-        ratio = window.devicePixelRatio || 1;
-        W = canvas.clientWidth = window.innerWidth;
-        H = canvas.clientHeight = window.innerHeight;
-        canvas.width = W * ratio; canvas.height = H * ratio;
-        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-      }
-      function seedAt(i, n) {
-        const up = (i * 7) % 3 !== 0;
-        return {
-          x: (i / n) * W + ((i * 53) % 40),
-          y: H + ((i * 37) % H),
-          w: 6 + (i % 4) * 2,
-          body: 14 + (i % 5) * 8,
-          wick: 8 + (i % 3) * 6,
-          speed: 0.25 + ((i % 5) * 0.12),
-          up,
-          alpha: 0.05 + ((i % 4) * 0.02),
-        };
-      }
-      function init() {
-        resize();
-        const n = Math.max(10, Math.floor(W / 90));
-        candles = Array.from({ length: n }, (_, i) => seedAt(i, n));
-      }
-      function draw() {
-        ctx.clearRect(0, 0, W, H);
-        candles.forEach((c) => {
-          c.y -= c.speed;
-          if (c.y + c.body + c.wick < -20) { c.y = H + 40; }
-          const col = c.up ? '45,212,191' : '59,130,246';
-          ctx.strokeStyle = `rgba(${col},${c.alpha + 0.04})`;
-          ctx.lineWidth = 1.2;
-          ctx.beginPath();
-          ctx.moveTo(c.x, c.y - c.wick);
-          ctx.lineTo(c.x, c.y + c.body + c.wick);
-          ctx.stroke();
-          ctx.fillStyle = `rgba(${col},${c.alpha})`;
-          ctx.fillRect(c.x - c.w / 2, c.y, c.w, c.body);
-        });
-        requestAnimationFrame(draw);
-      }
-      init();
-      window.addEventListener('resize', init);
-      draw();
+      const canvas = document.getElementById('candles'); const ctx = canvas.getContext('2d');
+      let W,H,ratio,candles=[];
+      function resize(){ ratio=window.devicePixelRatio||1; W=canvas.clientWidth=window.innerWidth; H=canvas.clientHeight=window.innerHeight;
+        canvas.width=W*ratio; canvas.height=H*ratio; ctx.setTransform(ratio,0,0,ratio,0,0); }
+      function seed(i,n){ return { x:(i/n)*W+((i*53)%40), y:H+((i*37)%H), w:6+(i%4)*2, body:14+(i%5)*8, wick:8+(i%3)*6,
+        speed:0.25+((i%5)*0.12), up:(i*7)%3!==0, alpha:0.05+((i%4)*0.02) }; }
+      function init(){ resize(); const n=Math.max(10,Math.floor(W/90)); candles=Array.from({length:n},(_,i)=>seed(i,n)); }
+      function draw(){ ctx.clearRect(0,0,W,H); candles.forEach(c=>{ c.y-=c.speed; if (c.y+c.body+c.wick<-20) c.y=H+40;
+        const col=c.up?'45,212,191':'59,130,246'; ctx.strokeStyle=`rgba(${col},${c.alpha+0.04})`; ctx.lineWidth=1.2;
+        ctx.beginPath(); ctx.moveTo(c.x,c.y-c.wick); ctx.lineTo(c.x,c.y+c.body+c.wick); ctx.stroke();
+        ctx.fillStyle=`rgba(${col},${c.alpha})`; ctx.fillRect(c.x-c.w/2,c.y,c.w,c.body); }); requestAnimationFrame(draw); }
+      init(); window.addEventListener('resize', init); draw();
     })();
 
-    /* ---------- Hero animated price chart ---------- */
+    /* ---------- Hero animated price chart (timed draw) ---------- */
     (function () {
-      const canvas = document.getElementById('priceChart');
-      if (!canvas) return;
+      const canvas = document.getElementById('priceChart'); if (!canvas) return;
       const ctx = canvas.getContext('2d');
       const pctEl = canvas.parentElement.querySelector('.font-mono.text-accent');
-
-      function resize() {
-        const ratio = window.devicePixelRatio || 1;
-        canvas.width = canvas.clientWidth * ratio;
-        canvas.height = 280 * ratio;
-        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-      }
-      resize();
-      window.addEventListener('resize', resize);
-
-      const N = 140;
-      const data = [];
-      let v = 50;
-      for (let i = 0; i < N; i++) {
-        const noise = Math.sin(i * 0.35) * 6 + Math.sin(i * 0.11) * 10;
-        v += (Math.sin(i * 0.07) * 0.9) + (i % 13 === 0 ? -4 : 0.35);
-        data.push(60 + noise + v * 0.4);
-      }
-      const min = Math.min(...data), max = Math.max(...data);
-
-      let progress = 0;
-      function draw() {
-        const w = canvas.clientWidth, h = 280;
-        ctx.clearRect(0, 0, w, h);
-
-        ctx.strokeStyle = 'rgba(148,163,184,0.08)';
-        ctx.lineWidth = 1;
-        for (let gy = 0; gy <= 4; gy++) {
-          const y = (h / 4) * gy;
-          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-        }
-
-        const count = Math.floor(progress);
-        const pad = 8;
-        const xAt = (i) => (i / (N - 1)) * w;
-        const yAt = (val) => pad + (1 - (val - min) / (max - min)) * (h - pad * 2);
-
-        const grad = ctx.createLinearGradient(0, 0, 0, h);
-        grad.addColorStop(0, 'rgba(45,212,191,0.28)');
-        grad.addColorStop(1, 'rgba(45,212,191,0)');
-        ctx.beginPath();
-        ctx.moveTo(0, h);
-        for (let i = 0; i <= count && i < N; i++) ctx.lineTo(xAt(i), yAt(data[i]));
-        ctx.lineTo(xAt(Math.min(count, N - 1)), h);
-        ctx.closePath();
-        ctx.fillStyle = grad;
-        ctx.fill();
-
-        ctx.beginPath();
-        for (let i = 0; i <= count && i < N; i++) {
-          const x = xAt(i), y = yAt(data[i]);
-          i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-        }
-        ctx.strokeStyle = '#2DD4BF';
-        ctx.lineWidth = 2.5;
-        ctx.lineJoin = 'round';
-        ctx.shadowColor = 'rgba(45,212,191,0.6)';
-        ctx.shadowBlur = 12;
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-
-        const idx = Math.min(count, N - 1);
-        const hx = xAt(idx), hy = yAt(data[idx]);
-        ctx.beginPath(); ctx.arc(hx, hy, 4, 0, Math.PI * 2); ctx.fillStyle = '#2DD4BF'; ctx.fill();
-        ctx.beginPath(); ctx.arc(hx, hy, 9, 0, Math.PI * 2); ctx.strokeStyle = 'rgba(45,212,191,0.35)'; ctx.lineWidth = 2; ctx.stroke();
-
-        if (pctEl) {
-          const change = ((data[idx] - data[0]) / data[0] * 100);
-          pctEl.textContent = (change >= 0 ? '+' : '') + change.toFixed(2) + '%';
-          pctEl.style.color = change >= 0 ? '#2DD4BF' : '#f87171';
-        }
-
-        if (progress < N - 1) { progress += 0.9; requestAnimationFrame(draw); }
-      }
-      requestAnimationFrame(() => { progress = 0; draw(); });
+      function resize(){ const r=window.devicePixelRatio||1; canvas.width=canvas.clientWidth*r; canvas.height=280*r; ctx.setTransform(r,0,0,r,0,0); }
+      resize(); window.addEventListener('resize', resize);
+      const N=140, data=[]; let v=50;
+      for (let i=0;i<N;i++){ const noise=Math.sin(i*0.35)*6+Math.sin(i*0.11)*10; v+=(Math.sin(i*0.07)*0.9)+(i%13===0?-4:0.35); data.push(60+noise+v*0.4); }
+      const min=Math.min(...data), max=Math.max(...data);
+      let progress=0;
+      function draw(){ const w=canvas.clientWidth,h=280; ctx.clearRect(0,0,w,h);
+        ctx.strokeStyle='rgba(148,163,184,0.08)'; ctx.lineWidth=1;
+        for (let g=0;g<=4;g++){ const y=(h/4)*g; ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+        const count=Math.floor(progress), pad=8;
+        const xAt=(i)=>(i/(N-1))*w, yAt=(val)=>pad+(1-(val-min)/(max-min))*(h-pad*2);
+        const grad=ctx.createLinearGradient(0,0,0,h); grad.addColorStop(0,'rgba(45,212,191,0.28)'); grad.addColorStop(1,'rgba(45,212,191,0)');
+        ctx.beginPath(); ctx.moveTo(0,h); for (let i=0;i<=count&&i<N;i++) ctx.lineTo(xAt(i),yAt(data[i])); ctx.lineTo(xAt(Math.min(count,N-1)),h); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+        ctx.beginPath(); for (let i=0;i<=count&&i<N;i++){ const x=xAt(i),y=yAt(data[i]); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+        ctx.strokeStyle='#2DD4BF'; ctx.lineWidth=2.5; ctx.lineJoin='round'; ctx.shadowColor='rgba(45,212,191,0.6)'; ctx.shadowBlur=12; ctx.stroke(); ctx.shadowBlur=0;
+        const idx=Math.min(count,N-1), hx=xAt(idx), hy=yAt(data[idx]);
+        ctx.beginPath(); ctx.arc(hx,hy,4,0,Math.PI*2); ctx.fillStyle='#2DD4BF'; ctx.fill();
+        ctx.beginPath(); ctx.arc(hx,hy,9,0,Math.PI*2); ctx.strokeStyle='rgba(45,212,191,0.35)'; ctx.lineWidth=2; ctx.stroke();
+        if (pctEl){ const ch=((data[idx]-data[0])/data[0]*100); pctEl.textContent=(ch>=0?'+':'')+ch.toFixed(2)+'%'; pctEl.style.color=ch>=0?'#2DD4BF':'#f87171'; }
+        if (progress<N-1){ progress+=0.9; requestAnimationFrame(draw); } }
+      requestAnimationFrame(()=>{ progress=0; draw(); });
     })();
 
-    /* ---------- Mini trade canvases (win / loss) ---------- */
+    /* ---------- Mini trade canvases ---------- */
     document.querySelectorAll('.trade-canvas').forEach((canvas) => {
-      const ctx = canvas.getContext('2d');
-      const type = canvas.dataset.type;
-      function setup() {
-        const ratio = window.devicePixelRatio || 1;
-        canvas.width = canvas.clientWidth * ratio;
-        canvas.height = 170 * ratio;
-        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-        render();
-      }
-      function render() {
-        const w = canvas.clientWidth, h = 170, pad = 10;
-        ctx.clearRect(0, 0, w, h);
-
-        const pts = [];
-        const n = 40;
-        for (let i = 0; i < n; i++) {
-          let base = type === 'win'
-            ? 40 + i * 0.9 + Math.sin(i * 0.5) * 6
-            : 90 - i * 0.6 + Math.sin(i * 0.5) * 6;
-          pts.push(base);
-        }
-        const min = Math.min(...pts) - 8, max = Math.max(...pts) + 8;
-        const xAt = (i) => pad + (i / (n - 1)) * (w - pad * 2);
-        const yAt = (val) => pad + (1 - (val - min) / (max - min)) * (h - pad * 2);
-
-        const color = type === 'win' ? '#34d399' : '#f87171';
-
-        const entryIdx = 4, exitIdx = n - 5;
-        ctx.setLineDash([4, 4]);
-        ctx.strokeStyle = 'rgba(248,113,113,0.5)';
-        ctx.beginPath();
-        const stopY = type === 'win' ? yAt(pts[entryIdx] - 12) : yAt(pts[exitIdx]);
-        ctx.moveTo(0, stopY); ctx.lineTo(w, stopY); ctx.stroke();
-        ctx.strokeStyle = 'rgba(52,211,153,0.5)';
-        ctx.beginPath();
-        const tgtY = type === 'win' ? yAt(pts[exitIdx]) : yAt(pts[entryIdx] + 12);
-        ctx.moveTo(0, tgtY); ctx.lineTo(w, tgtY); ctx.stroke();
-        ctx.setLineDash([]);
-
-        ctx.beginPath();
-        pts.forEach((p, i) => { const x = xAt(i), y = yAt(p); i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); });
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 2;
-        ctx.lineJoin = 'round';
-        ctx.stroke();
-
-        ctx.fillStyle = '#60a5fa';
-        ctx.beginPath(); ctx.arc(xAt(entryIdx), yAt(pts[entryIdx]), 4, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = '#cbd5e1'; ctx.font = '10px Inter, sans-serif';
-        ctx.fillText('вход', xAt(entryIdx) - 8, yAt(pts[entryIdx]) - 8);
-
-        ctx.fillStyle = color;
-        ctx.beginPath(); ctx.arc(xAt(exitIdx), yAt(pts[exitIdx]), 4, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = '#cbd5e1';
-        ctx.fillText(type === 'win' ? 'выход +3R' : 'стоп −1R', xAt(exitIdx) - 40, yAt(pts[exitIdx]) + (type === 'win' ? -8 : 14));
-      }
-      const mio = new IntersectionObserver((es) => {
-        es.forEach(e => { if (e.isIntersecting) { setup(); mio.unobserve(canvas); } });
-      }, { threshold: 0.3 });
+      const ctx = canvas.getContext('2d'); const type = canvas.dataset.type;
+      function setup(){ const r=window.devicePixelRatio||1; canvas.width=canvas.clientWidth*r; canvas.height=170*r; ctx.setTransform(r,0,0,r,0,0); render(); }
+      function render(){ const w=canvas.clientWidth,h=170,pad=10; ctx.clearRect(0,0,w,h);
+        const pts=[], n=40;
+        for (let i=0;i<n;i++){ pts.push(type==='win'?40+i*0.9+Math.sin(i*0.5)*6:90-i*0.6+Math.sin(i*0.5)*6); }
+        const min=Math.min(...pts)-8, max=Math.max(...pts)+8;
+        const xAt=(i)=>pad+(i/(n-1))*(w-pad*2), yAt=(val)=>pad+(1-(val-min)/(max-min))*(h-pad*2);
+        const color=type==='win'?'#34d399':'#f87171'; const eIdx=4, xIdx=n-5;
+        ctx.setLineDash([4,4]); ctx.strokeStyle='rgba(248,113,113,0.5)'; ctx.beginPath();
+        const stopY=type==='win'?yAt(pts[eIdx]-12):yAt(pts[xIdx]); ctx.moveTo(0,stopY); ctx.lineTo(w,stopY); ctx.stroke();
+        ctx.strokeStyle='rgba(52,211,153,0.5)'; ctx.beginPath(); const tgtY=type==='win'?yAt(pts[xIdx]):yAt(pts[eIdx]+12); ctx.moveTo(0,tgtY); ctx.lineTo(w,tgtY); ctx.stroke(); ctx.setLineDash([]);
+        ctx.beginPath(); pts.forEach((p,i)=>{ const x=xAt(i),y=yAt(p); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }); ctx.strokeStyle=color; ctx.lineWidth=2; ctx.lineJoin='round'; ctx.stroke();
+        ctx.fillStyle='#60a5fa'; ctx.beginPath(); ctx.arc(xAt(eIdx),yAt(pts[eIdx]),4,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle='#cbd5e1'; ctx.font='10px Inter'; ctx.fillText('вход', xAt(eIdx)-8, yAt(pts[eIdx])-8);
+        ctx.fillStyle=color; ctx.beginPath(); ctx.arc(xAt(xIdx),yAt(pts[xIdx]),4,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle='#cbd5e1'; ctx.fillText(type==='win'?'выход +3R':'стоп −1R', xAt(xIdx)-40, yAt(pts[xIdx])+(type==='win'?-8:14)); }
+      const mio = new IntersectionObserver((es)=>{ es.forEach(e=>{ if (e.isIntersecting){ setup(); mio.unobserve(canvas); } }); }, { threshold: 0.3 });
       mio.observe(canvas);
       window.addEventListener('resize', () => { if (canvas.clientWidth) render(); });
     });
+
+    // first paint
+    onScroll();
   </script>
 </body>
 </html>

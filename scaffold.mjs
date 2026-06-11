@@ -27,7 +27,9 @@ function rewriteHrefs(s) {
     .replace(/href="app\.html(#[^"]*)?"/g, (_, h) => `href="${BASE}/app/${h || ''}"`)
     .replace(/href="admin\.html(#[^"]*)?"/g, (_, h) => `href="${BASE}/admin/${h || ''}"`)
     .replace(/href="privacy\.html"/g, `href="${BASE}/privacy/"`)
-    .replace(/href="offer\.html"/g, `href="${BASE}/offer/"`);
+    .replace(/href="offer\.html"/g, `href="${BASE}/offer/"`)
+    .replace(/href="cookie\.html"/g, `href="${BASE}/cookie/"`)
+    .replace(/href="consent\.html"/g, `href="${BASE}/consent/"`);
 }
 function rewriteScriptNav(s) {
   return s

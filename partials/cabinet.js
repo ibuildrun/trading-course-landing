@@ -35,6 +35,10 @@ export default `
       </div>
 
       <a href="/trading-course-landing/" class="nav-item mt-2 text-slate-400"><i class="fa-solid fa-right-from-bracket"></i> Выйти</a>
+      <div class="px-3 pt-3 text-[11px] text-slate-600 flex flex-wrap gap-x-3 gap-y-1">
+        <a href="/trading-course-landing/privacy/" class="hover:text-accent">Конфиденциальность</a>
+        <a href="/trading-course-landing/cookie/" class="hover:text-accent">Cookie</a>
+      </div>
     </aside>
 
     <!-- ============ MAIN ============ -->

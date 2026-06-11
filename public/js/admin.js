@@ -131,6 +131,19 @@ function drawLineChart(canvas, opts = {}) {
     ];
     const lessonsPerMod = 3;
 
+    /* ---------- CSV экспорт ---------- */
+    function downloadCSV(name, header, rows) {
+      const esc = (v) => '"' + String(v).replace(/"/g, '""') + '"';
+      const csv = [header, ...rows].map(r => r.map(esc).join(';')).join('\r\n');
+      const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click();
+      a.remove(); URL.revokeObjectURL(url);
+      toast('Файл ' + name + ' выгружен', 'success');
+    }
+    function exportLeads() { downloadCSV('leads.csv', ['Имя','Email','Telegram','Интерес','Источник','Дата','Статус'], leads); }
+    function exportPayments() { downloadCSV('payments.csv', ['Дата','Клиент','Продукт','Сумма','Метод','Статус'], payments); }
+
     /* ---------- Routing ---------- */
     const titles = { dashboard:'Дашборд', students:'Ученики', leads:'Заявки', content:'Контент', payments:'Платежи', server:'Сервер Secret Trading', analytics:'Аналитика', settings:'Настройки' };
     let charted = {};

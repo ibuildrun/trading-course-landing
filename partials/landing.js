@@ -676,8 +676,8 @@ export default `
           <div><label class="block text-sm text-slate-300 mb-1.5">Telegram <span class="text-slate-500">(опционально)</span></label>
             <input name="telegram" type="text" placeholder="@username" class="w-full rounded-xl bg-ink/60 border border-white/10 px-4 py-3 text-white placeholder-slate-500 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none transition" /></div>
           <label class="flex items-start gap-3 text-sm text-slate-300 cursor-pointer select-none">
-            <input type="checkbox" class="mt-1 h-4 w-4 rounded border-white/20 bg-ink text-accent focus:ring-accent/40" />
-            <span>Я ознакомлен с дисклеймером и принимаю условия обучения.</span>
+            <input name="consent" type="checkbox" required class="mt-1 h-4 w-4 rounded border-white/20 bg-ink text-accent focus:ring-accent/40" />
+            <span>Я принимаю <a href="/trading-course-landing/privacy/" class="text-accent hover:underline">политику конфиденциальности</a> и даю <a href="/trading-course-landing/consent/" class="text-accent hover:underline">согласие на обработку персональных данных</a>.</span>
           </label>
           <button type="submit" class="btn-anim btn-shine w-full py-3.5 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40">
             <i class="fa-solid fa-paper-plane mr-2"></i> Отправить заявку
@@ -697,7 +697,9 @@ export default `
           <span class="font-display font-extrabold text-lg text-white">Mind<span class="text-accent">Trade</span></span>
         </a>
         <nav class="flex items-center gap-6 text-sm text-slate-400">
-          <a href="/trading-course-landing/privacy/" class="hover:text-accent transition-colors">Политика конфиденциальности</a>
+          <a href="/trading-course-landing/privacy/" class="hover:text-accent transition-colors">Конфиденциальность</a>
+          <a href="/trading-course-landing/consent/" class="hover:text-accent transition-colors">Согласие на ПДн</a>
+          <a href="/trading-course-landing/cookie/" class="hover:text-accent transition-colors">Cookie</a>
           <a href="/trading-course-landing/offer/" class="hover:text-accent transition-colors">Оферта</a>
           <a href="/trading-course-landing/admin/" class="hover:text-accent transition-colors">Админ-панель</a>
         </nav>

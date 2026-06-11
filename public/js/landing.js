@@ -202,8 +202,9 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
     (function build(){
       const frag = document.createDocumentFragment();
       for (let pass=0; pass<2; pass++) modules.forEach((m,i) => {
-        const card = document.createElement('button');
-        card.className = 'c-card card-hover text-left rounded-2xl border border-white/10 bg-ink2/60 p-6 group';
+        const card = document.createElement('a');
+        card.href = '/trading-course-landing/course/' + (i + 1) + '/';
+        card.className = 'c-card card-hover block text-left rounded-2xl border border-white/10 bg-ink2/60 p-6 group';
         card.innerHTML = `
           <div class="flex items-center justify-between mb-4">
             <span class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent text-xl group-hover:bg-accent group-hover:text-ink group-hover:scale-110 transition-all"><i class="fa-solid ${m.icon}"></i></span>
@@ -212,7 +213,7 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
           <h3 class="font-display font-bold text-white leading-snug min-h-[3rem]">${m.title}</h3>
           <p class="text-sm text-slate-400 mt-2 line-clamp-3">${m.desc}</p>
           <span class="mt-4 inline-flex items-center gap-1.5 text-sm text-accent">Подробнее <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i></span>`;
-        card.addEventListener('click', () => { if (cDragged) return; openModal(m, i); });
+        card.addEventListener('click', (e) => { if (cDragged) { e.preventDefault(); } });
         frag.appendChild(card);
       });
       cTrack.appendChild(frag);

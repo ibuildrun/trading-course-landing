@@ -822,8 +822,8 @@
           <div><label class="block text-sm text-slate-300 mb-1.5">Telegram <span class="text-slate-500">(опционально)</span></label>
             <input name="telegram" type="text" placeholder="@username" class="w-full rounded-xl bg-ink/60 border border-white/10 px-4 py-3 text-white placeholder-slate-500 focus:border-accent focus:ring-2 focus:ring-accent/30 outline-none transition" /></div>
           <label class="flex items-start gap-3 text-sm text-slate-300 cursor-pointer select-none">
-            <input type="checkbox" class="mt-1 h-4 w-4 rounded border-white/20 bg-ink text-accent focus:ring-accent/40" />
-            <span>Я ознакомлен с дисклеймером и принимаю условия обучения.</span>
+            <input name="consent" type="checkbox" required class="mt-1 h-4 w-4 rounded border-white/20 bg-ink text-accent focus:ring-accent/40" />
+            <span>Я принимаю <a href="/trading-course-landing/privacy/" class="text-accent hover:underline">политику конфиденциальности</a> и даю <a href="/trading-course-landing/consent/" class="text-accent hover:underline">согласие на обработку персональных данных</a>.</span>
           </label>
           <button type="submit" class="btn-anim btn-shine w-full py-3.5 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40">
             <i class="fa-solid fa-paper-plane mr-2"></i> Отправить заявку
@@ -843,7 +843,9 @@
           <span class="font-display font-extrabold text-lg text-white">Mind<span class="text-accent">Trade</span></span>
         </a>
         <nav class="flex items-center gap-6 text-sm text-slate-400">
-          <a href="privacy.html" class="hover:text-accent transition-colors">Политика конфиденциальности</a>
+          <a href="privacy.html" class="hover:text-accent transition-colors">Конфиденциальность</a>
+          <a href="consent.html" class="hover:text-accent transition-colors">Согласие на ПДн</a>
+          <a href="cookie.html" class="hover:text-accent transition-colors">Cookie</a>
           <a href="offer.html" class="hover:text-accent transition-colors">Оферта</a>
           <a href="admin.html" class="hover:text-accent transition-colors">Админ-панель</a>
         </nav>
@@ -1083,8 +1085,9 @@
     (function build(){
       const frag = document.createDocumentFragment();
       for (let pass=0; pass<2; pass++) modules.forEach((m,i) => {
-        const card = document.createElement('button');
-        card.className = 'c-card card-hover text-left rounded-2xl border border-white/10 bg-ink2/60 p-6 group';
+        const card = document.createElement('a');
+        card.href = '/trading-course-landing/course/' + (i + 1) + '/';
+        card.className = 'c-card card-hover block text-left rounded-2xl border border-white/10 bg-ink2/60 p-6 group';
         card.innerHTML = `
           <div class="flex items-center justify-between mb-4">
             <span class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent text-xl group-hover:bg-accent group-hover:text-ink group-hover:scale-110 transition-all"><i class="fa-solid ${m.icon}"></i></span>
@@ -1093,7 +1096,7 @@
           <h3 class="font-display font-bold text-white leading-snug min-h-[3rem]">${m.title}</h3>
           <p class="text-sm text-slate-400 mt-2 line-clamp-3">${m.desc}</p>
           <span class="mt-4 inline-flex items-center gap-1.5 text-sm text-accent">Подробнее <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i></span>`;
-        card.addEventListener('click', () => { if (cDragged) return; openModal(m, i); });
+        card.addEventListener('click', (e) => { if (cDragged) { e.preventDefault(); } });
         frag.appendChild(card);
       });
       cTrack.appendChild(frag);

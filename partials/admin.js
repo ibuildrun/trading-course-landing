@@ -24,6 +24,10 @@ export default `
 
       <a href="/trading-course-landing/" class="nav-item mt-2 text-slate-400"><i class="fa-solid fa-arrow-up-right-from-square"></i> На сайт</a>
       <a href="/trading-course-landing/login/" class="nav-item text-slate-400"><i class="fa-solid fa-right-from-bracket"></i> Выйти</a>
+      <div class="px-3 pt-3 text-[11px] text-slate-600 flex flex-wrap gap-x-3 gap-y-1">
+        <a href="/trading-course-landing/privacy/" class="hover:text-accent">Конфиденциальность</a>
+        <a href="/trading-course-landing/cookie/" class="hover:text-accent">Cookie</a>
+      </div>
     </aside>
 
     <!-- ============ MAIN ============ -->
@@ -145,7 +149,7 @@ export default `
               <button class="chip" data-lf="В работе" onclick="filterLeads('В работе',this)">В работе</button>
               <button class="chip" data-lf="Закрыта" onclick="filterLeads('Закрыта',this)">Закрытые</button>
             </div>
-            <button class="btn btn-outline btn-sm" data-toast="Демо: экспорт заявок в CSV"><i class="fa-solid fa-file-export"></i> Экспорт</button>
+            <button class="btn btn-outline btn-sm" onclick="exportLeads()"><i class="fa-solid fa-file-export"></i> Экспорт</button>
           </div>
           <div class="card overflow-hidden"><div class="overflow-x-auto scroll-thin"><table class="tbl min-w-[820px]">
             <thead><tr><th>Имя</th><th>Контакты</th><th>Интерес</th><th>Источник</th><th>Дата</th><th>Статус</th><th></th></tr></thead>
@@ -172,7 +176,7 @@ export default `
           </div>
           <div class="flex justify-between items-center mb-3">
             <h3 class="font-display font-bold text-white">Транзакции</h3>
-            <button class="btn btn-outline btn-sm" data-toast="Демо: экспорт платежей"><i class="fa-solid fa-file-export"></i> Экспорт</button>
+            <button class="btn btn-outline btn-sm" onclick="exportPayments()"><i class="fa-solid fa-file-export"></i> Экспорт</button>
           </div>
           <div class="card overflow-hidden"><div class="overflow-x-auto scroll-thin"><table class="tbl min-w-[760px]">
             <thead><tr><th>Дата</th><th>Клиент</th><th>Продукт</th><th>Сумма</th><th>Метод</th><th>Статус</th></tr></thead>

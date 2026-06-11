@@ -1,7 +1,0 @@
-node_modules/
-.next/
-out/
-.pwshots/
-*.log
-.DS_Store
-verify.mjs

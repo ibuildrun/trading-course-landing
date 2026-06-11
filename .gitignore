@@ -1,5 +1,7 @@
 node_modules/
+.next/
+out/
 .pwshots/
-package.json
-package-lock.json
+*.log
+.DS_Store
 verify.mjs

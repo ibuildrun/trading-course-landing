@@ -45,36 +45,79 @@
         radial-gradient(1000px 500px at 0% 10%, rgba(59,130,246,0.12), transparent 55%),
         linear-gradient(160deg, #0B1121 0%, #0F172A 100%);
       background-attachment: fixed;
+      overflow-x: hidden;
     }
+
+    /* ---- Aurora moving blobs (page background) ---- */
+    .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .aurora span {
+      position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5;
+      mix-blend-mode: screen;
+    }
+    .aurora .b1 { width: 520px; height: 520px; background: radial-gradient(circle, #2DD4BF, transparent 70%); top: -120px; left: -80px; animation: drift1 18s ease-in-out infinite; }
+    .aurora .b2 { width: 460px; height: 460px; background: radial-gradient(circle, #3B82F6, transparent 70%); top: 30%; right: -120px; animation: drift2 22s ease-in-out infinite; }
+    .aurora .b3 { width: 380px; height: 380px; background: radial-gradient(circle, #6366f1, transparent 70%); bottom: -120px; left: 30%; animation: drift3 26s ease-in-out infinite; }
+    @keyframes drift1 { 0%,100%{ transform: translate(0,0) scale(1);} 50%{ transform: translate(120px,80px) scale(1.15);} }
+    @keyframes drift2 { 0%,100%{ transform: translate(0,0) scale(1);} 50%{ transform: translate(-100px,60px) scale(1.1);} }
+    @keyframes drift3 { 0%,100%{ transform: translate(0,0) scale(1);} 50%{ transform: translate(80px,-90px) scale(1.2);} }
+
+    /* keep content above aurora + candles */
+    .layer { position: relative; z-index: 2; }
+    #candles { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+
+    /* ---- Scroll progress bar ---- */
+    #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0%; z-index: 60;
+      background: linear-gradient(90deg, #2DD4BF, #3B82F6); box-shadow: 0 0 12px rgba(45,212,191,0.7); transition: width .1s linear; }
 
     /* Scroll-reveal */
-    .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);
-      will-change: opacity, transform;
-    }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); will-change: opacity, transform; }
     .reveal.is-visible { opacity: 1; transform: none; }
+    .reveal-l { opacity: 0; transform: translateX(-40px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+    .reveal-l.is-visible { opacity: 1; transform: none; }
+    .reveal-r { opacity: 0; transform: translateX(40px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+    .reveal-r.is-visible { opacity: 1; transform: none; }
 
-    /* Card hover micro-anim */
+    /* Card hover micro-anim + spotlight */
     .card-hover {
-      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background-color .2s ease;
+      position: relative;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease, background-color .25s ease;
     }
+    .card-hover::before {
+      content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .3s ease;
+      background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), rgba(45,212,191,0.16), transparent 60%);
+    }
+    .card-hover:hover::before { opacity: 1; }
     .card-hover:hover {
-      transform: scale(1.02);
+      transform: translateY(-4px) scale(1.02);
       border-color: rgba(45,212,191,0.5);
-      box-shadow: 0 18px 40px -18px rgba(45,212,191,0.35);
+      box-shadow: 0 22px 50px -20px rgba(45,212,191,0.4);
     }
 
-    .btn-anim { transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease, color .2s ease; }
+    /* 3D tilt */
+    .tilt { transform-style: preserve-3d; transition: transform .15s ease; }
+    .tilt-inner { transform: translateZ(30px); }
+
+    .btn-anim { position: relative; transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease, color .2s ease; }
     .btn-anim:hover { transform: translateY(-2px); }
+    /* shine sweep on primary buttons */
+    .btn-shine { overflow: hidden; }
+    .btn-shine::after {
+      content: ""; position: absolute; top: 0; left: -120%; width: 60%; height: 100%;
+      background: linear-gradient(110deg, transparent, rgba(255,255,255,0.45), transparent);
+      transform: skewX(-20deg); transition: left .6s ease;
+    }
+    .btn-shine:hover::after { left: 140%; }
 
     .glass { background: rgba(15,23,42,0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
 
+    /* Animated shimmer gradient text */
     .gradient-text {
-      background: linear-gradient(90deg, #2DD4BF, #3B82F6);
+      background: linear-gradient(90deg, #2DD4BF, #3B82F6, #8b5cf6, #2DD4BF);
+      background-size: 300% 100%;
       -webkit-background-clip: text; background-clip: text; color: transparent;
+      animation: shimmer 6s linear infinite;
     }
+    @keyframes shimmer { to { background-position: 300% center; } }
 
     .grid-bg {
       background-image:
@@ -83,12 +126,19 @@
       background-size: 40px 40px;
     }
 
+    /* Floating animation */
+    @keyframes floaty { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-10px);} }
+    .floaty { animation: floaty 5s ease-in-out infinite; }
+
+    /* Marquee ticker */
+    .marquee { overflow: hidden; }
+    .marquee-track { display: inline-flex; white-space: nowrap; animation: marquee 30s linear infinite; }
+    .marquee:hover .marquee-track { animation-play-state: paused; }
+    @keyframes marquee { from { transform: translateX(0);} to { transform: translateX(-50%);} }
+
     /* Toast */
     #toast-wrap { position: fixed; right: 1rem; bottom: 1rem; z-index: 100; display: flex; flex-direction: column; gap: .6rem; max-width: 360px; }
-    .toast {
-      transform: translateX(120%); opacity: 0;
-      transition: transform .4s cubic-bezier(.2,.8,.2,1), opacity .4s;
-    }
+    .toast { transform: translateX(120%); opacity: 0; transition: transform .4s cubic-bezier(.2,.8,.2,1), opacity .4s; }
     .toast.show { transform: translateX(0); opacity: 1; }
 
     /* Modal */
@@ -99,14 +149,40 @@
     @keyframes pulseDot { 0%,100% { opacity: 1; transform: scale(1);} 50% { opacity:.4; transform: scale(.7);} }
     .pulse-dot { animation: pulseDot 1.6s infinite; }
 
+    /* Glow ring */
+    @keyframes glowPulse { 0%,100%{ box-shadow: 0 0 0 0 rgba(45,212,191,0.35);} 50%{ box-shadow: 0 0 0 10px rgba(45,212,191,0);} }
+    .glow-pulse { animation: glowPulse 2.4s ease-out infinite; }
+
+    /* Back to top */
+    #toTop { opacity: 0; transform: translateY(12px) scale(.9); pointer-events: none; transition: all .3s ease; }
+    #toTop.show { opacity: 1; transform: none; pointer-events: auto; }
+
+    /* underline link animation */
+    .nav-link { position: relative; }
+    .nav-link::after { content:""; position:absolute; left:0; bottom:-4px; height:2px; width:0; background: linear-gradient(90deg,#2DD4BF,#3B82F6); transition: width .25s ease; }
+    .nav-link:hover::after { width: 100%; }
+
     ::-webkit-scrollbar { width: 10px; }
     ::-webkit-scrollbar-track { background: #0B1121; }
     ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 6px; }
     ::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
   </style>
 </head>
 
 <body class="font-sans text-slate-200 antialiased selection:bg-accent/30">
+
+  <!-- Scroll progress -->
+  <div id="progress"></div>
+
+  <!-- Background layers -->
+  <div class="aurora"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
+  <canvas id="candles"></canvas>
+
+  <div class="layer">
 
   <!-- ============ HEADER ============ -->
   <header id="top" class="fixed top-0 inset-x-0 z-50 glass border-b border-white/5">
@@ -114,16 +190,16 @@
       <div class="flex items-center justify-between h-16">
         <!-- Logo -->
         <a href="#top" class="flex items-center gap-2 group">
-          <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-accent2 text-ink font-display font-extrabold text-lg shadow-lg shadow-accent/20 group-hover:scale-105 transition-transform">M</span>
+          <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-accent2 text-ink font-display font-extrabold text-lg shadow-lg shadow-accent/20 group-hover:scale-110 group-hover:rotate-6 transition-transform">M</span>
           <span class="font-display font-extrabold text-lg tracking-tight text-white">Mind<span class="text-accent">Trade</span></span>
         </a>
 
         <!-- Desktop nav -->
         <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-          <a href="#mentor" class="hover:text-accent transition-colors">О менторе</a>
-          <a href="#program" class="hover:text-accent transition-colors">Программа</a>
-          <a href="#pricing" class="hover:text-accent transition-colors">Цены</a>
-          <a href="#contact" class="hover:text-accent transition-colors">Контакты</a>
+          <a href="#mentor" class="nav-link hover:text-white transition-colors">О менторе</a>
+          <a href="#program" class="nav-link hover:text-white transition-colors">Программа</a>
+          <a href="#pricing" class="nav-link hover:text-white transition-colors">Цены</a>
+          <a href="#contact" class="nav-link hover:text-white transition-colors">Контакты</a>
         </nav>
 
         <!-- Actions -->
@@ -131,7 +207,7 @@
           <button onclick="alert('Демо, кабинет в разработке')" class="btn-anim text-sm font-medium text-slate-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/5">
             <i class="fa-regular fa-circle-user mr-1.5"></i>Войти в кабинет
           </button>
-          <a href="#contact" class="btn-anim text-sm font-semibold px-4 py-2 rounded-lg bg-gradient-to-r from-accent to-accent2 text-ink shadow-lg shadow-accent/25 hover:shadow-accent/40">
+          <a href="#contact" class="btn-anim btn-shine text-sm font-semibold px-4 py-2 rounded-lg bg-gradient-to-r from-accent to-accent2 text-ink shadow-lg shadow-accent/25 hover:shadow-accent/40">
             Старт <i class="fa-solid fa-arrow-right ml-1"></i>
           </a>
         </div>
@@ -159,13 +235,13 @@
   </header>
 
   <!-- ============ HERO ============ -->
-  <section class="relative pt-28 pb-20 sm:pt-36 sm:pb-28 overflow-hidden">
+  <section class="relative pt-28 pb-12 sm:pt-36 overflow-hidden">
     <div class="absolute inset-0 grid-bg opacity-40 pointer-events-none"></div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
       <div class="grid lg:grid-cols-2 gap-12 items-center">
         <!-- Copy -->
-        <div class="reveal">
-          <span class="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/5 px-3 py-1 text-xs font-medium text-accent mb-6">
+        <div class="reveal-l">
+          <span class="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/5 px-3 py-1 text-xs font-medium text-accent mb-6 glow-pulse">
             <span class="h-1.5 w-1.5 rounded-full bg-accent pulse-dot"></span>
             Честное обучение. Без гарантий прибыли
           </span>
@@ -178,10 +254,10 @@
           </p>
 
           <div class="mt-8 flex flex-col sm:flex-row gap-3">
-            <a href="#program" class="btn-anim inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40">
+            <a href="#program" class="magnetic btn-anim btn-shine inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40">
               <i class="fa-solid fa-list-check"></i> Посмотреть программу
             </a>
-            <button onclick="toast('Это демо-версия. Запись на вебинар принята в тестовом режиме', 'info')" class="btn-anim inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-white/15 bg-white/5 text-white font-semibold hover:bg-white/10">
+            <button onclick="toast('Это демо-версия. Запись на вебинар принята в тестовом режиме', 'info')" class="magnetic btn-anim inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-white/15 bg-white/5 text-white font-semibold hover:bg-white/10">
               <i class="fa-solid fa-video text-accent"></i> Бесплатный вебинар
             </button>
           </div>
@@ -194,8 +270,8 @@
         </div>
 
         <!-- Animated chart card -->
-        <div class="reveal">
-          <div class="relative rounded-2xl border border-white/10 bg-ink2/70 p-4 sm:p-6 shadow-2xl shadow-black/40">
+        <div class="reveal-r">
+          <div class="floaty relative rounded-2xl border border-white/10 bg-ink2/70 p-4 sm:p-6 shadow-2xl shadow-black/40">
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center gap-2">
                 <span class="h-2.5 w-2.5 rounded-full bg-red-400/80"></span>
@@ -224,6 +300,11 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Ticker marquee -->
+    <div class="mt-12 marquee border-y border-white/5 bg-white/[0.02] py-3">
+      <div class="marquee-track text-sm font-mono" id="ticker"></div>
     </div>
   </section>
 
@@ -269,8 +350,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid lg:grid-cols-5 gap-10 items-center">
         <!-- Avatar -->
-        <div class="reveal lg:col-span-2">
-          <div class="relative mx-auto max-w-sm">
+        <div class="reveal-l lg:col-span-2">
+          <div class="relative mx-auto max-w-sm floaty">
             <div class="aspect-square rounded-3xl border border-white/10 bg-gradient-to-br from-ink2 to-ink flex items-center justify-center overflow-hidden">
               <i class="fa-solid fa-user-tie text-[7rem] text-slate-600"></i>
               <div class="absolute inset-0 grid-bg opacity-30"></div>
@@ -280,7 +361,7 @@
         </div>
 
         <!-- Bio -->
-        <div class="reveal lg:col-span-3">
+        <div class="reveal-r lg:col-span-3">
           <span class="text-sm font-semibold text-accent uppercase tracking-wider">О менторе</span>
           <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-2">Александр</h2>
           <p class="text-slate-300 mt-4 leading-relaxed">
@@ -292,15 +373,15 @@
 
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-7">
             <div class="card-hover rounded-xl border border-white/10 bg-ink2/50 p-4 text-center">
-              <div class="font-display font-extrabold text-2xl gradient-text">8 лет</div>
+              <div class="font-display font-extrabold text-2xl gradient-text"><span class="count" data-to="8">0</span> лет</div>
               <div class="text-xs text-slate-400 mt-1">на рынке</div>
             </div>
             <div class="card-hover rounded-xl border border-white/10 bg-ink2/50 p-4 text-center">
-              <div class="font-display font-extrabold text-2xl gradient-text">150+</div>
+              <div class="font-display font-extrabold text-2xl gradient-text"><span class="count" data-to="150">0</span>+</div>
               <div class="text-xs text-slate-400 mt-1">личных консультаций</div>
             </div>
             <div class="card-hover rounded-xl border border-white/10 bg-ink2/50 p-4 text-center">
-              <div class="font-display font-extrabold text-2xl gradient-text">80+</div>
+              <div class="font-display font-extrabold text-2xl gradient-text"><span class="count" data-to="80">0</span>+</div>
               <div class="text-xs text-slate-400 mt-1">учеников с системой</div>
             </div>
           </div>
@@ -450,7 +531,7 @@
             <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Приоритетные разборы сделок</li>
             <li class="flex gap-3"><i class="fa-solid fa-check text-accent mt-1"></i> Помощь с торговой системой</li>
           </ul>
-          <button onclick="toast('Это демо — оплата не проводится. В боевой версии будет платёжный шлюз', 'info')" class="btn-anim mt-8 w-full py-3 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40">Выбрать</button>
+          <button onclick="toast('Это демо — оплата не проводится. В боевой версии будет платёжный шлюз', 'info')" class="btn-anim btn-shine mt-8 w-full py-3 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40">Выбрать</button>
         </div>
       </div>
     </div>
@@ -502,7 +583,7 @@
             <input type="checkbox" class="mt-1 h-4 w-4 rounded border-white/20 bg-ink text-accent focus:ring-accent/40" />
             <span>Я ознакомлен с дисклеймером и принимаю условия обучения.</span>
           </label>
-          <button type="submit" class="btn-anim w-full py-3.5 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40">
+          <button type="submit" class="btn-anim btn-shine w-full py-3.5 rounded-xl bg-gradient-to-r from-accent to-accent2 text-ink font-semibold shadow-lg shadow-accent/25 hover:shadow-accent/40">
             <i class="fa-solid fa-paper-plane mr-2"></i> Отправить заявку
           </button>
           <p class="text-[11px] text-slate-500 text-center">Демо-форма: данные никуда не отправляются.</p>
@@ -535,6 +616,13 @@
     </div>
   </footer>
 
+  </div><!-- /.layer -->
+
+  <!-- Back to top -->
+  <button id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Наверх" class="fixed bottom-5 left-5 z-[90] h-12 w-12 rounded-full bg-gradient-to-br from-accent to-accent2 text-ink shadow-lg shadow-accent/30 flex items-center justify-center hover:scale-110 transition-transform">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+
   <!-- ============ MODAL ============ -->
   <div id="modal" class="fixed inset-0 z-[80] hidden items-center justify-center p-4">
     <div id="modal-backdrop" class="modal-backdrop absolute inset-0 bg-black/70 backdrop-blur-sm opacity-0"></div>
@@ -560,6 +648,8 @@
 
   <!-- ============ SCRIPTS ============ -->
   <script>
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     /* ---------- Burger menu ---------- */
     const burger = document.getElementById('burger');
     const mobileMenu = document.getElementById('mobile-menu');
@@ -588,10 +678,7 @@
       el.innerHTML = `<i class="fa-solid ${icons[type] || icons.success} mt-0.5"></i><span class="text-sm text-slate-100">${message}</span>`;
       wrap.appendChild(el);
       requestAnimationFrame(() => el.classList.add('show'));
-      setTimeout(() => {
-        el.classList.remove('show');
-        setTimeout(() => el.remove(), 400);
-      }, 4200);
+      setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 400); }, 4200);
     }
 
     /* ---------- Lead form ---------- */
@@ -600,6 +687,19 @@
       toast('Спасибо! Это демо-версия. В реальном проекте мы свяжемся с вами в течение часа', 'success');
       e.target.reset();
     });
+
+    /* ---------- Ticker marquee ---------- */
+    (function () {
+      const items = [
+        ['BTC', '+2.4%', true], ['ETH', '+1.1%', true], ['SOL', '-0.8%', false], ['EUR/USD', '+0.3%', true],
+        ['GOLD', '+0.6%', true], ['SP500', '-0.2%', false], ['NASDAQ', '+0.9%', true], ['OIL', '-1.3%', false],
+        ['BNB', '+0.5%', true], ['XRP', '-0.4%', false], ['DXY', '+0.1%', true], ['GBP/USD', '-0.2%', false],
+      ];
+      const make = (sym, chg, up) =>
+        `<span class="inline-flex items-center gap-2 px-6 text-slate-400"><span class="text-slate-200 font-semibold">${sym}</span><span class="${up ? 'text-emerald-400' : 'text-red-400'}"><i class="fa-solid fa-caret-${up ? 'up' : 'down'}"></i> ${chg}</span></span>`;
+      const row = items.map(i => make(...i)).join('');
+      document.getElementById('ticker').innerHTML = row + row; // duplicate for seamless loop
+    })();
 
     /* ---------- Program modules + modal ---------- */
     const modules = [
@@ -616,15 +716,17 @@
     const grid = document.getElementById('program-grid');
     modules.forEach((m, i) => {
       const card = document.createElement('button');
-      card.className = 'reveal card-hover text-left rounded-2xl border border-white/10 bg-ink2/50 p-6 group';
+      card.className = 'reveal card-hover tilt text-left rounded-2xl border border-white/10 bg-ink2/50 p-6 group';
       card.style.transitionDelay = (i % 4 * 60) + 'ms';
       card.innerHTML = `
-        <div class="flex items-center justify-between mb-4">
-          <span class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent text-xl group-hover:bg-accent group-hover:text-ink transition-colors"><i class="fa-solid ${m.icon}"></i></span>
-          <span class="text-xs font-mono text-slate-500">0${i + 1}</span>
+        <div class="tilt-inner">
+          <div class="flex items-center justify-between mb-4">
+            <span class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent text-xl group-hover:bg-accent group-hover:text-ink group-hover:scale-110 transition-all"><i class="fa-solid ${m.icon}"></i></span>
+            <span class="text-xs font-mono text-slate-500">0${i + 1}</span>
+          </div>
+          <h3 class="font-display font-bold text-white leading-snug">${m.title}</h3>
+          <span class="mt-3 inline-flex items-center gap-1.5 text-sm text-accent">Подробнее <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i></span>
         </div>
-        <h3 class="font-display font-bold text-white leading-snug">${m.title}</h3>
-        <span class="mt-3 inline-flex items-center gap-1.5 text-sm text-accent">Подробнее <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i></span>
       `;
       card.addEventListener('click', () => openModal(m, i));
       grid.appendChild(card);
@@ -653,16 +755,131 @@
     modalBackdrop.addEventListener('click', closeModal);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
+    /* ---------- Spotlight on cards (follow cursor) ---------- */
+    document.addEventListener('pointermove', (e) => {
+      const card = e.target.closest('.card-hover');
+      if (!card) return;
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+
+    /* ---------- 3D tilt on program cards ---------- */
+    if (!reduceMotion && window.matchMedia('(pointer:fine)').matches) {
+      document.querySelectorAll('.tilt').forEach((el) => {
+        el.addEventListener('pointermove', (e) => {
+          const r = el.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5;
+          const py = (e.clientY - r.top) / r.height - 0.5;
+          el.style.transform = `perspective(700px) rotateY(${px * 10}deg) rotateX(${-py * 10}deg)`;
+        });
+        el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+      });
+
+      /* ---------- Magnetic buttons ---------- */
+      document.querySelectorAll('.magnetic').forEach((el) => {
+        el.addEventListener('pointermove', (e) => {
+          const r = el.getBoundingClientRect();
+          const x = e.clientX - r.left - r.width / 2;
+          const y = e.clientY - r.top - r.height / 2;
+          el.style.transform = `translate(${x * 0.2}px, ${y * 0.3 - 2}px)`;
+        });
+        el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+      });
+    }
+
+    /* ---------- Count-up numbers ---------- */
+    function countUp(el) {
+      const target = +el.dataset.to;
+      const dur = 1400; let start = null;
+      function step(ts) {
+        if (!start) start = ts;
+        const p = Math.min((ts - start) / dur, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(eased * target);
+        if (p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
     /* ---------- Scroll reveal (Intersection Observer) ---------- */
     const io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('is-visible');
+          entry.target.querySelectorAll && entry.target.querySelectorAll('.count').forEach(countUp);
+          if (entry.target.classList.contains('count')) countUp(entry.target);
           io.unobserve(entry.target);
         }
       });
     }, { threshold: 0.12 });
-    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+    document.querySelectorAll('.reveal, .reveal-l, .reveal-r').forEach((el) => io.observe(el));
+    document.querySelectorAll('.count').forEach((el) => io.observe(el));
+
+    /* ---------- Scroll progress bar + back-to-top ---------- */
+    const progress = document.getElementById('progress');
+    const toTop = document.getElementById('toTop');
+    function onScroll() {
+      const h = document.documentElement;
+      const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight);
+      progress.style.width = (scrolled * 100) + '%';
+      toTop.classList.toggle('show', h.scrollTop > 600);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    /* ---------- Background floating candles ---------- */
+    (function () {
+      if (reduceMotion) return;
+      const canvas = document.getElementById('candles');
+      const ctx = canvas.getContext('2d');
+      let W, H, ratio, candles = [];
+      function resize() {
+        ratio = window.devicePixelRatio || 1;
+        W = canvas.clientWidth = window.innerWidth;
+        H = canvas.clientHeight = window.innerHeight;
+        canvas.width = W * ratio; canvas.height = H * ratio;
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      }
+      function seedAt(i, n) {
+        const up = (i * 7) % 3 !== 0;
+        return {
+          x: (i / n) * W + ((i * 53) % 40),
+          y: H + ((i * 37) % H),
+          w: 6 + (i % 4) * 2,
+          body: 14 + (i % 5) * 8,
+          wick: 8 + (i % 3) * 6,
+          speed: 0.25 + ((i % 5) * 0.12),
+          up,
+          alpha: 0.05 + ((i % 4) * 0.02),
+        };
+      }
+      function init() {
+        resize();
+        const n = Math.max(10, Math.floor(W / 90));
+        candles = Array.from({ length: n }, (_, i) => seedAt(i, n));
+      }
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        candles.forEach((c) => {
+          c.y -= c.speed;
+          if (c.y + c.body + c.wick < -20) { c.y = H + 40; }
+          const col = c.up ? '45,212,191' : '59,130,246';
+          ctx.strokeStyle = `rgba(${col},${c.alpha + 0.04})`;
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.moveTo(c.x, c.y - c.wick);
+          ctx.lineTo(c.x, c.y + c.body + c.wick);
+          ctx.stroke();
+          ctx.fillStyle = `rgba(${col},${c.alpha})`;
+          ctx.fillRect(c.x - c.w / 2, c.y, c.w, c.body);
+        });
+        requestAnimationFrame(draw);
+      }
+      init();
+      window.addEventListener('resize', init);
+      draw();
+    })();
 
     /* ---------- Hero animated price chart ---------- */
     (function () {
@@ -680,7 +897,6 @@
       resize();
       window.addEventListener('resize', resize);
 
-      // Pre-generate a "price" series with some volatility + uptrend
       const N = 140;
       const data = [];
       let v = 50;
@@ -696,7 +912,6 @@
         const w = canvas.clientWidth, h = 280;
         ctx.clearRect(0, 0, w, h);
 
-        // grid
         ctx.strokeStyle = 'rgba(148,163,184,0.08)';
         ctx.lineWidth = 1;
         for (let gy = 0; gy <= 4; gy++) {
@@ -709,7 +924,6 @@
         const xAt = (i) => (i / (N - 1)) * w;
         const yAt = (val) => pad + (1 - (val - min) / (max - min)) * (h - pad * 2);
 
-        // area fill
         const grad = ctx.createLinearGradient(0, 0, 0, h);
         grad.addColorStop(0, 'rgba(45,212,191,0.28)');
         grad.addColorStop(1, 'rgba(45,212,191,0)');
@@ -721,7 +935,6 @@
         ctx.fillStyle = grad;
         ctx.fill();
 
-        // line
         ctx.beginPath();
         for (let i = 0; i <= count && i < N; i++) {
           const x = xAt(i), y = yAt(data[i]);
@@ -735,32 +948,19 @@
         ctx.stroke();
         ctx.shadowBlur = 0;
 
-        // head dot
         const idx = Math.min(count, N - 1);
         const hx = xAt(idx), hy = yAt(data[idx]);
-        ctx.beginPath();
-        ctx.arc(hx, hy, 4, 0, Math.PI * 2);
-        ctx.fillStyle = '#2DD4BF';
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(hx, hy, 9, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(45,212,191,0.35)';
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        ctx.beginPath(); ctx.arc(hx, hy, 4, 0, Math.PI * 2); ctx.fillStyle = '#2DD4BF'; ctx.fill();
+        ctx.beginPath(); ctx.arc(hx, hy, 9, 0, Math.PI * 2); ctx.strokeStyle = 'rgba(45,212,191,0.35)'; ctx.lineWidth = 2; ctx.stroke();
 
-        // live percent
         if (pctEl) {
           const change = ((data[idx] - data[0]) / data[0] * 100);
           pctEl.textContent = (change >= 0 ? '+' : '') + change.toFixed(2) + '%';
           pctEl.style.color = change >= 0 ? '#2DD4BF' : '#f87171';
         }
 
-        if (progress < N - 1) {
-          progress += 0.9;
-          requestAnimationFrame(draw);
-        }
+        if (progress < N - 1) { progress += 0.9; requestAnimationFrame(draw); }
       }
-      // start after a tick so layout is ready
       requestAnimationFrame(() => { progress = 0; draw(); });
     })();
 
@@ -793,9 +993,7 @@
 
         const color = type === 'win' ? '#34d399' : '#f87171';
 
-        // entry / exit markers
         const entryIdx = 4, exitIdx = n - 5;
-        // stop / target dashed lines
         ctx.setLineDash([4, 4]);
         ctx.strokeStyle = 'rgba(248,113,113,0.5)';
         ctx.beginPath();
@@ -807,7 +1005,6 @@
         ctx.moveTo(0, tgtY); ctx.lineTo(w, tgtY); ctx.stroke();
         ctx.setLineDash([]);
 
-        // price line
         ctx.beginPath();
         pts.forEach((p, i) => { const x = xAt(i), y = yAt(p); i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); });
         ctx.strokeStyle = color;
@@ -815,19 +1012,16 @@
         ctx.lineJoin = 'round';
         ctx.stroke();
 
-        // entry marker
         ctx.fillStyle = '#60a5fa';
         ctx.beginPath(); ctx.arc(xAt(entryIdx), yAt(pts[entryIdx]), 4, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = '#cbd5e1'; ctx.font = '10px Inter, sans-serif';
         ctx.fillText('вход', xAt(entryIdx) - 8, yAt(pts[entryIdx]) - 8);
 
-        // exit marker
         ctx.fillStyle = color;
         ctx.beginPath(); ctx.arc(xAt(exitIdx), yAt(pts[exitIdx]), 4, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = '#cbd5e1';
         ctx.fillText(type === 'win' ? 'выход +3R' : 'стоп −1R', xAt(exitIdx) - 40, yAt(pts[exitIdx]) + (type === 'win' ? -8 : 14));
       }
-      // render mini chart when it enters viewport
       const mio = new IntersectionObserver((es) => {
         es.forEach(e => { if (e.isIntersecting) { setup(); mio.unobserve(canvas); } });
       }, { threshold: 0.3 });

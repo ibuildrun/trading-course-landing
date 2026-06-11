@@ -16,9 +16,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ru" className={`${inter.variable} ${manrope.variable}`}>
       <head>
-        <link rel="preload" href="/trading-course-landing/fa/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <link rel="preload" href="/trading-course-landing/fa/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <link rel="stylesheet" href="/trading-course-landing/fa/css/all.min.css" />
+        <link rel="preload" href="/trading-course-landing/fa/webfonts/fa-solid-900-subset.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/trading-course-landing/fa/webfonts/fa-brands-400-subset.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="stylesheet" href="/trading-course-landing/fa/css/fa-lite.css" />
         <script dangerouslySetInnerHTML={{ __html: "try{if(sessionStorage.getItem('mt-splashed')==='1')document.documentElement.classList.add('splashed')}catch(e){}" }} />
       </head>
       <body>

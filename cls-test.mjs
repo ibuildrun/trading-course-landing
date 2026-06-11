@@ -45,11 +45,23 @@ log('CLS при перезагрузке < 0.1 (нет видимых сдвиг
 log('Лоадер скрыт сразу (html.splashed)', await page.evaluate(() => document.documentElement.classList.contains('splashed') && getComputedStyle(document.getElementById('site-loader')).display === 'none'));
 log('Fade-in отключён на повторной загрузке', await page.evaluate(() => getComputedStyle(document.querySelector('.route-content')).animationName === 'none'));
 
-// FA локальный и шрифт иконок загружен
-const faLocal = await page.evaluate(() => [...document.styleSheets].some(s => s.href && s.href.includes('/fa/css/all.min.css')));
-log('Font Awesome самохостится (не CDN)', faLocal);
+// FA: lite-сабсет подключён и шрифт загружен
+const faLocal = await page.evaluate(() => [...document.styleSheets].some(s => s.href && s.href.includes('/fa/css/fa-lite.css')));
+log('Font Awesome: lite-сабсет подключён', faLocal);
 const faLoaded = await page.evaluate(() => document.fonts.check('900 16px "Font Awesome 6 Free"'));
 log('Шрифт иконок загружен', faLoaded);
+// все видимые иконки страницы реально отрисованы (ни одна не потерялась при сабсете)
+const iconCheck = await page.evaluate(() => {
+  const bad = [];
+  document.querySelectorAll('i[class*="fa-"]').forEach(i => {
+    const r = i.getBoundingClientRect();
+    if (r.width === 0 && r.height === 0) return; // скрытые контейнеры не считаем
+    const cs = getComputedStyle(i, '::before');
+    if (!cs.content || cs.content === 'none' || cs.content === '""') bad.push(i.className);
+  });
+  return bad.slice(0, 5);
+});
+log('Все видимые иконки имеют глиф', iconCheck.length === 0, iconCheck.join(' | '));
 
 // резервы высоты: тикер и карусель не двигают вёрстку
 const mh = await page.evaluate(() => {

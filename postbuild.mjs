@@ -2,6 +2,7 @@
 // подключаем страничные скрипты обычными <script> в конце <body>. Dev-режим (`next dev`) не затрагивается.
 import fs from 'fs';
 import path from 'path';
+import { transformSync } from 'esbuild';
 
 const OUT = 'out';
 const BASE = '/trading-course-landing';
@@ -49,4 +50,28 @@ for (const file of walk(OUT)) {
   bytesSaved += before - Buffer.byteLength(html);
 }
 
-console.log(`postbuild: обработано HTML — ${htmlCount}, удалено .txt — ${txtRemoved}, HTML похудел суммарно на ${(bytesSaved / 1024).toFixed(0)} КБ`);
+// 5) минификация наших JS (lenis уже минифицирован)
+let jsSaved = 0;
+for (const f of fs.readdirSync(path.join(OUT, 'js'))) {
+  if (!f.endsWith('.js') || f.includes('.min.')) continue;
+  const p = path.join(OUT, 'js', f);
+  const src = fs.readFileSync(p, 'utf8');
+  const min = transformSync(src, { minify: true, target: 'es2017' }).code;
+  fs.writeFileSync(p, min);
+  jsSaved += Buffer.byteLength(src) - Buffer.byteLength(min);
+}
+const swp = path.join(OUT, 'sw.js');
+if (fs.existsSync(swp)) {
+  const s = fs.readFileSync(swp, 'utf8');
+  fs.writeFileSync(swp, transformSync(s, { minify: true, target: 'es2017' }).code);
+}
+
+// 6) полный FA не нужен в деплое — остаётся только сабсет
+for (const f of ['fa/css/all.min.css', 'fa/webfonts/fa-solid-900.woff2', 'fa/webfonts/fa-solid-900.ttf',
+  'fa/webfonts/fa-brands-400.woff2', 'fa/webfonts/fa-brands-400.ttf',
+  'fa/webfonts/fa-regular-400.woff2', 'fa/webfonts/fa-regular-400.ttf']) {
+  const p = path.join(OUT, f);
+  if (fs.existsSync(p)) fs.unlinkSync(p);
+}
+
+console.log(`postbuild: обработано HTML — ${htmlCount}, удалено .txt — ${txtRemoved}, HTML −${(bytesSaved / 1024).toFixed(0)} КБ, JS минифицирован −${(jsSaved / 1024).toFixed(0)} КБ, полный FA исключён`);

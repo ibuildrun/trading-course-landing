@@ -22,7 +22,7 @@ export default `
             <div style="display:flex; gap:.8rem; align-items:center; color:#cbd5e1;"><i class="fa-solid fa-circle-check" style="color:#2DD4BF;"></i> Дневник сделок и аналитика результатов</div>
             <div style="display:flex; gap:.8rem; align-items:center; color:#cbd5e1;"><i class="fa-solid fa-circle-check" style="color:#2DD4BF;"></i> Подключение брокера в режиме «только чтение»</div>
           </div>
-          <canvas id="brandChart" height="120" style="width:100%; margin-top:2rem; border-radius:.8rem; background:rgba(0,0,0,.2);"></canvas>
+          <canvas id="brandChart" height="120" style="width:100%; height:120px; margin-top:2rem; border-radius:.8rem; background:rgba(0,0,0,.2);"></canvas>
           <p style="font-size:.7rem; color:#64748b; margin-top:.6rem;">Демо-данные. Не является торговой рекомендацией.</p>
         </div>
       </aside>

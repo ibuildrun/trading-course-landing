@@ -7,6 +7,8 @@ html.lenis, html.lenis body { height: auto; }
 /* ===== Page enter (opacity only — не ломает position:fixed фоны) ===== */
 .route-content { animation: pageIn .55s cubic-bezier(.2,.7,.2,1) both; }
 @keyframes pageIn { from { opacity: 0; } to { opacity: 1; } }
+/* при перезагрузке/повторном визите — без вступительной анимации, мгновенный рендер */
+html.splashed .route-content { animation: none; }
 
 /* ===== Loader / curtain ===== */
 #site-loader {

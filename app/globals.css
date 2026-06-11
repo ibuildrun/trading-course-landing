@@ -223,7 +223,12 @@ button { font-family: inherit; background: transparent; border: none; color: inh
     @keyframes floaty { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
     .floaty { animation: floaty 5s ease-in-out infinite; }
 
-    .marquee { overflow:hidden; }
+    .marquee { overflow:hidden; min-height: 46px; } /* высота зарезервирована — заполнение JS не сдвигает вёрстку */
+
+    /* canvas: фиксированная CSS-высота, иначе до JS-ресайза браузер рисует по аспекту атрибутов и страница прыгает */
+    #priceChart { height: 280px; }
+    #stageChart { height: 340px; }
+    .trade-canvas { height: 170px; }
     .marquee-track { display:inline-flex; white-space:nowrap; animation: marquee 32s linear infinite; }
     .marquee:hover .marquee-track { animation-play-state: paused; }
     @keyframes marquee { from{transform:translateX(0);} to{transform:translateX(-50%);} }
@@ -245,7 +250,7 @@ button { font-family: inherit; background: transparent; border: none; color: inh
     }
 
     /* Auto carousel */
-    .c-mask { overflow: hidden; cursor: grab; padding: 2.5rem 0; }
+    .c-mask { overflow: hidden; cursor: grab; padding: 2.5rem 0; min-height: 26rem; } /* резерв под карточки до их инъекции */
     .c-mask:active { cursor: grabbing; }
     .c-track { display: flex; gap: 1.25rem; width: max-content; will-change: transform; }
     .c-card { width: 320px; flex: 0 0 auto; }

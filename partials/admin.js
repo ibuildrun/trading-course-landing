@@ -95,7 +95,7 @@ export default `
           <div class="grid lg:grid-cols-3 gap-4 mt-4">
             <div class="lg:col-span-2 card p-5">
               <div class="flex items-center justify-between mb-3"><h3 class="font-display font-bold text-white">Выручка, последние 30 дней</h3><span class="text-xs font-mono text-emerald-400">$48 200</span></div>
-              <canvas id="admRevenue" height="220" class="w-full rounded-lg bg-black/20"></canvas>
+              <canvas id="admRevenue" height="220" style="height:220px" class="w-full rounded-lg bg-black/20"></canvas>
             </div>
             <div class="card p-5">
               <h3 class="font-display font-bold text-white mb-4">Выручка по форматам</h3>
@@ -218,7 +218,7 @@ export default `
           <div class="grid lg:grid-cols-3 gap-4">
             <div class="lg:col-span-2 card p-5">
               <h3 class="font-display font-bold text-white mb-3">Трафик и заявки</h3>
-              <canvas id="admTraffic" height="220" class="w-full rounded-lg bg-black/20"></canvas>
+              <canvas id="admTraffic" height="220" style="height:220px" class="w-full rounded-lg bg-black/20"></canvas>
             </div>
             <div class="card p-5">
               <h3 class="font-display font-bold text-white mb-4">Источники заявок</h3>

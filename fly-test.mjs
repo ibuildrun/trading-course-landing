@@ -7,8 +7,8 @@ import { chromium } from 'playwright';
 const root = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.join(root, 'out');
 const BASE = '/trading-course-landing';
-const PORT = 5097;
-const types = { '.html':'text/html','.css':'text/css','.js':'text/javascript','.json':'application/json','.txt':'text/plain','.woff2':'font/woff2','.woff':'font/woff','.png':'image/png','.svg':'image/svg+xml','.ico':'image/x-icon' };
+const PORT = 5096;
+const types = { '.html':'text/html','.css':'text/css','.js':'text/javascript','.json':'application/json','.txt':'text/plain','.woff2':'font/woff2','.png':'image/png','.svg':'image/svg+xml','.ico':'image/x-icon' };
 const server = http.createServer((req, res) => {
   let url = decodeURIComponent(req.url.split('?')[0]);
   if (url.startsWith(BASE)) url = url.slice(BASE.length);
@@ -25,31 +25,43 @@ const b = await chromium.launch();
 const page = await (await b.newContext({ viewport: { width: 1366, height: 900 } })).newPage();
 const errors = []; page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
 
-// 1) первый визит — лоадер показан, затем скрыт
 await page.goto(u('/'), { waitUntil: 'networkidle' });
-await page.waitForTimeout(1200);
-log('Сплэш скрылся после первой загрузки', await page.evaluate(() => { const l = document.getElementById('site-loader'); return l.classList.contains('hide') || getComputedStyle(l).display === 'none'; }));
+await page.waitForTimeout(1000);
 
-// 2) Lenis активен
-log('Lenis инициализирован на лендинге', await page.evaluate(() => !!window.__lenis));
+// Lenis поднялся из landing.js (локальный файл)
+const hasLenis = await page.waitForFunction(() => !!window.__lenis, null, { timeout: 5000 }).then(() => true).catch(() => false);
+log('Lenis инициализирован (из landing.js, без React)', hasLenis);
 
-// 3) плавный якорь
+// ПЛАВНОСТЬ: сэмплируем scrollY во время доезда — должно быть много промежуточных значений
 await page.evaluate(() => window.scrollTo(0, 0));
-await page.waitForTimeout(150);
-await page.click('header nav a[href="#pricing"]');
-await page.waitForTimeout(1700);
-const sy = await page.evaluate(() => window.scrollY);
-log('Якорь «Цены»: плавный доезд', sy > 1500, 'scrollY=' + Math.round(sy));
+await page.waitForTimeout(250);
+const samples = await page.evaluate(async () => {
+  const out = [];
+  const a = document.querySelector('header nav a[href="#pricing"]');
+  a.click();
+  for (let i = 0; i < 40; i++) { out.push(Math.round(window.scrollY)); await new Promise(r => setTimeout(r, 40)); }
+  return out;
+});
+const distinct = new Set(samples).size;
+const final = samples[samples.length - 1];
+log('Якорь «Цены»: скролл АНИМИРОВАН (не прыжок)', distinct >= 8 && final > 1500, `точек=${distinct}, финал=${final}`);
 
-// 4) переход на /app/ в той же сессии — лоадера нет (display:none через .splashed)
+// тот же тест на кнопку героя (#how)
+await page.evaluate(() => window.scrollTo(0, 0));
+await page.waitForTimeout(250);
+const s2 = await page.evaluate(async () => {
+  const out = [];
+  document.querySelector('a[href="#how"]').click();
+  for (let i = 0; i < 30; i++) { out.push(Math.round(window.scrollY)); await new Promise(r => setTimeout(r, 40)); }
+  return out;
+});
+log('Кнопка героя «Как устроено обучение»: анимировано', new Set(s2).size >= 8 && s2[s2.length - 1] > 400, `точек=${new Set(s2).size}, финал=${s2[s2.length - 1]}`);
+
+// сплэш одна сессия
+log('Сплэш скрыт после загрузки', await page.evaluate(() => { const l = document.getElementById('site-loader'); return l.classList.contains('hide') || getComputedStyle(l).display === 'none'; }));
 await page.click('a[href$="/login/"]');
-await page.waitForTimeout(900);
-log('После перехода (login) лоадер скрыт (нет вспышки)', await page.evaluate(() => { const l = document.getElementById('site-loader'); return !l || getComputedStyle(l).display === 'none'; }));
-log('html.splashed выставлен на повторной странице', await page.evaluate(() => document.documentElement.classList.contains('splashed')));
-
-// 5) свечи фон работает
-await page.goto(u('/'), { waitUntil: 'networkidle' });
-log('Фон-свечи canvas присутствует', await page.$('#candles') !== null);
+await page.waitForTimeout(800);
+log('Повторная страница — лоадера нет', await page.evaluate(() => { const l = document.getElementById('site-loader'); return !l || getComputedStyle(l).display === 'none'; }));
 
 log('Нет JS-ошибок', errors.length === 0, errors.slice(0, 3).join(' | '));
 

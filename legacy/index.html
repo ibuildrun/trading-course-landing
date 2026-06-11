@@ -895,19 +895,52 @@
       burger.innerHTML = mobileMenu.classList.contains('hidden') ? '<i class="fa-solid fa-bars text-lg"></i>' : '<i class="fa-solid fa-xmark text-lg"></i>';
     });
 
-    /* ---------- Smooth anchor scroll (offset for sticky header) ---------- */
+    /* ---------- Smooth scroll: Lenis (локальный) + rAF-фолбэк, без зависимостей от React ---------- */
+    (function initLenis(){
+      if (reduceMotion || window.__lenis) return;
+      const s = document.createElement('script');
+      s.src = '/trading-course-landing/js/lenis.min.js';
+      s.onload = function(){
+        try {
+          const l = new window.Lenis({ duration: 1.15, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
+          (function raf(t){ l.raf(t); requestAnimationFrame(raf); })(performance.now());
+          window.__lenis = l;
+        } catch (e) {}
+      };
+      document.head.appendChild(s);
+    })();
+
+    let scrollAnim = null;
+    function smoothTo(top){
+      top = Math.max(0, top);
+      if (window.__lenis) { window.__lenis.scrollTo(top, { duration: 1.2 }); return; }
+      if (scrollAnim) cancelAnimationFrame(scrollAnim);
+      const start = window.scrollY, dist = top - start;
+      if (Math.abs(dist) < 2) return;
+      const dur = clamp(500 + Math.abs(dist) * 0.12, 600, 1300);
+      const ease = (t) => (t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2);
+      const t0 = performance.now();
+      (function step(now){
+        const p = Math.min((now - t0) / dur, 1);
+        window.scrollTo(0, start + dist * ease(p));
+        if (p < 1) scrollAnim = requestAnimationFrame(step); else scrollAnim = null;
+      })(t0);
+    }
     function scrollToId(id){ const t = document.querySelector(id); if(!t) return;
-      const y = t.getBoundingClientRect().top + window.scrollY - 72;
-      window.scrollTo({ top: y, behavior: 'smooth' }); }
-    document.querySelectorAll('a.anchor').forEach(a => {
-      a.addEventListener('click', (e) => {
-        const id = a.getAttribute('href');
-        if (!id || id === '#') return;
-        if (id === '#top') { e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); closeMenu(); return; }
-        const t = document.querySelector(id); if (!t) return;
-        e.preventDefault(); scrollToId(id); closeMenu();
-      });
-    });
+      smoothTo(t.getBoundingClientRect().top + window.scrollY - 80); }
+
+    // Делегированный перехват ВСЕХ якорных кликов (capture — выигрывает у любых других обработчиков)
+    document.addEventListener('click', (e) => {
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = e.target.closest('a');
+      if (!a) return;
+      const id = a.getAttribute('href');
+      if (!id || !id.startsWith('#') || id.length < 2) return;
+      if (id === '#top') { e.preventDefault(); e.stopImmediatePropagation(); smoothTo(0); closeMenu(); return; }
+      const t = document.querySelector(id); if (!t) return;
+      e.preventDefault(); e.stopImmediatePropagation();
+      scrollToId(id); closeMenu();
+    }, true);
     function enterCabinet(){ scrollToId('#cabinet'); toast('Это демо личного кабинета. В боевой версии — вход по логину','info'); }
 
     /* ---------- Toast ---------- */
